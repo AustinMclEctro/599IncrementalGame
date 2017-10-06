@@ -27,7 +27,7 @@ class ControllerView: UIView {
         }
         else {
             // Placed at ambiguous point
-            playArea.addObject(of: of.objectType, at: CGPoint(x: 100, y: 100));
+            playArea.addObject(of: of.objectType, at: CGPoint(x: 0, y: 0));
         }
     }
     func updateMenuU() {

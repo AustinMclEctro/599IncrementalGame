@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		494605AB1F88364C00B18145 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494605AA1F88364C00B18145 /* Level.swift */; };
 		F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */; };
 		F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74211F86ED1A0057AF21 /* ViewController.swift */; };
 		F8FF74251F86ED1A0057AF21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8FF74231F86ED1A0057AF21 /* Main.storyboard */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		494605AA1F88364C00B18145 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		F8FF741C1F86ED1A0057AF21 /* IncrementalGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IncrementalGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F8FF74211F86ED1A0057AF21 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				F8FF74561F86EDB70057AF21 /* UpgradeMenu.swift */,
 				F8FF74581F86EDC60057AF21 /* PlayArea.swift */,
 				F8FF745E1F87147A0057AF21 /* ObjectType.swift */,
+				494605AA1F88364C00B18145 /* Level.swift */,
 			);
 			path = IncrementalGame;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 				F8FF74531F86ED700057AF21 /* InfoPanel.swift in Sources */,
 				F8FF74281F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld in Sources */,
 				F8FF74571F86EDB70057AF21 /* UpgradeMenu.swift in Sources */,
+				494605AB1F88364C00B18145 /* Level.swift in Sources */,
 				F8FF745D1F870DD20057AF21 /* ControllerViewTouchEvents.swift in Sources */,
 				F8FF74551F86EDAA0057AF21 /* ShapeMenu.swift in Sources */,
 				F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */,

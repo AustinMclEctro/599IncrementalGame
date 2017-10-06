@@ -10,30 +10,42 @@ import Foundation
 import SpriteKit
 
 class PlayArea: SKView {
+    
+    var level: Level
+    
     override init(frame: CGRect) {
+        level = Level()
         super.init(frame: frame)
-        presentScene(SKScene(size: frame.size))
+        let scene = level
+        scene.size = frame.size
+        presentScene(scene)
         
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     func setShapes(_ shapes: [[String: String]]) {
         // used to init
     }
+    
     func addObject(of: ObjectType, at: CGPoint) {
         // GameObject inherits from SKSpriteNode
         // Initializer is ObjectType - Circle, Triangle etc
-        var gameObject = GameObject(type: of);
-        self.scene!.addChild(gameObject);
-        gameObject.position = at;
-        gameObject.scale(to: CGSize(width: 50, height: 50));
+        if level.canAdd(type: of) {
+            let gameObject = GameObject(type: of);
+            level.addChild(gameObject);
+            gameObject.setUp(at: at, withSize: level.size)
+        }
     }
+    
     func gained(amount: Int) {
         // Change the name/delete as you like :) just left here to show how to add currency A
         if let controller = superview as? ControllerView {
             controller.addCurA(by: amount);
         }
     }
+    
 }
+
