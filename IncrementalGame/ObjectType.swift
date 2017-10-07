@@ -41,9 +41,9 @@ class GameObject: SKSpriteNode {
         let dimension = withSize.width/9
         self.scale(to: CGSize(width: dimension, height: dimension))
         switch objectType {
-        case .Circle: self.physicsBody = SKPhysicsBody(circleOfRadius: dimension/2.0)
-        case .Square: self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: dimension, height: dimension))
-        default: self.physicsBody = SKPhysicsBody(texture: self.texture!, size: CGSize(width: dimension, height: dimension))
+            case .Circle: self.physicsBody = SKPhysicsBody(circleOfRadius: dimension/2.0)
+            case .Square: self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: dimension, height: dimension))
+            default: self.physicsBody = SKPhysicsBody(texture: self.texture!, size: CGSize(width: dimension, height: dimension))
         }
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = true
@@ -52,6 +52,11 @@ class GameObject: SKSpriteNode {
         self.physicsBody?.contactTestBitMask = 1
         self.physicsBody?.collisionBitMask = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
+        let rangeX = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.width-(dimension/2))+1)
+        let conX = SKConstraint.positionX(rangeX)
+        let rangeY = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.height-(dimension/2))+1)
+        let conY = SKConstraint.positionY(rangeY)
+        self.constraints = [conX,conY]
     }
     
     
