@@ -12,7 +12,6 @@ import SpriteKit
 class GameObject: SKSpriteNode {
     
     var objectType: ObjectType
-    var basePoints: Int
     var touched: ((GameObject, Set<UITouch>, UIGestureRecognizerState) -> Void) = {
         _, _, _ in
         return
@@ -22,11 +21,6 @@ class GameObject: SKSpriteNode {
         objectType = type
         let im = type.getImage() ?? UIImage()
         let texture = SKTexture(image: im)
-        if type == .Circle {
-            basePoints = 1
-        } else {
-            basePoints = type.rawValue + 2
-        }
         
         super.init(texture: texture, color: UIColor.clear, size: im.size)
         self.isUserInteractionEnabled = true
@@ -41,16 +35,24 @@ class GameObject: SKSpriteNode {
         let dimension = withSize.width/9
         self.scale(to: CGSize(width: dimension, height: dimension))
         switch objectType {
-            case .Circle: self.physicsBody = SKPhysicsBody(circleOfRadius: dimension/2.0)
+            case .Circle, .Bumper: self.physicsBody = SKPhysicsBody(circleOfRadius: dimension/2.0)
             case .Square: self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: dimension, height: dimension))
             default: self.physicsBody = SKPhysicsBody(texture: self.texture!, size: CGSize(width: dimension, height: dimension))
         }
-        self.physicsBody?.isDynamic = true
-        self.physicsBody?.allowsRotation = true
-        self.physicsBody?.restitution = 0.75
         self.physicsBody?.categoryBitMask = 1
         self.physicsBody?.contactTestBitMask = 1
         self.physicsBody?.collisionBitMask = 1
+        
+        if objectType == .Bumper {
+            self.physicsBody?.isDynamic = false
+            self.physicsBody?.allowsRotation = false
+            self.physicsBody?.restitution = 2.5
+        } else {
+            self.physicsBody?.isDynamic = true
+            self.physicsBody?.allowsRotation = true
+            self.physicsBody?.restitution = 0.75
+        }
+        
         self.physicsBody?.usesPreciseCollisionDetection = true
         let rangeX = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.width-(dimension/2))+1)
         let conX = SKConstraint.positionX(rangeX)
@@ -66,7 +68,7 @@ class GameObject: SKSpriteNode {
         touched(self, touches, .began)
         if let level = parent as? Level {
             if let playArea = level.view as? PlayArea {
-                playArea.gained(amount: basePoints)
+                playArea.gained(amount: objectType.getPoints())
             }
         }
     }
@@ -83,8 +85,10 @@ class GameObject: SKSpriteNode {
         let last = touch!.previousLocation(in: self)
         
         let flick = CGVector(dx: location.x - last.x, dy: location.y - last.y)
-        self.physicsBody?.isDynamic = true
-        self.physicsBody?.applyImpulse(flick)
+        if objectType.rawValue < 10 {
+            self.physicsBody?.isDynamic = true
+            self.physicsBody?.applyImpulse(flick)
+        }
     }
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         touched(self, touches, .ended)
@@ -94,21 +98,29 @@ class GameObject: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+
 enum ObjectType: Int {
-    case Circle
-    case Triangle
-    case Square
+    case Circle = 1
+    case Triangle = 3
+    case Square = 4
+    case Bumper = 10
+    
     func getImage() -> UIImage? {
         return UIImage(named: String(describing: self))
     }
     func getPrice() -> Int {
-        switch self {
-            case .Circle :
-                return 500;
-            case .Triangle:
-                return 2000;
-            case .Square:
-                return 10000;
+        if self.rawValue < 10 {
+            return self.rawValue * self.rawValue * 100
+        } else {
+            return 10000
+        }
+    }
+    func getPoints() -> Int {
+        if self.rawValue < 10 {
+            return self.rawValue
+        } else {
+            return 0
         }
     }
 }

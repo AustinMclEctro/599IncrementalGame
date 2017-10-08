@@ -67,8 +67,9 @@ class SideMenu: SKView {
     func updateAllowedCurrency(val: Int) {
         // Called every time the store is opened/currency changes while open - constant update of available items
         curA = val;
+        let controller = superview as? ControllerView
         for i in storeItems {
-            if (i.objectType.getPrice() > curA) {
+            if (i.objectType.getPrice() > curA || !(controller?.playArea.level.canAdd(type: i.objectType))!) {
                 i.color = UIColor.gray;
                 i.colorBlendFactor = 0.9;
             }

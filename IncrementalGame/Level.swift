@@ -14,7 +14,8 @@ class Level: SKScene, SKPhysicsContactDelegate {
     
     var motionManager = CMMotionManager()
     let maxShapes = 12
-    var allowedShapes: Set<ObjectType> = [.Circle]
+    let minVel: CGFloat = 30
+    var allowedObjects: Set<ObjectType> = [.Circle]
     
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
@@ -33,8 +34,9 @@ class Level: SKScene, SKPhysicsContactDelegate {
         self.physicsBody = boundary
         
         // just for MVP demo
-        addAllowedShape(type: .Triangle)
-        addAllowedShape(type: .Square)
+        addAllowedObject(type: .Triangle)
+        addAllowedObject(type: .Square)
+        addAllowedObject(type: .Bumper)
         
     }
     
@@ -45,22 +47,41 @@ class Level: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        if let playArea = view as? PlayArea {
-            if let one = contact.bodyA.node as? GameObject {
-                playArea.gained(amount: one.basePoints)
-            }
-            if let two = contact.bodyB.node as? GameObject {
-                playArea.gained(amount: two.basePoints)
+        if contact.bodyA.velocity.magnitude() > minVel || contact.bodyB.velocity.magnitude() > minVel {
+            if let playArea = view as? PlayArea {
+                if let one = contact.bodyA.node as? GameObject {
+                    playArea.gained(amount: one.objectType.getPoints())
+                }
+                if let two = contact.bodyB.node as? GameObject {
+                    playArea.gained(amount: two.objectType.getPoints())
+                }
             }
         }
     }
     
     func canAdd(type: ObjectType) -> Bool {
-        return allowedShapes.contains(type) && self.children.count < maxShapes
+        var addOK = true
+        var shapeCount = 0
+        if !allowedObjects.contains(type) {addOK = false}
+        for object in self.children {
+            let shape = object as! GameObject
+            if shape.objectType.rawValue < 10 {
+                shapeCount += 1
+            } else {
+                if shape.objectType == type {addOK = false}
+            }
+        }
+        if shapeCount >= maxShapes {addOK = false}
+        return addOK
     }
     
-    func addAllowedShape(type: ObjectType) {
-        allowedShapes.insert(type)
+    func addAllowedObject(type: ObjectType) {
+        allowedObjects.insert(type)
     }
 }
 
+extension CGVector {
+    func magnitude() -> CGFloat {
+        return sqrt((self.dx * self.dx) + (self.dy * self.dy))
+    }
+}

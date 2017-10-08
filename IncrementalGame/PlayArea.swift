@@ -20,6 +20,11 @@ class PlayArea: SKView {
         scene.size = frame.size
         presentScene(scene)
         
+        // just for testing
+        addObject(of: .Bumper, at: CGPoint(x:0, y:0))
+        if level.canAdd(type: .Bumper) {
+            addObject(of: .Bumper, at: CGPoint(x:150, y:150))
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,11 +38,9 @@ class PlayArea: SKView {
     func addObject(of: ObjectType, at: CGPoint) {
         // GameObject inherits from SKSpriteNode
         // Initializer is ObjectType - Circle, Triangle etc
-        if level.canAdd(type: of) {
-            let gameObject = GameObject(type: of);
-            level.addChild(gameObject);
-            gameObject.setUp(at: at, withSize: level.size)
-        }
+        let gameObject = GameObject(type: of);
+        level.addChild(gameObject);
+        gameObject.setUp(at: at, withSize: level.size)
     }
     
     func gained(amount: Int) {

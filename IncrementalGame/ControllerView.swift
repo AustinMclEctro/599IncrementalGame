@@ -22,7 +22,7 @@ class ControllerView: UIView {
         }
     }
     func purchaseObject(of: GameObject, sender: UITouch?) {
-        if (currencyA < of.objectType.getPrice()) {
+        if (currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
             return;
         }
         currencyA -= of.objectType.getPrice();
