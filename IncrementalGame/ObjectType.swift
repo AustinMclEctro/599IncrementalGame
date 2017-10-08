@@ -101,5 +101,15 @@ enum ObjectType: Int {
     func getImage() -> UIImage? {
         return UIImage(named: String(describing: self))
     }
+    func getPrice() -> Int {
+        switch self {
+            case .Circle :
+                return 500;
+            case .Triangle:
+                return 2000;
+            case .Square:
+                return 10000;
+        }
+    }
 }
 

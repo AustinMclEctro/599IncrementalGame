@@ -20,13 +20,13 @@ extension ControllerView {
         panRight.isEnabled = true;
         self.addGestureRecognizer(panRight);
         
-        let closeShape = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(shapeClose))
+        /*let closeShape = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(shapeClose))
         closeShape.edges = .right;
         shapeMenu.addGestureRecognizer(closeShape);
         
         let closeUpgrade = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(upgradeClose))
         closeUpgrade.edges = .left;
-        shapeMenu.addGestureRecognizer(closeUpgrade);
+        shapeMenu.addGestureRecognizer(closeUpgrade);*/
         
         shapeButton.addTarget(self, action: #selector(clickShape), for: .touchUpInside)
         upgradeButton.addTarget(self, action: #selector(clickUpgrade), for: .touchUpInside)
@@ -48,6 +48,8 @@ extension ControllerView {
         }
         shapeButton.frame = CGRect(x: shapeMenu.frame.maxX, y: shapeButton.frame.minY, width: shapeButton.frame.width, height: shapeButton.frame.height);
         updateMenuS();
+        shapeMenu.scene?.isUserInteractionEnabled = true;
+        shapeMenu.isUserInteractionEnabled = true;
     }
     @objc func clickUpgrade(sender: UIButton) {
         if upgradeOpen {
@@ -96,6 +98,7 @@ extension ControllerView {
     }
     
     @objc func shapeToggle(sender: UIScreenEdgePanGestureRecognizer) {
+        
         let left = min(-200 + sender.location(in: self).x, 0);
         if (shapeOpen) {
             return;

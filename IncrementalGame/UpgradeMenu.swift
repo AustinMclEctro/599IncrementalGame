@@ -13,8 +13,8 @@ class UpgradeMenu: SideMenu {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        var circle = GameObject(type: .Circle);
-        addStoreItem(gameObject: circle);
+        //var circle = GameObject(type: .Circle);
+        //addStoreItem(gameObject: circle);
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

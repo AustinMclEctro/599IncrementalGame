@@ -22,8 +22,13 @@ class ControllerView: UIView {
         }
     }
     func purchaseObject(of: GameObject, sender: UITouch?) {
+        if (currencyA < of.objectType.getPrice()) {
+            return;
+        }
+        currencyA -= of.objectType.getPrice();
         if sender != nil {
-            playArea.addObject(of: of.objectType, at: sender!.location(in: playArea));
+            var locat = sender?.preciseLocation(in: playArea) ?? sender?.location(in: playArea) ?? CGPoint(x: 0, y: 0)
+            playArea.addObject(of: of.objectType, at: CGPoint(x: locat.x, y: playArea.frame.height-locat.y));
         }
         else {
             // Placed at ambiguous point
@@ -72,16 +77,24 @@ class ControllerView: UIView {
         self.getUserInfo();
         
         self.addSubview(infoPanel);
+        
+        self.addSubview(playArea);
         self.addSubview(shapeMenu);
         self.addSubview(upgradeMenu);
-        self.addSubview(playArea);
         setupTouchEvents()
         
         self.addSubview(shapeButton);
         self.addSubview(upgradeButton);
         infoPanel.upgradeCurrencyA(to: currencyA)
+        
+        
     }
     func getUserInfo() {
+        if (userDefaults.bool(forKey: "init") == false) {
+            addCurA(by: 500);
+            userDefaults.set(true, forKey: "init")
+            userDefaults.set(currencyA, forKey: "currencyA");
+        }
         let curA = userDefaults.integer(forKey: "currencyA")
         if (curA == nil) {
             userDefaults.set(currencyA, forKey: "currencyA");
