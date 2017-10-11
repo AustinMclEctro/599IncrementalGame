@@ -12,7 +12,10 @@ import UIKit
 class InfoPanel: UIView {
     var curALabel: UILabel;
     override init(frame: CGRect) {
-        curALabel = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: frame.height))
+        curALabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        curALabel.textAlignment = NSTextAlignment.center
+
+        
         super.init(frame: frame);
         curALabel.text = "F";
         self.addSubview(curALabel)
