@@ -67,7 +67,13 @@ class Level: SKScene, SKPhysicsContactDelegate {
         if (contact.bodyA.affectedByGravity && contact.bodyB.affectedByGravity) {
             //want animation to be of greater valued object in future
             let collisionEmitter =  createEmitter(color: UIColor.red, location: contact.contactPoint)
-            self.addChild(collisionEmitter)
+            let duration = CGFloat(collisionEmitter.numParticlesToEmit)*collisionEmitter.particleLifetime
+            let addEmitterAction = SKAction.run({self.addChild(collisionEmitter)})
+            let waitAction = SKAction.wait(forDuration: TimeInterval(duration))
+            let remove = SKAction.run {collisionEmitter.removeFromParent()}
+            let collisionSequence = SKAction.sequence([addEmitterAction,waitAction,remove])
+            self.run(collisionSequence)
+            
         }
     }
  
