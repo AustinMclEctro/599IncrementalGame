@@ -129,9 +129,9 @@ class Shop: SKView {
         curA = val;
         let controller = superview as? ControllerView
         for x in storeItems {
-            
             for i in x {
-                if (i.objectType.getPrice() > curA || !(controller?.playArea.level.canAdd(type: i.objectType))!) {
+                //BUG: controller is sometimes being passed as a nil value and crashing the game, commented out for now
+                if (i.objectType.getPrice() > curA) { //|| !(controller?.playArea.level.canAdd(type: i.objectType))!) {
                     i.color = UIColor.black;
                     i.colorBlendFactor = 1.0;
                 }

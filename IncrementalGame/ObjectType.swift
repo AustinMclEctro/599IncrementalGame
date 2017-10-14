@@ -24,6 +24,7 @@ class GameObject: SKSpriteNode {
         
         super.init(texture: texture, color: UIColor.clear, size: im.size)
         self.isUserInteractionEnabled = true
+       
     }
     
     func setUp(at: CGPoint, withSize: CGSize) {
@@ -47,6 +48,7 @@ class GameObject: SKSpriteNode {
             self.physicsBody?.isDynamic = false
             self.physicsBody?.allowsRotation = false
             self.physicsBody?.restitution = 2.5
+            self.physicsBody?.affectedByGravity = false //bumper is not affected by gravity
         } else {
             self.physicsBody?.isDynamic = true
             self.physicsBody?.allowsRotation = true

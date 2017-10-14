@@ -31,6 +31,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
         boundary.contactTestBitMask = 1
         boundary.collisionBitMask = 1
         boundary.usesPreciseCollisionDetection = true
+        boundary.affectedByGravity = false
         self.physicsBody = boundary
         
         // just for MVP demo
@@ -62,6 +63,22 @@ class Level: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+        //Luke: my hacky work around for animations right now, I've made only shapes affected by gravity, so i can easily check this logic.
+        if (contact.bodyA.affectedByGravity && contact.bodyB.affectedByGravity) {
+            //want animation to be of greater valued object in future
+            let collisionEmitter =  createEmitter(color: UIColor.red, location: contact.contactPoint)
+            self.addChild(collisionEmitter)
+        }
+    }
+ 
+    //creates an emitter node
+    func createEmitter(color: UIColor, location: CGPoint) -> SKEmitterNode {
+        let emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+        //emitter?.particleTexture = texture
+        emitter?.particleColor = color
+        emitter?.particlePosition = location
+        emitter?.numParticlesToEmit = 5
+        return emitter!
     }
     
     func canAdd(type: ObjectType) -> Bool {
