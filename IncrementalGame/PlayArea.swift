@@ -13,7 +13,7 @@ class PlayArea: SKView {
     
     var level: Level
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, gameState: GameState) {
         level = Level()
         super.init(frame: frame)
         let scene = level

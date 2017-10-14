@@ -37,6 +37,11 @@ class Level: SKScene, SKPhysicsContactDelegate {
         addAllowedObject(type: .Triangle)
         addAllowedObject(type: .Square)
         addAllowedObject(type: .Bumper)
+        // Added these
+        addAllowedObject(type: .Star)
+        addAllowedObject(type: .Pentagon)
+        addAllowedObject(type: .Hexagon)
+        addAllowedObject(type: .Circle)
         
     }
     

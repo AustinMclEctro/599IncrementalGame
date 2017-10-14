@@ -10,16 +10,23 @@ import Foundation
 import UIKit
 
 class ControllerView: UIView {
-    private var currencyA = 0;
+    private var _currencyA: Int = 0;
+    private var currencyA: Int {
+        set(val) {
+            _currencyA = val;
+            gameState.currencyA = currencyA;
+        }
+        get {
+            return _currencyA;
+        }
+    }
     func addCurA(by: Int) {
         currencyA += by;
         infoPanel.upgradeCurrencyA(to: currencyA);
-        if shapeOpen {
-            shapeMenu.updateAllowedCurrency(val: currencyA);
+        if (shopOpen) {
+            shop.updateAllowedCurrency(val: currencyA);
         }
-        if upgradeOpen {
-            upgradeMenu.updateAllowedCurrency(val: currencyA);
-        }
+        
     }
     func purchaseObject(of: GameObject, sender: UITouch?) {
         if (currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
@@ -35,84 +42,66 @@ class ControllerView: UIView {
             playArea.addObject(of: of.objectType, at: CGPoint(x: 0, y: 0));
         }
     }
-    func updateMenuU() {
-        upgradeMenu.updateAllowedCurrency(val: currencyA);
-    }
-    func updateMenuS() {
-        shapeMenu.updateAllowedCurrency(val: currencyA);
-    }
+
     
     var infoPanel: InfoPanel;
-    var shapeMenu: ShapeMenu;
-    var upgradeMenu: UpgradeMenu;
     var playArea: PlayArea;
-    
-    var shapeButton: UIButton;
-    var upgradeButton: UIButton;
-    var userDefaults: UserDefaults;
+    var shopButton: UIButton;
+    var shop: Shop;
+    var shopOpen = false;
+    let shopWidth: CGFloat = 250.0;
+    let gameState: GameState;
     override init(frame: CGRect) {
-        userDefaults = UserDefaults();
-        
-        
-        
+        gameState = GameState();
         
         let heightPerc = frame.width*1.25;
         let infoHeight = frame.height-heightPerc;
         infoPanel = InfoPanel(frame: CGRect(x: 0, y: 0, width: frame.width, height: infoHeight))
-        shapeMenu = ShapeMenu(frame: CGRect(x: -200, y: 0, width: 200, height: frame.height));
-        upgradeMenu = UpgradeMenu(frame: CGRect(x: frame.width, y: 0, width: 100, height: frame.height));
-        playArea = PlayArea(frame: CGRect(x: 0, y: infoHeight, width: frame.width, height: heightPerc))
-        
-        shapeMenu.layer.zPosition = 3000;
-        upgradeMenu.layer.zPosition = 3000;
-        
-        shapeButton = UIButton(frame: CGRect(x: 0, y: 100, width: 50, height: 100))
-        upgradeButton = UIButton(frame: CGRect(x: frame.width-50, y: 100, width: 50, height: 100))
-        
-        shapeButton.backgroundColor = UIColor.darkGray;
-        upgradeButton.backgroundColor = UIColor.darkGray;
-        
+        playArea = PlayArea(frame: CGRect(x: 0, y: infoHeight, width: frame.width, height: heightPerc), gameState: gameState)
+        shopButton = UIButton(frame: CGRect(x: frame.width-60, y: frame.height-60, width: 50, height: 50))
+        shopButton.setImage(UIImage(named: "ShopButton"), for: .normal);
+        shop = Shop(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
         super.init(frame: frame)
         
-        self.getUserInfo();
+        
         
         self.addSubview(infoPanel);
         
         self.addSubview(playArea);
-        self.addSubview(shapeMenu);
-        self.addSubview(upgradeMenu);
+        self.addSubview(shopButton);
+        self.getUserInfo();
         setupTouchEvents()
         
-        self.addSubview(shapeButton);
-        self.addSubview(upgradeButton);
-        infoPanel.upgradeCurrencyA(to: currencyA)
-        
-        
+        infoPanel.upgradeCurrencyA(to: currencyA);
     }
     func getUserInfo() {
-        if (userDefaults.bool(forKey: "init") == false) {
-            addCurA(by: 500);
-            userDefaults.set(true, forKey: "init")
-            userDefaults.set(currencyA, forKey: "currencyA");
+        currencyA = gameState.currencyA;
+        
+    }
+    
+    // Upgrades & shop
+    func openUpgrade(object: GameObject) {
+        
+        if (!shopOpen) {
+            self.addSubview(shop)
+            self.addSubview(shopButton)
         }
-        let curA = userDefaults.integer(forKey: "currencyA")
-        if (curA == nil) {
-            userDefaults.set(currencyA, forKey: "currencyA");
-        }
-        else {
-            currencyA = curA;
-        }
-        let shapes = userDefaults.array(forKey: "shapes") as? [[String: String]] ?? [];
-        if (shapes != nil) {
-            playArea.setShapes(shapes)
-        }
-        else {
-            userDefaults.set([], forKey: "shapes")
+        shop.upgradeTree(object: object)
+    }
+    func closeUpgrade() {
+        self.shop.closeUpgradeTree();
+        if (!shopOpen) {
+            self.shop.removeFromSuperview();
         }
         
     }
-    var shapeOpen = false;
-    var upgradeOpen = false;
+    func purchaseUpgrade(object: GameObject, touch: UITouch) {
+        self.shop.purchaseUpgrade(object: object, touch: touch)
+    }
+    func openedShop() {
+        shop.updateAllowedCurrency(val: currencyA);
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

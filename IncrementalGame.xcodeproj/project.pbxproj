@@ -8,22 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		494605AB1F88364C00B18145 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494605AA1F88364C00B18145 /* Level.swift */; };
+		F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00D1F90485F0028A5A1 /* Shop.swift */; };
+		F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00F1F904B8D0028A5A1 /* GameState.swift */; };
 		F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */; };
 		F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74211F86ED1A0057AF21 /* ViewController.swift */; };
 		F8FF74251F86ED1A0057AF21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8FF74231F86ED1A0057AF21 /* Main.storyboard */; };
 		F8FF74281F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74261F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld */; };
-		F8FF742A1F86ED1A0057AF21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8FF74291F86ED1A0057AF21 /* Assets.xcassets */; };
 		F8FF742D1F86ED1A0057AF21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8FF742B1F86ED1A0057AF21 /* LaunchScreen.storyboard */; };
 		F8FF74381F86ED1A0057AF21 /* IncrementalGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74371F86ED1A0057AF21 /* IncrementalGameTests.swift */; };
 		F8FF74431F86ED1A0057AF21 /* IncrementalGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74421F86ED1A0057AF21 /* IncrementalGameUITests.swift */; };
 		F8FF74511F86ED2D0057AF21 /* ControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74501F86ED2D0057AF21 /* ControllerView.swift */; };
 		F8FF74531F86ED700057AF21 /* InfoPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74521F86ED700057AF21 /* InfoPanel.swift */; };
-		F8FF74551F86EDAA0057AF21 /* ShapeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74541F86EDAA0057AF21 /* ShapeMenu.swift */; };
-		F8FF74571F86EDB70057AF21 /* UpgradeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74561F86EDB70057AF21 /* UpgradeMenu.swift */; };
 		F8FF74591F86EDC60057AF21 /* PlayArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74581F86EDC60057AF21 /* PlayArea.swift */; };
 		F8FF745D1F870DD20057AF21 /* ControllerViewTouchEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF745C1F870DD20057AF21 /* ControllerViewTouchEvents.swift */; };
 		F8FF745F1F87147A0057AF21 /* ObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF745E1F87147A0057AF21 /* ObjectType.swift */; };
-		F8FF74611F8741930057AF21 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74601F8741930057AF21 /* SideMenu.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,12 +43,13 @@
 
 /* Begin PBXFileReference section */
 		494605AA1F88364C00B18145 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		F804A00D1F90485F0028A5A1 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
+		F804A00F1F904B8D0028A5A1 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		F8FF741C1F86ED1A0057AF21 /* IncrementalGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IncrementalGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F8FF74211F86ED1A0057AF21 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F8FF74241F86ED1A0057AF21 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F8FF74271F86ED1A0057AF21 /* IncrementalGame.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = IncrementalGame.xcdatamodel; sourceTree = "<group>"; };
-		F8FF74291F86ED1A0057AF21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F8FF742C1F86ED1A0057AF21 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F8FF742E1F86ED1A0057AF21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F8FF74331F86ED1A0057AF21 /* IncrementalGameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncrementalGameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,12 +60,10 @@
 		F8FF74441F86ED1A0057AF21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F8FF74501F86ED2D0057AF21 /* ControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerView.swift; sourceTree = "<group>"; };
 		F8FF74521F86ED700057AF21 /* InfoPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPanel.swift; sourceTree = "<group>"; };
-		F8FF74541F86EDAA0057AF21 /* ShapeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeMenu.swift; sourceTree = "<group>"; };
-		F8FF74561F86EDB70057AF21 /* UpgradeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeMenu.swift; sourceTree = "<group>"; };
 		F8FF74581F86EDC60057AF21 /* PlayArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayArea.swift; sourceTree = "<group>"; };
 		F8FF745C1F870DD20057AF21 /* ControllerViewTouchEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerViewTouchEvents.swift; sourceTree = "<group>"; };
 		F8FF745E1F87147A0057AF21 /* ObjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectType.swift; sourceTree = "<group>"; };
-		F8FF74601F8741930057AF21 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
+		F8FFAAA61F917B4200822B82 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,22 +114,21 @@
 		F8FF741E1F86ED1A0057AF21 /* IncrementalGame */ = {
 			isa = PBXGroup;
 			children = (
+				F804A00F1F904B8D0028A5A1 /* GameState.swift */,
 				F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */,
 				F8FF74211F86ED1A0057AF21 /* ViewController.swift */,
 				F8FF74231F86ED1A0057AF21 /* Main.storyboard */,
-				F8FF74291F86ED1A0057AF21 /* Assets.xcassets */,
 				F8FF742B1F86ED1A0057AF21 /* LaunchScreen.storyboard */,
 				F8FF742E1F86ED1A0057AF21 /* Info.plist */,
 				F8FF74261F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld */,
 				F8FF74501F86ED2D0057AF21 /* ControllerView.swift */,
 				F8FF745C1F870DD20057AF21 /* ControllerViewTouchEvents.swift */,
 				F8FF74521F86ED700057AF21 /* InfoPanel.swift */,
-				F8FF74601F8741930057AF21 /* SideMenu.swift */,
-				F8FF74541F86EDAA0057AF21 /* ShapeMenu.swift */,
-				F8FF74561F86EDB70057AF21 /* UpgradeMenu.swift */,
 				F8FF74581F86EDC60057AF21 /* PlayArea.swift */,
 				F8FF745E1F87147A0057AF21 /* ObjectType.swift */,
+				F8FFAAA61F917B4200822B82 /* Assets.xcassets */,
 				494605AA1F88364C00B18145 /* Level.swift */,
+				F804A00D1F90485F0028A5A1 /* Shop.swift */,
 			);
 			path = IncrementalGame;
 			sourceTree = "<group>";
@@ -263,7 +259,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8FF742D1F86ED1A0057AF21 /* LaunchScreen.storyboard in Resources */,
-				F8FF742A1F86ED1A0057AF21 /* Assets.xcassets in Resources */,
 				F8FF74251F86ED1A0057AF21 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,15 +284,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F8FF74611F8741930057AF21 /* SideMenu.swift in Sources */,
 				F8FF745F1F87147A0057AF21 /* ObjectType.swift in Sources */,
 				F8FF74591F86EDC60057AF21 /* PlayArea.swift in Sources */,
 				F8FF74531F86ED700057AF21 /* InfoPanel.swift in Sources */,
 				F8FF74281F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld in Sources */,
-				F8FF74571F86EDB70057AF21 /* UpgradeMenu.swift in Sources */,
 				494605AB1F88364C00B18145 /* Level.swift in Sources */,
+				F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */,
 				F8FF745D1F870DD20057AF21 /* ControllerViewTouchEvents.swift in Sources */,
-				F8FF74551F86EDAA0057AF21 /* ShapeMenu.swift in Sources */,
+				F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */,
 				F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */,
 				F8FF74511F86ED2D0057AF21 /* ControllerView.swift in Sources */,
 				F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */,

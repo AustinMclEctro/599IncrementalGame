@@ -72,10 +72,54 @@ class GameObject: SKSpriteNode {
             }
         }
     }
+    var movedToStore = false;
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         touched(self, touches, .changed)
         self.position = touches.first!.location(in: parent!)
         self.physicsBody?.isDynamic = false
+        
+            if let p = parent as? Level {
+                if let controller = p.view?.superview as? ControllerView {
+                    if !movedToStore {
+                        if !controller.shopOpen {
+                            if (controller.shopButton.frame.contains(touches.first!.location(in: controller))) {
+                                // In shop
+                                controller.openUpgrade(object: self);
+                                movedToStore = true;
+                            }
+                        }
+                        else {
+                            if (controller.shop.frame.contains(touches.first!.location(in: controller))) {
+                                // In shop
+                                controller.openUpgrade(object: self);
+                                movedToStore = true;
+                            }
+                        }
+                    }
+                    else {
+                        if !(controller.shop.frame.contains(touches.first!.location(in: controller))) {
+                            
+                            controller.closeUpgrade();
+                            self.movedToStore = false;
+                            
+                        }
+                        else {
+                            if controller.shop.inRings(location: touches.first!.location(in: controller.shop)) {
+                                controller.shop.upgradeIn(location: touches.first!.location(in: controller.shop));
+                            }
+                            else {
+                                controller.closeUpgrade();
+                                self.movedToStore = false;
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        
+        
+        
+        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -89,6 +133,14 @@ class GameObject: SKSpriteNode {
             self.physicsBody?.isDynamic = true
             self.physicsBody?.applyImpulse(flick)
         }
+        if (movedToStore) {
+            if let p = parent as? Level {
+                if let controller = p.view?.superview as? ControllerView {
+                    controller.purchaseUpgrade(object: self, touch: touches.first!)
+                }
+            }
+        }
+        movedToStore = false;
     }
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         touched(self, touches, .ended)
@@ -101,10 +153,14 @@ class GameObject: SKSpriteNode {
 
 
 enum ObjectType: Int {
-    case Circle = 1
+    case Pentagon = 5
+    case Hexagon = 6
+    case Star = 1000
+    case Circle = 360
     case Triangle = 3
     case Square = 4
     case Bumper = 10
+    
     
     func getImage() -> UIImage? {
         return UIImage(named: String(describing: self))
