@@ -17,7 +17,6 @@ class PlayArea: SKView, UIGestureRecognizerDelegate {
     let doubleTap = UITapGestureRecognizer()
     let swipeRight = UISwipeGestureRecognizer()
     let swipeLeft = UISwipeGestureRecognizer()
-    
     init(frame: CGRect, gameState: GameState) {
         level = Level(size: frame.size, actual: false)
         super.init(frame: frame)
@@ -37,7 +36,12 @@ class PlayArea: SKView, UIGestureRecognizerDelegate {
         self.addGestureRecognizer(swipeLeft)
         zones.append(level)
         presentScene(level)
+        
+        
+        
     }
+    
+    
     
     @objc func handleSwipes(recognizer: UISwipeGestureRecognizer) {
         if recognizer.direction == .left {
@@ -51,13 +55,16 @@ class PlayArea: SKView, UIGestureRecognizerDelegate {
         // don't know why this is needed but zones[0] won't display right without it!!
         if zoneNumber == 0 {zones[0] = Level(size: frame.size, actual: false)}
         
-        level = zones[zoneNumber]
-        presentScene(level)
-        
+        // Show zone at index
+        selectZone(index: zoneNumber);
         // just for testing
         print(zoneNumber)
     }
-    
+    func selectZone(index: Int) {
+        // Displays the selected zone
+        level = zones[index]
+        presentScene(level)
+    }
     @objc func handleTaps() {
         if zoneNumber == 0 {
             zoneNumber = zones.count

@@ -52,6 +52,8 @@ class ControllerView: UIView {
     var shopOpen = false;
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
+    var tableSceneView: SceneTableView?;
+    var tableOpen = false;
     override init(frame: CGRect) {
         if GameState.loadGameState() != nil {
             self.gameState = GameState.loadGameState()!
