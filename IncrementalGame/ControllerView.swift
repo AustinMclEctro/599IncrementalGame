@@ -26,7 +26,6 @@ class ControllerView: UIView {
         if (shopOpen) {
             shop.updateAllowedCurrency(val: currencyA);
         }
-        
     }
     func purchaseObject(of: GameObject, sender: UITouch?) {
         if (currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
@@ -41,6 +40,8 @@ class ControllerView: UIView {
             // Placed at ambiguous point
             playArea.addObject(of: of.objectType, at: CGPoint(x: 0, y: 0));
         }
+        
+        GameState.saveGameState(gameState)
     }
 
     
@@ -52,7 +53,11 @@ class ControllerView: UIView {
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
     override init(frame: CGRect) {
-        gameState = GameState();
+        if GameState.loadGameState() != nil {
+            self.gameState = GameState.loadGameState()!
+        } else {
+            gameState = GameState(2000);
+        }
         
         let heightPerc = frame.width*1.25;
         let infoHeight = frame.height-heightPerc;
