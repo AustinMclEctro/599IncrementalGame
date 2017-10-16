@@ -12,6 +12,8 @@
 		A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A37572FC1F9286FB0006CC3B /* Assets.xcassets */; };
 		F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00D1F90485F0028A5A1 /* Shop.swift */; };
 		F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00F1F904B8D0028A5A1 /* GameState.swift */; };
+		F83FF1EA1F95497100200B30 /* SceneTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83FF1E91F95497100200B30 /* SceneTableView.swift */; };
+		F83FF1EC1F95596700200B30 /* SceneShapePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83FF1EB1F95596700200B30 /* SceneShapePreview.swift */; };
 		F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */; };
 		F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74211F86ED1A0057AF21 /* ViewController.swift */; };
 		F8FF74251F86ED1A0057AF21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8FF74231F86ED1A0057AF21 /* Main.storyboard */; };
@@ -49,6 +51,8 @@
 		A37572FC1F9286FB0006CC3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F804A00D1F90485F0028A5A1 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		F804A00F1F904B8D0028A5A1 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
+		F83FF1E91F95497100200B30 /* SceneTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTableView.swift; sourceTree = "<group>"; };
+		F83FF1EB1F95596700200B30 /* SceneShapePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneShapePreview.swift; sourceTree = "<group>"; };
 		F8FF741C1F86ED1A0057AF21 /* IncrementalGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IncrementalGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F8FF74211F86ED1A0057AF21 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +137,8 @@
 				A37572FC1F9286FB0006CC3B /* Assets.xcassets */,
 				494605AA1F88364C00B18145 /* Level.swift */,
 				F804A00D1F90485F0028A5A1 /* Shop.swift */,
+				F83FF1E91F95497100200B30 /* SceneTableView.swift */,
+				F83FF1EB1F95596700200B30 /* SceneShapePreview.swift */,
 			);
 			path = IncrementalGame;
 			sourceTree = "<group>";
@@ -294,8 +300,10 @@
 				F8FF74591F86EDC60057AF21 /* PlayArea.swift in Sources */,
 				F8FF74531F86ED700057AF21 /* InfoPanel.swift in Sources */,
 				F8FF74281F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld in Sources */,
+				F83FF1EA1F95497100200B30 /* SceneTableView.swift in Sources */,
 				494605AB1F88364C00B18145 /* Level.swift in Sources */,
 				F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */,
+				F83FF1EC1F95596700200B30 /* SceneShapePreview.swift in Sources */,
 				F8FF745D1F870DD20057AF21 /* ControllerViewTouchEvents.swift in Sources */,
 				F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */,
 				F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */,
@@ -467,10 +475,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5PKUCYGVDP;
+				DEVELOPMENT_TEAM = VQ99BLGHS4;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = personal.fuck;
+				PRODUCT_BUNDLE_IDENTIFIER = "-99incrementalgame";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -482,10 +490,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5PKUCYGVDP;
+				DEVELOPMENT_TEAM = VQ99BLGHS4;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = personal.fuck;
+				PRODUCT_BUNDLE_IDENTIFIER = "-99incrementalgame";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
