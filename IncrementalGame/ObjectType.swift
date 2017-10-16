@@ -43,22 +43,27 @@ class GameObject: SKSpriteNode {
         self.physicsBody?.categoryBitMask = 1
         self.physicsBody?.contactTestBitMask = 1
         self.physicsBody?.collisionBitMask = 1
+        let rangeX: SKRange
+        let rangeY: SKRange
         
         if objectType == .Bumper {
             self.physicsBody?.isDynamic = false
             self.physicsBody?.allowsRotation = false
             self.physicsBody?.restitution = 2.5
             self.physicsBody?.affectedByGravity = false //bumper is not affected by gravity
+            rangeX = SKRange(lowerLimit: (dimension*2), upperLimit: (withSize.width-(dimension*2)))
+            rangeY = SKRange(lowerLimit: (dimension*2), upperLimit: (withSize.height-(dimension*2)))
         } else {
             self.physicsBody?.isDynamic = true
             self.physicsBody?.allowsRotation = true
             self.physicsBody?.restitution = 0.75
+            rangeX = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.width-(dimension/2)+1))
+            rangeY = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.height-(dimension/2)+1))
         }
         
         self.physicsBody?.usesPreciseCollisionDetection = true
-        let rangeX = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.width-(dimension/2))+1)
+        
         let conX = SKConstraint.positionX(rangeX)
-        let rangeY = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.height-(dimension/2))+1)
         let conY = SKConstraint.positionY(rangeY)
         self.constraints = [conX,conY]
     }

@@ -9,21 +9,65 @@
 import Foundation
 import SpriteKit
 
-class PlayArea: SKView {
+class PlayArea: SKView, UIGestureRecognizerDelegate {
     
     var level: Level
+    var zones: [Level] = []
+    var zoneNumber = 0
+    let doubleTap = UITapGestureRecognizer()
+    let swipeRight = UISwipeGestureRecognizer()
+    let swipeLeft = UISwipeGestureRecognizer()
     
     init(frame: CGRect, gameState: GameState) {
-        level = Level()
+        level = Level(size: frame.size, actual: false)
         super.init(frame: frame)
-        let scene = level
-        scene.size = frame.size
-        presentScene(scene)
+        doubleTap.numberOfTapsRequired = 2
+        doubleTap.addTarget(self, action: #selector(handleTaps))
+        doubleTap.delegate = self
+        self.addGestureRecognizer(doubleTap)
+        swipeRight.numberOfTouchesRequired = 2
+        swipeRight.direction = .right
+        swipeRight.addTarget(self, action: #selector(handleSwipes(recognizer:)))
+        swipeRight.delegate = self
+        self.addGestureRecognizer(swipeRight)
+        swipeLeft.numberOfTouchesRequired = 2
+        swipeLeft.direction = .left
+        swipeLeft.addTarget(self, action: #selector(handleSwipes(recognizer:)))
+        swipeLeft.delegate = self
+        self.addGestureRecognizer(swipeLeft)
+        zones.append(level)
+        presentScene(level)
+    }
+    
+    @objc func handleSwipes(recognizer: UISwipeGestureRecognizer) {
+        if recognizer.direction == .left {
+            zoneNumber += 1
+            if zoneNumber == zones.count {zoneNumber = 0}
+        } else if recognizer.direction == .right {
+            zoneNumber -= 1
+            if zoneNumber < 0 {zoneNumber = zones.count - 1}
+        }
+        
+        // don't know why this is needed but zones[0] won't display right without it!!
+        if zoneNumber == 0 {zones[0] = Level(size: frame.size, actual: false)}
+        
+        level = zones[zoneNumber]
+        presentScene(level)
         
         // just for testing
-        addObject(of: .Bumper, at: CGPoint(x:0, y:0))
-        if level.canAdd(type: .Bumper) {
-            addObject(of: .Bumper, at: CGPoint(x:150, y:150))
+        print(zoneNumber)
+    }
+    
+    @objc func handleTaps() {
+        if zoneNumber == 0 {
+            zoneNumber = zones.count
+            zones.append(Level(size: frame.size))
+            level = zones[zoneNumber]
+            presentScene(level)
+            // just for testing
+            if level.canAdd(type: .Bumper) {
+                addObject(of: .Bumper, at: CGPoint(x:0, y:0))
+            }
         }
     }
     

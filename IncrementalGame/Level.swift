@@ -6,7 +6,7 @@
 //  Copyright © 2017 Ben Grande. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import SpriteKit
 import CoreMotion
 
@@ -14,36 +14,52 @@ class Level: SKScene, SKPhysicsContactDelegate {
     
     var motionManager = CMMotionManager()
     let maxShapes = 12
-    let minVel: CGFloat = 30
-    var allowedObjects: Set<ObjectType> = [.Circle]
+    let minVel: CGFloat = 50
+    var allowedObjects: Set<ObjectType> = []
     
-    override func didMove(to view: SKView) {
+    
+    init(size: CGSize, actual: Bool=true) {
+        super.init(size: size)
+        
         backgroundColor = SKColor.black
         
-        motionManager.startAccelerometerUpdates()
+        if actual {
+            motionManager.startAccelerometerUpdates()
+            
+            physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+            physicsWorld.contactDelegate = self
+            
+            let boundary = SKPhysicsBody(edgeLoopFrom: self.frame)
+            boundary.friction = 0.2
+            boundary.categoryBitMask = 1
+            boundary.contactTestBitMask = 1
+            boundary.collisionBitMask = 1
+            boundary.usesPreciseCollisionDetection = true
+            boundary.affectedByGravity = false
+            self.physicsBody = boundary
+            
+            addAllowedObject(type: .Triangle)
+            
+            // just for MVP demo
+            addAllowedObject(type: .Square)
+            addAllowedObject(type: .Bumper)
+            // Added these
+            addAllowedObject(type: .Star)
+            addAllowedObject(type: .Pentagon)
+            addAllowedObject(type: .Hexagon)
+            addAllowedObject(type: .Circle)
+        }
+        else {
+            let addTap = SKLabelNode(text: "Double Tap to Add a New Zone")
+            addTap.fontSize = 26
+            addTap.position = CGPoint(x: frame.midX, y: frame.midY)
+            addChild(addTap)
+        }
         
-        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-        physicsWorld.contactDelegate = self
-        
-        let boundary = SKPhysicsBody(edgeLoopFrom: self.frame)
-        boundary.friction = 0.2
-        boundary.categoryBitMask = 1
-        boundary.contactTestBitMask = 1
-        boundary.collisionBitMask = 1
-        boundary.usesPreciseCollisionDetection = true
-        boundary.affectedByGravity = false
-        self.physicsBody = boundary
-        
-        // just for MVP demo
-        addAllowedObject(type: .Triangle)
-        addAllowedObject(type: .Square)
-        addAllowedObject(type: .Bumper)
-        // Added these
-        addAllowedObject(type: .Star)
-        addAllowedObject(type: .Pentagon)
-        addAllowedObject(type: .Hexagon)
-        addAllowedObject(type: .Circle)
-        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -92,11 +108,12 @@ class Level: SKScene, SKPhysicsContactDelegate {
         var shapeCount = 0
         if !allowedObjects.contains(type) {addOK = false}
         for object in self.children {
-            let shape = object as! GameObject
-            if shape.objectType.rawValue < 10 {
-                shapeCount += 1
-            } else {
-                if shape.objectType == type {addOK = false}
+            if let shape = object as? GameObject {
+                if shape.objectType.rawValue < 10 {
+                    shapeCount += 1
+                } else {
+                    if shape.objectType == type {addOK = false}
+                }
             }
         }
         if shapeCount >= maxShapes {addOK = false}
