@@ -26,6 +26,8 @@ class ControllerView: UIView {
         if (shopOpen) {
             shop.updateAllowedCurrency(val: currencyA);
         }
+        
+        GameState.saveGameState(gameState)
     }
     func purchaseObject(of: GameObject, sender: UITouch?) {
         if (currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
