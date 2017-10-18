@@ -78,29 +78,45 @@ class Level: SKScene, SKPhysicsContactDelegate {
                     playArea.gained(amount: two.objectType.getPoints())
                 }
             }
+            if (contact.bodyA.node is GameObject && contact.bodyB.node is GameObject) {
+                
+                //find the most highly valued object in the collision
+                var min = contact.bodyA.node as! GameObject
+                var max = contact.bodyB.node as! GameObject
+                if min.getType().getPoints() > max.getType().getPoints() {
+                    swap(&min, &max)
+                }
+                //want animation to be of greater valued object
+                //create an object first
+                let collisionEmitter =  createEmitter(sourceNode: max, location: contact.contactPoint)
+                animateCollision(collisionEmitter: collisionEmitter)
+                
+            }
         }
-        //Luke: my hacky work around for animations right now, I've made only shapes affected by gravity, so i can easily check this logic.
-        if (contact.bodyA.affectedByGravity && contact.bodyB.affectedByGravity) {
-            //want animation to be of greater valued object in future
-            let collisionEmitter =  createEmitter(color: UIColor.red, location: contact.contactPoint)
-            let duration = CGFloat(collisionEmitter.numParticlesToEmit)*collisionEmitter.particleLifetime
-            let addEmitterAction = SKAction.run({self.addChild(collisionEmitter)})
-            let waitAction = SKAction.wait(forDuration: TimeInterval(duration))
-            let remove = SKAction.run {collisionEmitter.removeFromParent()}
-            let collisionSequence = SKAction.sequence([addEmitterAction,waitAction,remove])
-            self.run(collisionSequence)
-            
-        }
+  
+        
     }
  
     //creates an emitter node
-    func createEmitter(color: UIColor, location: CGPoint) -> SKEmitterNode {
+    func createEmitter(sourceNode: GameObject, location: CGPoint) -> SKEmitterNode {
         let emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
-        //emitter?.particleTexture = texture
-        emitter?.particleColor = color
+        //now set the emitter to have the right texture of the passed node
+        emitter?.particleTexture = SKTexture(image: sourceNode.getType().getImage()!)
         emitter?.particlePosition = location
         emitter?.numParticlesToEmit = 5
         return emitter!
+    }
+    
+    //animates the collision after being passed an emitter node by setting the proper duration, adding a child node
+    //and then letting the animation play before removing itself
+    func animateCollision(collisionEmitter: SKEmitterNode) {
+        //set up a sequence animation which deletes its node after completion.
+        let duration = CGFloat(collisionEmitter.numParticlesToEmit)*collisionEmitter.particleLifetime
+        let addEmitterAction = SKAction.run({self.addChild(collisionEmitter)})
+        let waitAction = SKAction.wait(forDuration: TimeInterval(duration)) //allow sparks to animate
+        let remove = SKAction.run {collisionEmitter.removeFromParent()}
+        let collisionSequence = SKAction.sequence([addEmitterAction,waitAction,remove])
+        self.run(collisionSequence)
     }
     
     func canAdd(type: ObjectType) -> Bool {
