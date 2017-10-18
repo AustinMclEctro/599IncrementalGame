@@ -61,7 +61,7 @@ class GameObject: SKSpriteNode {
             rangeY = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.height-(dimension/2)+1))
         }
         
-        self.physicsBody?.usesPreciseCollisionDetection = true
+        self.physicsBody?.usesPreciseCollisionDetection = false
         
         let conX = SKConstraint.positionX(rangeX)
         let conY = SKConstraint.positionY(rangeY)
@@ -166,8 +166,8 @@ class GameObject: SKSpriteNode {
 enum ObjectType: Int {
     case Pentagon = 5
     case Hexagon = 6
-    case Star = 1000
-    case Circle = 360
+    case Star = 8
+    case Circle = 9
     case Triangle = 3
     case Square = 4
     case Bumper = 10
