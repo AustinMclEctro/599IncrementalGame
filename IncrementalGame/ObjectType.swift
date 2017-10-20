@@ -57,6 +57,9 @@ class GameObject: SKSpriteNode {
             self.physicsBody?.isDynamic = true
             self.physicsBody?.allowsRotation = true
             self.physicsBody?.restitution = 0.75
+            self.physicsBody?.angularDamping = 0.5
+            self.physicsBody?.friction = 0
+            self.physicsBody?.linearDamping = 0.5
             rangeX = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.width-(dimension/2)+1))
             rangeY = SKRange(lowerLimit: (dimension/2)-1, upperLimit: (withSize.height-(dimension/2)+1))
         }
