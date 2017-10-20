@@ -69,7 +69,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        if contact.bodyA.velocity.magnitude() > minVel || contact.bodyB.velocity.magnitude() > minVel {
+        if contact.bodyA.velocity.magnitude() > minVel && contact.bodyB.velocity.magnitude() > minVel && !contact.bodyB.angularVelocity.isLess(than: minVel){
             if let playArea = view as? PlayArea {
                 if let one = contact.bodyA.node as? GameObject {
                     playArea.gained(amount: one.objectType.getPoints())
