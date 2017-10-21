@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 class SceneTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
-    var zones: [Level] = [];
+    var zones: [Zone] = [];
     init(frame: CGRect) {
         super.init(frame: frame, style: .plain)
         dataSource = self;
         delegate = self;
     }
-    func setZones(zones: [Level]) {
+    func setZones(zones: [Zone]) {
         self.zones = zones;
         self.reloadData();
     }
@@ -31,7 +31,7 @@ class SceneTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let controller = superview as? ControllerView {
+        if let controller = superview as? MasterView {
             controller.playArea.selectZone(index: indexPath.row);
             controller.tableOpen = false;
             self.removeFromSuperview()
@@ -41,3 +41,4 @@ class SceneTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

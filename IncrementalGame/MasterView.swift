@@ -1,5 +1,5 @@
 //
-//  ControllerView.swift
+//  MasterView.swift
 //  IncrementalGame
 //
 //  Created by Ben Grande on 2017-10-05.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ControllerView: UIView {
+class MasterView: UIView {
     private var _currencyA: Int = 0;
     private var currencyA: Int {
         set(val) {
@@ -20,7 +20,6 @@ class ControllerView: UIView {
                 shop.updateAllowedCurrency(val: currencyA);
             }
             
-            GameState.saveGameState(gameState)
         }
         get {
             return _currencyA;
@@ -43,9 +42,8 @@ class ControllerView: UIView {
             playArea.addObject(of: of.objectType, at: CGPoint(x: 0, y: 0));
         }
         
-        GameState.saveGameState(gameState)
     }
-
+    
     
     var infoPanel: InfoPanel;
     var playArea: PlayArea;
@@ -57,11 +55,8 @@ class ControllerView: UIView {
     var tableSceneView: SceneTableView?;
     var tableOpen = false;
     override init(frame: CGRect) {
-        if GameState.loadGameState() != nil {
-            self.gameState = GameState.loadGameState()!
-        } else {
-            gameState = GameState(2000);
-        }
+        gameState = GameState(2000, [Zone(size: frame.size, actual: false)]);
+        
         
         let heightPerc = frame.width*1.25;
         let infoHeight = frame.height-heightPerc;
@@ -118,3 +113,4 @@ class ControllerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

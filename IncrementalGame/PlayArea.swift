@@ -11,30 +11,30 @@ import SpriteKit
 
 class PlayArea: SKView, UIGestureRecognizerDelegate {
     
-    var level: Level
-    var zones: [Level] = []
+    var level: Zone
     var zoneNumber = 0
+    let gameState: GameState
     let doubleTap = UITapGestureRecognizer()
     let swipeRight = UISwipeGestureRecognizer()
     let swipeLeft = UISwipeGestureRecognizer()
     init(frame: CGRect, gameState: GameState) {
-        level = Level(size: frame.size, actual: false)
+        self.gameState = gameState
+        level = gameState.zones[0]
         super.init(frame: frame)
         doubleTap.numberOfTapsRequired = 2
         doubleTap.addTarget(self, action: #selector(handleTaps))
         doubleTap.delegate = self
         self.addGestureRecognizer(doubleTap)
-        swipeRight.numberOfTouchesRequired = 2
+        swipeRight.numberOfTouchesRequired = 1
         swipeRight.direction = .right
         swipeRight.addTarget(self, action: #selector(handleSwipes(recognizer:)))
         swipeRight.delegate = self
         self.addGestureRecognizer(swipeRight)
-        swipeLeft.numberOfTouchesRequired = 2
+        swipeLeft.numberOfTouchesRequired = 1
         swipeLeft.direction = .left
         swipeLeft.addTarget(self, action: #selector(handleSwipes(recognizer:)))
         swipeLeft.delegate = self
         self.addGestureRecognizer(swipeLeft)
-        zones.append(level)
         presentScene(level)
         
         
@@ -46,30 +46,33 @@ class PlayArea: SKView, UIGestureRecognizerDelegate {
     @objc func handleSwipes(recognizer: UISwipeGestureRecognizer) {
         if recognizer.direction == .left {
             zoneNumber += 1
-            if zoneNumber == zones.count {zoneNumber = 0}
+            if zoneNumber == gameState.zones.count {zoneNumber = 0}
         } else if recognizer.direction == .right {
             zoneNumber -= 1
-            if zoneNumber < 0 {zoneNumber = zones.count - 1}
+            if zoneNumber < 0 {zoneNumber = gameState.zones.count - 1}
         }
         
         // don't know why this is needed but zones[0] won't display right without it!!
-        if zoneNumber == 0 {zones[0] = Level(size: frame.size, actual: false)}
+        if zoneNumber == 0 {gameState.zones[0] = Zone(size: frame.size, actual: false)}
         
         // Show zone at index
         selectZone(index: zoneNumber);
         // just for testing
         print(zoneNumber)
     }
+    
     func selectZone(index: Int) {
         // Displays the selected zone
-        level = zones[index]
+        zoneNumber = index
+        level = gameState.zones[index]
         presentScene(level)
     }
+    
     @objc func handleTaps() {
         if zoneNumber == 0 {
-            zoneNumber = zones.count
-            zones.append(Level(size: frame.size))
-            level = zones[zoneNumber]
+            zoneNumber = gameState.zones.count
+            gameState.zones.append(Zone(size: frame.size))
+            level = gameState.zones[zoneNumber]
             presentScene(level)
             // just for testing
             if level.canAdd(type: .Bumper) {
@@ -96,7 +99,7 @@ class PlayArea: SKView, UIGestureRecognizerDelegate {
     
     func gained(amount: Int) {
         // Change the name/delete as you like :) just left here to show how to add currency A
-        if let controller = superview as? ControllerView {
+        if let controller = superview as? MasterView {
             controller.addCurA(by: amount);
         }
     }

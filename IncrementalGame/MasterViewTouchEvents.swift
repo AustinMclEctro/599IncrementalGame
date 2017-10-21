@@ -1,5 +1,5 @@
 //
-//  ControllerViewTouchEvents.swift
+//  MasterViewTouchEvents.swift
 //  IncrementalGame
 //
 //  Created by Ben Grande on 2017-10-05.
@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-extension ControllerView {
+extension MasterView {
     func setupTouchEvents() {
         shopButton.addTarget(self, action: #selector(tapDownStore), for: .touchDown)
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinchSelf))
@@ -39,7 +39,7 @@ extension ControllerView {
             if (tableSceneView == nil) {
                 tableSceneView = SceneTableView(frame: CGRect(x: -100, y: -100, width: frame.width+200, height: frame.height+200))
             }
-            tableSceneView!.setZones(zones: playArea.zones);
+            tableSceneView!.setZones(zones: gameState.zones);
             self.addSubview(tableSceneView!);
         case .changed:
             if (tableOpen) {
@@ -74,3 +74,4 @@ extension ControllerView {
     
    
 }
+

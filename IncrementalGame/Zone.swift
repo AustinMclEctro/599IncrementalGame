@@ -1,5 +1,5 @@
 //
-//  Level.swift
+//  Zone.swift
 //  IncrementalGame
 //
 //  Created by Andrew Groeneveldt on 10-06-2017.
@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 import CoreMotion
 
-class Level: SKScene, SKPhysicsContactDelegate {
+class Zone: SKScene, SKPhysicsContactDelegate {
     
     var motionManager = CMMotionManager()
     let maxShapes = 12
@@ -59,7 +59,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -93,10 +93,10 @@ class Level: SKScene, SKPhysicsContactDelegate {
                 
             }
         }
-  
+        
         
     }
- 
+    
     //creates an emitter node
     func createEmitter(sourceNode: GameObject, location: CGPoint) -> SKEmitterNode {
         let emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
@@ -146,3 +146,4 @@ extension CGVector {
         return sqrt((self.dx * self.dx) + (self.dy * self.dy))
     }
 }
+

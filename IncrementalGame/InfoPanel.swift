@@ -17,7 +17,7 @@ class InfoPanel: UIView {
         curALabel.textAlignment = NSTextAlignment.center
         var height = min(frame.height, 50.0)
         let logoWidth = (183/77)*height
-    
+        
         logo = UIImageView(frame: CGRect(x: (frame.width/2)-(logoWidth/2), y: 10, width: logoWidth, height: height))
         logo.image = UIImage(named: "colidr");
         super.init(frame: frame);
@@ -34,5 +34,6 @@ class InfoPanel: UIView {
     func upgradeCurrencyA(to: Int) {
         curALabel.text = "$"+String(to);
     }
-   
+    
 }
+

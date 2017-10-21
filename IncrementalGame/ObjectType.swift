@@ -80,7 +80,7 @@ class GameObject: SKSpriteNode {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touched(self, touches, .began)
-        if let level = parent as? Level {
+        if let level = parent as? Zone {
             if let playArea = level.view as? PlayArea {
                 playArea.gained(amount: objectType.getPoints())
             }
@@ -92,8 +92,8 @@ class GameObject: SKSpriteNode {
         self.position = touches.first!.location(in: parent!)
         self.physicsBody?.isDynamic = false
         
-            if let p = parent as? Level {
-                if let controller = p.view?.superview as? ControllerView {
+            if let p = parent as? Zone {
+                if let controller = p.view?.superview as? MasterView {
                     if !movedToStore {
                         if !controller.shopOpen {
                             if (controller.shopButton.frame.contains(touches.first!.location(in: controller))) {
@@ -148,8 +148,8 @@ class GameObject: SKSpriteNode {
             self.physicsBody?.applyImpulse(flick)
         }
         if (movedToStore) {
-            if let p = parent as? Level {
-                if let controller = p.view?.superview as? ControllerView {
+            if let p = parent as? Zone {
+                if let controller = p.view?.superview as? MasterView {
                     controller.purchaseUpgrade(object: self, touch: touches.first!)
                 }
             }
@@ -161,7 +161,8 @@ class GameObject: SKSpriteNode {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        self.objectType = .Triangle // just to set it to something!!
+        super.init(coder: aDecoder)
     }
 }
 

@@ -95,7 +95,7 @@ class Shop: SKView {
         
         super.didMoveToSuperview()
         /*animateIn {
-            
+         
         }*/
         blackout();
         
@@ -171,7 +171,7 @@ class Shop: SKView {
             touchLoc = (touches.first?.location(in: self));
         }
         if (state == .ended) {
-            if let controller = superview as? ControllerView {
+            if let controller = superview as? MasterView {
                 
                 let touch = touches[touches.startIndex];
                 let touchLocation = touch.location(in: self);
@@ -205,7 +205,7 @@ class Shop: SKView {
         curA = val;
     }
     func updateStores() {
-        if let controller = superview as? ControllerView {
+        if let controller = superview as? MasterView {
             if (nextLowestRing1 < storeItems[0].count) {
                 var storeItem1 = storeItems[0][nextLowestRing1];
                 while (curA >= storeItem1.getType().getPrice()) {
@@ -245,7 +245,7 @@ class Shop: SKView {
             //}
         }
     }
-    func applyFilter(item: GameObject, controller: ControllerView) {
+    func applyFilter(item: GameObject, controller: MasterView) {
         // Makes store items black or normal depending on ability to add
         if (item.objectType.getPrice() > curA || !(controller.playArea.level.canAdd(type: item.objectType))) {
             item.color = UIColor.black;
