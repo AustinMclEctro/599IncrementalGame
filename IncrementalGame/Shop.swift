@@ -10,25 +10,45 @@ import Foundation
 import SpriteKit
 
 class Shop: SKView {
-    var curA = 0;
+    private var _curA = 0;
+    var curA: Int {
+        set(val) {
+            if _curA > curA { // Purchased something
+                blackout() // updateStores called by blackout
+            }
+            else {
+                updateStores() // need to call it since not called by blackout
+            }
+            _curA = val;
+
+        }
+        get {
+            return _curA;
+        }
+    }
     var itemCount = [1, 1]
     var storeItems: [[GameObject]] = [[],[]];
     var ringOne: SKShapeNode;
     var ringTwo: SKShapeNode;
     override init(frame: CGRect) {
-        
-        ringOne = SKShapeNode(ellipseIn: CGRect(x: 0, y: -frame.height, width: frame.width*2, height: frame.height*2))//SKShapeNode(color: .green, size: frame.width*2)//SKSpriteNode(frame: CGRect(x: 0, y: 0, width: frame.width*2, height: frame.height*2))
-        //ringOne.layer.cornerRadius = frame.width;
-        ringTwo = SKShapeNode(ellipseIn: CGRect(x: frame.width/4, y: -3*frame.height/4, width: 3*frame.width/2, height: 3*frame.height/2))
-        super.init(frame: frame)
+        // Outer ring
+        ringOne = SKShapeNode(ellipseIn: CGRect(x: 0, y: -frame.height, width: frame.width*2, height: frame.height*2))
         ringOne.fillColor = UIColor.green.withAlphaComponent(0.3);
+        // inner ring - placed within the outer ring
+        ringTwo = SKShapeNode(ellipseIn: CGRect(x: frame.width/4, y: -3*frame.height/4, width: 3*frame.width/2, height: 3*frame.height/2))
         ringTwo.fillColor = UIColor.green.withAlphaComponent(0.3);
+        super.init(frame: frame)
         
+        // Sets up the store scene
         presentScene(SKScene(size: frame.size))
+        
+        // Adds both rings
         self.scene?.addChild(ringOne);
         self.scene?.addChild(ringTwo);
+        // We want a clear background so that shapes are visible behind
         scene?.backgroundColor = .clear;
         
+        // All of the shapes created and added
         let triangle = GameObject(type: .Triangle);
         let square = GameObject(type: .Square);
         let pentagon = GameObject(type: .Pentagon);
@@ -42,7 +62,8 @@ class Shop: SKView {
         addStoreItem(ring: 1, gameObject: hexagon);
         addStoreItem(ring: 1, gameObject: circle);
         addStoreItem(ring: 1, gameObject: star);
-
+        
+        // Create structures
         let bumper = GameObject(type: .Bumper);
         addStoreItem(ring: 2, gameObject: bumper)
         let bumper2 = GameObject(type: .Bumper);
@@ -51,22 +72,73 @@ class Shop: SKView {
         addStoreItem(ring: 2, gameObject: bumper3)
         self.scene?.backgroundColor = .clear;
         self.backgroundColor = .clear;
-        
+        blackout();
+    }
+    func blackout() {
+        // Makes all shapes black, then shows only the ones that can be added
+        // Should be called only when needed (purchasing objects, changing zones)
+        for i in self.storeItems {
+            for x in i {
+                x.color = UIColor.black;
+                x.colorBlendFactor = 1.0;
+            }
+        }
+        nextLowestRing1 = 0;
+        nextLowestRing2 = 0;
+        updateStores()
         
     }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func animateIn() {
+    override func didMoveToSuperview() {
         
+        super.didMoveToSuperview()
+        /*animateIn {
+            
+        }*/
+        blackout();
+        
+    }
+    override func removeFromSuperview() {
+        animateOut {
+            super.removeFromSuperview()
+        }
+    }
+    func animateIn(callback: @escaping () -> Void) {
+        let move = SKAction.move(to: CGPoint(x: 0, y: 0), duration:0.45)
+        move.timingMode = .easeOut
+        self.ringOne.run(move);
+        Timer.scheduledTimer(withTimeInterval: 0.15, repeats: false, block: {_ in
+            self.ringTwo.run(move);
+            Timer.scheduledTimer(withTimeInterval: 0.35, repeats: false, block: {_ in
+                self.ringOne.position = CGPoint(x: 0, y: 0)
+                self.ringTwo.position = CGPoint(x: 0, y: 0)
+                callback()
+            });
+        });
+        
+    }
+    func animateOut(callback: @escaping () -> Void) {
+        let move = SKAction.move(to: CGPoint(x: self.frame.width, y: -self.frame.height), duration:0.5)
+        move.timingMode = .easeOut
+        self.ringTwo.run(move);
+        Timer.scheduledTimer(withTimeInterval: 0.15, repeats: false, block: {_ in
+            
+            self.ringOne.run(move);
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: {_ in
+                self.ringOne.position = CGPoint(x: self.frame.width, y: -self.frame.height)
+                self.ringTwo.position = CGPoint(x: self.frame.width, y: -self.frame.height)
+                callback()
+            });
+        });
     }
     let numShapes : [CGFloat] = [8.0, 5.0]
     var ringPositions: [[CGPoint]] = [[],[]];
     func addStoreItem(ring: Int, gameObject: GameObject) {
-        var shapeWidth = (frame.width/numShapes[0]);
-        scene!.addChild(gameObject);
+        let shapeWidth = (frame.width/numShapes[0]);
+        gameObject.zPosition = 10
+        ringOne.addChild(gameObject);
         //degrees * M_PI / 180.0
         let rad = CGFloat.pi-(CGFloat.pi*CGFloat(itemCount[ring-1])/(numShapes[ring-1]*2.0));
         
@@ -84,10 +156,12 @@ class Shop: SKView {
         itemCount[ring-1] += 1;
         self.isUserInteractionEnabled = true;
         
-        var label = SKLabelNode(text: "$"+String(gameObject.objectType.getPrice()));
+        let label = SKLabelNode(text: "$"+String(gameObject.objectType.getPrice()));
         label.position = point//CGPoint(x: point.x+(1.5*shapeWidth), y: point.y-shapeWidth/2);
         label.fontSize = shapeWidth/2
-        scene!.addChild(label)
+        label.zPosition = 11;
+        ringOne.addChild(label)
+    
     }
     var touchTime: NSDate?;
     var touchLoc: CGPoint?;
@@ -114,9 +188,9 @@ class Shop: SKView {
                     controller.purchaseObject(of: object, sender: touches.first);
                     
                 }
-                var ring = storeItems[0].index(of: object) == nil ? 2 : 1;
+                let ring = storeItems[0].index(of: object) == nil ? 2 : 1;
                 let ind = storeItems[ring-1].index(of: object) ?? 0
-                var pos = ringPositions[ring-1][ind];
+                let pos = ringPositions[ring-1][ind];
                 object.position = pos//CGPoint(x: frame.width/2, y: frame.height-CGFloat(100*(storeItems.index(of: object)!+1)));
                 self.removeFromSuperview();
                 
@@ -124,25 +198,62 @@ class Shop: SKView {
             }
         }
     }
+    var nextLowestRing1 = 0;
+    var nextLowestRing2 = 0;
     func updateAllowedCurrency(val: Int) {
         // Called every time the store is opened/currency changes while open - constant update of available items
         curA = val;
+    }
+    func updateStores() {
         if let controller = superview as? ControllerView {
-            for x in storeItems {
-                for i in x {
-                    //BUG: controller is sometimes being passed as a nil value and crashing the game, commented out for now
-                    if (i.objectType.getPrice() > curA || !(controller.playArea.level.canAdd(type: i.objectType))) {
-                        i.color = UIColor.black;
-                        i.colorBlendFactor = 1.0;
+            if (nextLowestRing1 < storeItems[0].count) {
+                var storeItem1 = storeItems[0][nextLowestRing1];
+                while (curA >= storeItem1.getType().getPrice()) {
+                    applyFilter(item: storeItem1, controller: controller);
+                    nextLowestRing1 += 1;
+                    if (nextLowestRing1 >= storeItems[0].count) { // second loop condition
+                        break;
                     }
-                    else {
-                        i.color = UIColor.gray;
-                        i.colorBlendFactor = 0.0;
-                    }
+                    storeItem1 = storeItems[0][nextLowestRing1];
                 }
-                
-                
             }
+            if (nextLowestRing2 < storeItems[1].count) {
+                var storeItem2 = storeItems[1][nextLowestRing2];
+                while (curA >= storeItem2.getType().getPrice()) {
+                    applyFilter(item: storeItem2, controller: controller);
+                    nextLowestRing2 += 1;
+                    if (nextLowestRing2 >= storeItems[1].count) {
+                        break;
+                    }
+                    storeItem2 = storeItems[1][nextLowestRing2];
+                }
+            }
+            /*nextLowestRing1 = nextLowestRing1 > 0 ? nextLowestRing1 : storeItems[0].count;
+             nextLowestRing2 = nextLowestRing2 > 0 ? nextLowestRing2 : storeItems[1].count;
+             //for x in storeItems {
+             for i in 0..<nextLowestRing1 {
+             let item = storeItems[0][i];
+             applyFilter(item: item, controller: controller);
+             }
+             for i in 0..<nextLowestRing2 {
+             let item = storeItems[1][i];
+             applyFilter(item: item, controller: controller);
+             }*/
+            
+            
+            
+            //}
+        }
+    }
+    func applyFilter(item: GameObject, controller: ControllerView) {
+        // Makes store items black or normal depending on ability to add
+        if (item.objectType.getPrice() > curA || !(controller.playArea.level.canAdd(type: item.objectType))) {
+            item.color = UIColor.black;
+            item.colorBlendFactor = 1.0;
+        }
+        else {
+            item.color = UIColor.gray;
+            item.colorBlendFactor = 0.0;
         }
     }
     var upgradeRingOne: SKShapeNode?;
@@ -206,3 +317,4 @@ class Shop: SKView {
         self.removeFromSuperview()
     }
 }
+

@@ -21,10 +21,8 @@ extension ControllerView {
     @objc func tapDownStore(sender: UIButton) {
         if (!shopOpen) {
             self.addSubview(shop)
-            shop.animateIn();
             self.addSubview(sender)
             openedShop();
-            
         }
         else {
             shop.removeFromSuperview()

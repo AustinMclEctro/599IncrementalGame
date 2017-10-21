@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        var controllerView = ControllerView(frame: self.view.frame)
+        let controllerView = ControllerView(frame: self.view.frame)
         self.view.addSubview(controllerView);
     }
 

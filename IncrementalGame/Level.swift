@@ -14,7 +14,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
     
     var motionManager = CMMotionManager()
     let maxShapes = 12
-    let minVel: CGFloat = 50
+    let minVel: CGFloat = 0; //50
     var allowedObjects: Set<ObjectType> = []
     
     
@@ -69,7 +69,8 @@ class Level: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        if contact.bodyA.velocity.magnitude() > minVel && contact.bodyB.velocity.magnitude() > minVel && !contact.bodyB.angularVelocity.isLess(than: minVel){
+        // This is the line I commented out for testing the store - Ben
+        if true {//contact.bodyA.velocity.magnitude() > minVel && contact.bodyB.velocity.magnitude() > minVel && !contact.bodyB.angularVelocity.isLess(than: minVel){
             if let playArea = view as? PlayArea {
                 if let one = contact.bodyA.node as? GameObject {
                     playArea.gained(amount: one.objectType.getPoints())
@@ -79,7 +80,6 @@ class Level: SKScene, SKPhysicsContactDelegate {
                 }
             }
             if (contact.bodyA.node is GameObject && contact.bodyB.node is GameObject) {
-                
                 //find the most highly valued object in the collision
                 var min = contact.bodyA.node as! GameObject
                 var max = contact.bodyB.node as! GameObject

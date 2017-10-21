@@ -15,6 +15,12 @@ class ControllerView: UIView {
         set(val) {
             _currencyA = val;
             gameState.currencyA = currencyA;
+            infoPanel.upgradeCurrencyA(to: currencyA);
+            if (shopOpen) {
+                shop.updateAllowedCurrency(val: currencyA);
+            }
+            
+            GameState.saveGameState(gameState)
         }
         get {
             return _currencyA;
@@ -22,12 +28,6 @@ class ControllerView: UIView {
     }
     func addCurA(by: Int) {
         currencyA += by;
-        infoPanel.upgradeCurrencyA(to: currencyA);
-        if (shopOpen) {
-            shop.updateAllowedCurrency(val: currencyA);
-        }
-        
-        GameState.saveGameState(gameState)
     }
     func purchaseObject(of: GameObject, sender: UITouch?) {
         if (currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
@@ -35,7 +35,7 @@ class ControllerView: UIView {
         }
         currencyA -= of.objectType.getPrice();
         if sender != nil {
-            var locat = sender?.preciseLocation(in: playArea) ?? sender?.location(in: playArea) ?? CGPoint(x: 0, y: 0)
+            let locat = sender?.preciseLocation(in: playArea) ?? sender?.location(in: playArea) ?? CGPoint(x: 0, y: 0)
             playArea.addObject(of: of.objectType, at: CGPoint(x: locat.x, y: playArea.frame.height-locat.y));
         }
         else {
@@ -109,6 +109,9 @@ class ControllerView: UIView {
     }
     func openedShop() {
         shop.updateAllowedCurrency(val: currencyA);
+        shop.animateIn {
+            
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
