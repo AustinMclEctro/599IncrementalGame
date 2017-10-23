@@ -10,20 +10,12 @@ import Foundation
 import SpriteKit
 
 class Shop: SKView {
-    private var _curA = 0;
     var curA: Int {
-        set(val) {
-            if _curA > curA { // Purchased something
-                blackout() // updateStores called by blackout
-            }
-            else {
-                updateStores() // need to call it since not called by blackout
-            }
-            _curA = val;
-
-        }
         get {
-            return _curA;
+            if let controller = superview as? MasterView {
+                return controller.currencyA;
+            }
+            return -1;
         }
     }
     var itemCount = [1, 1]
@@ -73,6 +65,9 @@ class Shop: SKView {
         self.scene?.backgroundColor = .clear;
         self.backgroundColor = .clear;
         blackout();
+        
+        self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(drag)));
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
     }
     func blackout() {
         // Makes all shapes black, then shows only the ones that can be added
@@ -94,11 +89,7 @@ class Shop: SKView {
     override func didMoveToSuperview() {
         
         super.didMoveToSuperview()
-        /*animateIn {
-         
-        }*/
         blackout();
-        
     }
     override func removeFromSuperview() {
         animateOut {
@@ -150,7 +141,7 @@ class Shop: SKView {
         
         gameObject.scale(to: CGSize(width: shapeWidth, height: shapeWidth));
         gameObject.name = String(describing: gameObject.objectType);
-        gameObject.touched = self.addShape;
+        //gameObject.touched = self.addShape;
         gameObject.isUserInteractionEnabled = true
         storeItems[ring-1].append(gameObject);
         itemCount[ring-1] += 1;
@@ -163,47 +154,9 @@ class Shop: SKView {
         ringOne.addChild(label)
     
     }
-    var touchTime: NSDate?;
-    var touchLoc: CGPoint?;
-    func addShape(object: GameObject, touches: Set<UITouch>, state: UIGestureRecognizerState) {
-        if (state == .began) {
-            touchTime = NSDate();
-            touchLoc = (touches.first?.location(in: self));
-        }
-        if (state == .ended) {
-            if let controller = superview as? MasterView {
-                
-                let touch = touches[touches.startIndex];
-                let touchLocation = touch.location(in: self);
-                if (abs(touchLoc!.x - touchLocation.y) < 20 && abs(touchLoc!.y - touchLocation.y) < 20) {
-                    if (Double((touchTime?.timeIntervalSinceNow)!) > -0.5) {
-                        // Tap
-                        controller.purchaseObject(of: object, sender: nil);
-                    }
-                    else {
-                        return; // Cancel
-                    }
-                }
-                else {
-                    controller.purchaseObject(of: object, sender: touches.first);
-                    
-                }
-                let ring = storeItems[0].index(of: object) == nil ? 2 : 1;
-                let ind = storeItems[ring-1].index(of: object) ?? 0
-                let pos = ringPositions[ring-1][ind];
-                object.position = pos//CGPoint(x: frame.width/2, y: frame.height-CGFloat(100*(storeItems.index(of: object)!+1)));
-                self.removeFromSuperview();
-                
-                
-            }
-        }
-    }
+    
     var nextLowestRing1 = 0;
     var nextLowestRing2 = 0;
-    func updateAllowedCurrency(val: Int) {
-        // Called every time the store is opened/currency changes while open - constant update of available items
-        curA = val;
-    }
     func updateStores() {
         if let controller = superview as? MasterView {
             if (nextLowestRing1 < storeItems[0].count) {
@@ -315,6 +268,84 @@ class Shop: SKView {
     func purchaseUpgrade(object: GameObject, touch: UITouch) {
         closeUpgradeTree();
         self.removeFromSuperview()
+    }
+    var selectedNode: GameObject?;
+    var tempSelectedNode: GameObject?;
+    @objc func tap(sender: UITapGestureRecognizer) {
+        if (sender.state == .ended) {
+            let location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
+            let nodes = scene?.nodes(at: location) ?? []
+            if (nodes.count > 0) {
+                var ind = 0;
+                while ind < nodes.count {
+                    if let node = nodes[ind] as? GameObject {
+                        if let controller = self.superview as? MasterView {
+                            controller.purchaseObject(of: node, sender: nil)
+                            break;
+                        }
+                    }
+                    ind += 1;
+                }
+            }
+        }
+    }
+    @objc func drag(sender: UIPanGestureRecognizer) {
+        
+        switch sender.state {
+        case .began:
+            var location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
+            let nodes = scene?.nodes(at: location) ?? []
+            if (nodes.count > 0) {
+                print(nodes);
+                var ind = 0;
+                var nodeFound = false;
+                while !nodeFound {
+                    if let node = nodes[ind] as? GameObject {
+                        nodeFound = true;
+                        if let controller = self.superview as? MasterView {
+                            print("SELECTED NODE");
+                            selectedNode = node;
+                            self.selectedNode!.removeFromParent();
+                            self.tempSelectedNode = GameObject(type: (self.selectedNode?.objectType)!);
+                            controller.playArea.scene?.addChild(self.tempSelectedNode!)
+                            location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
+                            self.tempSelectedNode?.setUp(at: location, withSize: controller.playArea.level.size)
+                            self.tempSelectedNode?.physicsBody?.isDynamic = false;
+                            break;
+                        }
+                    }
+                    ind += 1;
+                    if (ind >= nodes.count) {
+                        break;
+                    }
+                }
+            }
+            break;
+        case .changed:
+            if let controller = superview as? MasterView {
+                let location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
+                if (tempSelectedNode != nil) {
+                    tempSelectedNode?.position = location;
+                }
+            }
+            break;
+        default: // ended, canceled etc.
+            var loc = sender.location(in: self)
+            if (selectedNode != nil) && (loc.x < 0 || loc.y < 0) {
+                if let controller = superview as? MasterView {
+                    let location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
+                    controller.purchaseObject(of: selectedNode!, sender: sender);
+                    
+                }
+                
+                self.ringOne.addChild(selectedNode!);
+            }
+            
+            selectedNode = nil
+            tempSelectedNode?.removeFromParent();
+            tempSelectedNode = nil;
+            break;
+        }
     }
 }
 

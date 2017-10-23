@@ -10,32 +10,6 @@ import Foundation
 import UIKit
 
 class MasterView: UIView {
-    
-    func updateCurrencyA(by: Int) {
-        gameState.currencyA += by;
-        infoPanel.upgradeCurrencyA(to: gameState.currencyA);
-        if (shopOpen) {
-            shop.updateAllowedCurrency(val: gameState.currencyA);
-        }
-    }
-    
-    func purchaseObject(of: GameObject, sender: UITouch?) {
-        if (gameState.currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
-            return;
-        }
-        updateCurrencyA(by: -of.objectType.getPrice())
-        if sender != nil {
-            let locat = sender?.preciseLocation(in: playArea) ?? sender?.location(in: playArea) ?? CGPoint(x: 0, y: 0)
-            playArea.addShape(of: of.objectType, at: CGPoint(x: locat.x, y: playArea.frame.height-locat.y));
-        }
-        else {
-            // Placed at ambiguous point
-            playArea.addShape(of: of.objectType, at: CGPoint(x: 0, y: 0));
-        }
-        
-    }
-    
-    
     var infoPanel: InfoPanel;
     var playArea: PlayArea;
     var shopButton: UIButton;
@@ -43,7 +17,6 @@ class MasterView: UIView {
     var shopOpen = false;
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
-    
     
     override init(frame: CGRect) {
         gameState = GameState(0, []);
@@ -57,8 +30,6 @@ class MasterView: UIView {
         shopButton.setImage(UIImage(named: "ShopButton"), for: .normal);
         shop = Shop(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
         super.init(frame: frame)
-        
-        
         
         self.addSubview(infoPanel);
         
@@ -84,14 +55,42 @@ class MasterView: UIView {
         }
         
     }
-    func purchaseUpgrade(object: GameObject, touch: UITouch) {
-        self.shop.purchaseUpgrade(object: object, touch: touch)
+    func updateCurrencyA(by: Int) {
+        gameState.currencyA += by;
+        infoPanel.upgradeCurrencyA(to: gameState.currencyA);
+        if (shopOpen) {
+            shop.updateStores();
+        }
     }
-    func openedShop() {
-        shop.updateAllowedCurrency(val: gameState.currencyA);
-        shop.animateIn {
+    var currencyA: Int {
+        set(val) {
+            // Do we want to allow this?
+        }
+        get {
+            return gameState.currencyA;
+        }
+    }
+    func purchaseObject(of: GameObject, sender: UIPanGestureRecognizer?) {
+        if (gameState.currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
+            return;
+        }
+        updateCurrencyA(by: -of.objectType.getPrice())
+        if sender != nil {
+            let loc = sender!.location(in: playArea); // UIView location (need to flip y)
+            let location = CGPoint(x: loc.x, y: playArea.frame.height-loc.y); // Flipped y
+            let vel = sender!.velocity(in: playArea); // UIView velocity (need to flip y)
+            let velocity =  CGVector(dx: vel.x, dy: -vel.y);// Flopped y
+            let shape = playArea.addShape(of: of.objectType, at: location);
+            shape?.physicsBody?.velocity = velocity;
             
         }
+        else {
+            // Placed at ambiguous point
+            playArea.addShape(of: of.objectType, at: CGPoint(x: 0, y: 0));
+        }
+        closeStore();
+        
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

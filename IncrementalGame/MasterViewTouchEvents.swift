@@ -13,14 +13,17 @@ extension MasterView {
         shopButton.addTarget(self, action: #selector(tapDownStore), for: .touchDown)
     }
     func closeStore() {
-        
+        shop.removeFromSuperview()
+        shopOpen = false;
     }
     
     @objc func tapDownStore(sender: UIButton) {
         if (!shopOpen) {
             self.addSubview(shop)
             self.addSubview(sender)
-            openedShop();
+            shop.animateIn {
+                
+            }
         }
         else {
             shop.removeFromSuperview()
