@@ -14,8 +14,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     var motionManager = CMMotionManager()
     let maxShapes = 12
-    let minVel: CGFloat = 0; //50
+    let minVel: CGFloat = 300 * 300
     var allowedObjects: Set<ObjectType> = []
+    static var newZonePrice = 1000
     
     
     init(size: CGSize, actual: Bool=true) {
@@ -30,27 +31,26 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             physicsWorld.contactDelegate = self
             
             let boundary = SKPhysicsBody(edgeLoopFrom: self.frame)
-            boundary.friction = 0.2
+            boundary.friction = 1
             boundary.categoryBitMask = 1
             boundary.contactTestBitMask = 1
             boundary.collisionBitMask = 1
-            boundary.usesPreciseCollisionDetection = true
+            boundary.usesPreciseCollisionDetection = false
             boundary.affectedByGravity = false
             self.physicsBody = boundary
             
             addAllowedObject(type: .Triangle)
+            addAllowedObject(type: .Bumper)
             
             // just for MVP demo
             addAllowedObject(type: .Square)
-            addAllowedObject(type: .Bumper)
-            // Added these
             addAllowedObject(type: .Star)
             addAllowedObject(type: .Pentagon)
             addAllowedObject(type: .Hexagon)
             addAllowedObject(type: .Circle)
         }
         else {
-            let addTap = SKLabelNode(text: "Double Tap to Add a New Zone")
+            let addTap = SKLabelNode(text: "Double Tap to Add a New Zone For $\(Zone.newZonePrice)")
             addTap.fontSize = 26
             addTap.position = CGPoint(x: frame.midX, y: frame.midY)
             addChild(addTap)
@@ -69,31 +69,21 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        // This is the line I commented out for testing the store - Ben
-        if true {//contact.bodyA.velocity.magnitude() > minVel && contact.bodyB.velocity.magnitude() > minVel && !contact.bodyB.angularVelocity.isLess(than: minVel){
+        
+        if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
             if let playArea = view as? PlayArea {
-                if let one = contact.bodyA.node as? GameObject {
+                if let one = contact.bodyA.node as? Shape {
                     playArea.gained(amount: one.objectType.getPoints())
+                    let collisionEmitter =  createEmitter(sourceNode: one, location: contact.contactPoint)
+                    animateCollision(collisionEmitter: collisionEmitter)
                 }
-                if let two = contact.bodyB.node as? GameObject {
+                if let two = contact.bodyB.node as? Shape {
                     playArea.gained(amount: two.objectType.getPoints())
+                    let collisionEmitter =  createEmitter(sourceNode: two, location: contact.contactPoint)
+                    animateCollision(collisionEmitter: collisionEmitter)
                 }
-            }
-            if (contact.bodyA.node is GameObject && contact.bodyB.node is GameObject) {
-                //find the most highly valued object in the collision
-                var min = contact.bodyA.node as! GameObject
-                var max = contact.bodyB.node as! GameObject
-                if min.getType().getPoints() > max.getType().getPoints() {
-                    swap(&min, &max)
-                }
-                //want animation to be of greater valued object
-                //create an object first
-                let collisionEmitter =  createEmitter(sourceNode: max, location: contact.contactPoint)
-                animateCollision(collisionEmitter: collisionEmitter)
-                
             }
         }
-        
         
     }
     
@@ -124,12 +114,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         var shapeCount = 0
         if !allowedObjects.contains(type) {addOK = false}
         for object in self.children {
-            if let shape = object as? GameObject {
-                if shape.objectType.rawValue < 10 {
-                    shapeCount += 1
-                } else {
-                    if shape.objectType == type {addOK = false}
-                }
+            if object is Shape {
+                shapeCount += 1
             }
         }
         if shapeCount >= maxShapes {addOK = false}
@@ -139,11 +125,15 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     func addAllowedObject(type: ObjectType) {
         allowedObjects.insert(type)
     }
+    
+    func removeAllowedObject(type: ObjectType) {
+        allowedObjects.remove(type)
+    }
 }
 
 extension CGVector {
-    func magnitude() -> CGFloat {
-        return sqrt((self.dx * self.dx) + (self.dy * self.dy))
+    func magnitudeSquared() -> CGFloat {
+        return (self.dx * self.dx) + (self.dy * self.dy)
     }
 }
 

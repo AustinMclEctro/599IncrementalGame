@@ -35,11 +35,11 @@ class MasterView: UIView {
         currencyA -= of.objectType.getPrice();
         if sender != nil {
             let locat = sender?.preciseLocation(in: playArea) ?? sender?.location(in: playArea) ?? CGPoint(x: 0, y: 0)
-            playArea.addObject(of: of.objectType, at: CGPoint(x: locat.x, y: playArea.frame.height-locat.y));
+            playArea.addShape(of: of.objectType, at: CGPoint(x: locat.x, y: playArea.frame.height-locat.y));
         }
         else {
             // Placed at ambiguous point
-            playArea.addObject(of: of.objectType, at: CGPoint(x: 0, y: 0));
+            playArea.addShape(of: of.objectType, at: CGPoint(x: 0, y: 0));
         }
         
     }
@@ -52,10 +52,8 @@ class MasterView: UIView {
     var shopOpen = false;
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
-    var tableSceneView: SceneTableView?;
-    var tableOpen = false;
     override init(frame: CGRect) {
-        gameState = GameState(2000, [Zone(size: frame.size, actual: false)]);
+        gameState = GameState(5000, []);
         
         
         let heightPerc = frame.width*1.25;

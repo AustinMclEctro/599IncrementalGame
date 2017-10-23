@@ -9,92 +9,51 @@
 import Foundation
 import SpriteKit
 
-class PlayArea: SKView, UIGestureRecognizerDelegate {
+class PlayArea: SKView {
     
     var level: Zone
     var zoneNumber = 0
     let gameState: GameState
-    let doubleTap = UITapGestureRecognizer()
-    let swipeRight = UISwipeGestureRecognizer()
-    let swipeLeft = UISwipeGestureRecognizer()
+    var tableSceneView: SceneTableView?
+    var tableOpen = false
+    
+    
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState
-        level = gameState.zones[0]
+        level = Zone(size: frame.size, actual: false)
+        gameState.zones.append(level)
         super.init(frame: frame)
-        doubleTap.numberOfTapsRequired = 2
-        doubleTap.addTarget(self, action: #selector(handleTaps))
-        doubleTap.delegate = self
-        self.addGestureRecognizer(doubleTap)
-        swipeRight.numberOfTouchesRequired = 1
-        swipeRight.direction = .right
-        swipeRight.addTarget(self, action: #selector(handleSwipes(recognizer:)))
-        swipeRight.delegate = self
-        self.addGestureRecognizer(swipeRight)
-        swipeLeft.numberOfTouchesRequired = 1
-        swipeLeft.direction = .left
-        swipeLeft.addTarget(self, action: #selector(handleSwipes(recognizer:)))
-        swipeLeft.delegate = self
-        self.addGestureRecognizer(swipeLeft)
+        setupTouchEvents()
         presentScene(level)
         
-        
-        
-    }
-    
-    
-    
-    @objc func handleSwipes(recognizer: UISwipeGestureRecognizer) {
-        if recognizer.direction == .left {
-            zoneNumber += 1
-            if zoneNumber == gameState.zones.count {zoneNumber = 0}
-        } else if recognizer.direction == .right {
-            zoneNumber -= 1
-            if zoneNumber < 0 {zoneNumber = gameState.zones.count - 1}
-        }
-        
-        // don't know why this is needed but zones[0] won't display right without it!!
-        if zoneNumber == 0 {gameState.zones[0] = Zone(size: frame.size, actual: false)}
-        
-        // Show zone at index
-        selectZone(index: zoneNumber);
-        // just for testing
-        print(zoneNumber)
     }
     
     func selectZone(index: Int) {
         // Displays the selected zone
         zoneNumber = index
+        // don't know why this is needed but zones[0] won't display right without it!!
+        if zoneNumber == 0 {gameState.zones[0] = Zone(size: frame.size, actual: false)}
         level = gameState.zones[index]
         presentScene(level)
-    }
-    
-    @objc func handleTaps() {
-        if zoneNumber == 0 {
-            zoneNumber = gameState.zones.count
-            gameState.zones.append(Zone(size: frame.size))
-            level = gameState.zones[zoneNumber]
-            presentScene(level)
-            // just for testing
-            if level.canAdd(type: .Bumper) {
-                addObject(of: .Bumper, at: CGPoint(x:0, y:0))
-            }
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setShapes(_ shapes: [[String: String]]) {
-        // used to init
+    func addShape(of: ObjectType, at: CGPoint) {
+        if level.canAdd(type: of) {
+            let shape = Shape(type: of, at: at, withSize: level.size);
+            level.addChild(shape);
+        }
     }
     
-    func addObject(of: ObjectType, at: CGPoint) {
-        // GameObject inherits from SKSpriteNode
-        // Initializer is ObjectType - Circle, Triangle etc
-        let gameObject = GameObject(type: of);
-        level.addChild(gameObject);
-        gameObject.setUp(at: at, withSize: level.size)
+    func addFixture(of: ObjectType, at: CGPoint) {
+        if level.canAdd(type: of) {
+            let fix = Fixture(type: of, at: at, withSize: level.size);
+            level.addChild(fix);
+            level.removeAllowedObject(type: of)
+        }
     }
     
     func gained(amount: Int) {
@@ -103,8 +62,6 @@ class PlayArea: SKView, UIGestureRecognizerDelegate {
             controller.addCurA(by: amount);
         }
     }
-    
-    
     
 }
 

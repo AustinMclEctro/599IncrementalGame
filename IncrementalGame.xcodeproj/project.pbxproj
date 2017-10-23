@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		494605AB1F88364C00B18145 /* Zone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494605AA1F88364C00B18145 /* Zone.swift */; };
+		49B715251F9D024800132AD7 /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B715241F9D024800132AD7 /* GameObject.swift */; };
+		49B715271F9D04FD00132AD7 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B715261F9D04FD00132AD7 /* Shape.swift */; };
+		49B715291F9D05EA00132AD7 /* Fixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B715281F9D05EA00132AD7 /* Fixture.swift */; };
+		49B7152B1F9D58D100132AD7 /* PlayAreaTouchEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B7152A1F9D58D100132AD7 /* PlayAreaTouchEvents.swift */; };
 		A37572FD1F9286FB0006CC3B /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = A37572FB1F9286FB0006CC3B /* MyParticle.sks */; };
 		A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A37572FC1F9286FB0006CC3B /* Assets.xcassets */; };
 		F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00D1F90485F0028A5A1 /* Shop.swift */; };
@@ -47,6 +51,10 @@
 
 /* Begin PBXFileReference section */
 		494605AA1F88364C00B18145 /* Zone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zone.swift; sourceTree = "<group>"; };
+		49B715241F9D024800132AD7 /* GameObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObject.swift; sourceTree = "<group>"; };
+		49B715261F9D04FD00132AD7 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
+		49B715281F9D05EA00132AD7 /* Fixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixture.swift; sourceTree = "<group>"; };
+		49B7152A1F9D58D100132AD7 /* PlayAreaTouchEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayAreaTouchEvents.swift; sourceTree = "<group>"; };
 		A37572FB1F9286FB0006CC3B /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
 		A37572FC1F9286FB0006CC3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F804A00D1F90485F0028A5A1 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
@@ -128,7 +136,11 @@
 				F8FF745C1F870DD20057AF21 /* MasterViewTouchEvents.swift */,
 				F8FF74521F86ED700057AF21 /* InfoPanel.swift */,
 				F8FF74581F86EDC60057AF21 /* PlayArea.swift */,
+				49B7152A1F9D58D100132AD7 /* PlayAreaTouchEvents.swift */,
 				F8FF745E1F87147A0057AF21 /* ObjectType.swift */,
+				49B715241F9D024800132AD7 /* GameObject.swift */,
+				49B715261F9D04FD00132AD7 /* Shape.swift */,
+				49B715281F9D05EA00132AD7 /* Fixture.swift */,
 				494605AA1F88364C00B18145 /* Zone.swift */,
 				F804A00D1F90485F0028A5A1 /* Shop.swift */,
 				F83FF1E91F95497100200B30 /* SceneTableView.swift */,
@@ -298,6 +310,7 @@
 			files = (
 				F8FF745F1F87147A0057AF21 /* ObjectType.swift in Sources */,
 				F8FF74591F86EDC60057AF21 /* PlayArea.swift in Sources */,
+				49B715251F9D024800132AD7 /* GameObject.swift in Sources */,
 				F8FF74531F86ED700057AF21 /* InfoPanel.swift in Sources */,
 				F8FF74281F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld in Sources */,
 				F83FF1EA1F95497100200B30 /* SceneTableView.swift in Sources */,
@@ -305,10 +318,13 @@
 				F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */,
 				F83FF1EC1F95596700200B30 /* SceneShapePreview.swift in Sources */,
 				F8FF745D1F870DD20057AF21 /* MasterViewTouchEvents.swift in Sources */,
+				49B715271F9D04FD00132AD7 /* Shape.swift in Sources */,
 				F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */,
 				F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */,
 				F8FF74511F86ED2D0057AF21 /* MasterView.swift in Sources */,
 				F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */,
+				49B715291F9D05EA00132AD7 /* Fixture.swift in Sources */,
+				49B7152B1F9D58D100132AD7 /* PlayAreaTouchEvents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,10 +491,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = VQ99BLGHS4;
+				DEVELOPMENT_TEAM = 5PKUCYGVDP;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.599incremental;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.599incremental;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -490,10 +506,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = VQ99BLGHS4;
+				DEVELOPMENT_TEAM = 5PKUCYGVDP;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.599incremental;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.599incremental;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
