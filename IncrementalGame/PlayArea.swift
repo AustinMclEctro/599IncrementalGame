@@ -16,7 +16,7 @@ class PlayArea: SKView {
     let gameState: GameState
     var tableSceneView: SceneTableView?
     var tableOpen = false
-    
+    var selectedNode: GameObject?;
     
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState
@@ -25,10 +25,9 @@ class PlayArea: SKView {
         super.init(frame: frame)
         setupTouchEvents()
         presentScene(level)
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(drag))
-        self.addGestureRecognizer(pan)
         
-        let leftEdgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(panLeftEdge))
+        
+        /*let leftEdgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(panLeftEdge))
         leftEdgePan.edges = .left
         self.addGestureRecognizer(leftEdgePan)
         leftEdgePan.require(toFail: pan)
@@ -36,7 +35,7 @@ class PlayArea: SKView {
         let rightEdgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(panRightEdge))
         rightEdgePan.edges = .right
         self.addGestureRecognizer(rightEdgePan)
-        rightEdgePan.require(toFail: pan)
+        rightEdgePan.require(toFail: pan)*/
     }
     @objc func panLeftEdge(sender: UIScreenEdgePanGestureRecognizer) {
         let oneLess = String(zoneNumber-1);
@@ -52,30 +51,7 @@ class PlayArea: SKView {
             selectZone(index: zoneNumber+1)
         }
     }
-    var selectedNode: GameObject?;
-    @objc func drag(sender: UIPanGestureRecognizer) {
-        let location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
-        switch sender.state {
-            case .began:
-                let nodes = scene?.nodes(at: location) ?? []
-                if (nodes.count > 0) {
-                    if let node = nodes[0] as? GameObject {
-                        selectedNode = node;
-                    }
-                }
-                break;
-            case .changed:
-                if (selectedNode != nil) {
-                    selectedNode?.position = location;
-                }
-                break;
-            default: // ended, canceled etc.
-                let vel = sender.velocity(in: self);
-                selectedNode?.physicsBody?.applyForce(CGVector(dx: vel.x, dy: -vel.y))
-                selectedNode = nil;
-                break;
-        }
-    }
+    
     
     func selectZone(index: Int) {
         let count = gameState.zones.count

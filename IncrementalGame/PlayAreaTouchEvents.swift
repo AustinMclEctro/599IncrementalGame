@@ -24,8 +24,39 @@ extension PlayArea {
         let edgePanLeft = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgePan))
         edgePanLeft.edges = .left
         self.addGestureRecognizer(edgePanLeft)
+        
+        
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(drag));
+        self.addGestureRecognizer(pan);
+        pan.require(toFail: edgePanRight);
+        pan.require(toFail: edgePanLeft);
     }
     
+    @objc func drag(sender: UIPanGestureRecognizer) {
+        let location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
+        switch sender.state {
+        case .began:
+            
+            let nodes = scene?.nodes(at: location) ?? []
+            if (nodes.count > 0) {
+                if let node = nodes[0] as? GameObject {
+                    selectedNode = node;
+                }
+            }
+            
+            break;
+        case .changed:
+            if (selectedNode != nil) {
+                selectedNode?.position = location;
+            }
+            break;
+        default: // ended, canceled etc.
+            let vel = sender.velocity(in: self);
+            selectedNode?.physicsBody?.applyForce(CGVector(dx: vel.x, dy: -vel.y))
+            selectedNode = nil;
+            break;
+        }
+    }
     @objc func oneTap(recognizer: UITapGestureRecognizer) {
         var location = recognizer.location(in: self)
         location = level.convertPoint(fromView: location)
