@@ -13,11 +13,7 @@ class GameState: NSObject { //}, NSCoding {
     
     // MARK: Properties
     
-    var currencyA: Int {
-        didSet {
-            
-        }
-    }
+    var currencyA: Int 
     
     var zones: [Zone]
     

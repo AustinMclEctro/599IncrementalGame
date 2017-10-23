@@ -10,29 +10,20 @@ import Foundation
 import UIKit
 
 class MasterView: UIView {
-    private var _currencyA: Int = 0;
-    private var currencyA: Int {
-        set(val) {
-            _currencyA = val;
-            gameState.currencyA = currencyA;
-            infoPanel.upgradeCurrencyA(to: currencyA);
-            if (shopOpen) {
-                shop.updateAllowedCurrency(val: currencyA);
-            }
-            
-        }
-        get {
-            return _currencyA;
+    
+    func updateCurrencyA(by: Int) {
+        gameState.currencyA += by;
+        infoPanel.upgradeCurrencyA(to: gameState.currencyA);
+        if (shopOpen) {
+            shop.updateAllowedCurrency(val: gameState.currencyA);
         }
     }
-    func addCurA(by: Int) {
-        currencyA += by;
-    }
+    
     func purchaseObject(of: GameObject, sender: UITouch?) {
-        if (currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
+        if (gameState.currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
             return;
         }
-        currencyA -= of.objectType.getPrice();
+        updateCurrencyA(by: -of.objectType.getPrice())
         if sender != nil {
             let locat = sender?.preciseLocation(in: playArea) ?? sender?.location(in: playArea) ?? CGPoint(x: 0, y: 0)
             playArea.addShape(of: of.objectType, at: CGPoint(x: locat.x, y: playArea.frame.height-locat.y));
@@ -52,8 +43,10 @@ class MasterView: UIView {
     var shopOpen = false;
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
+    
+    
     override init(frame: CGRect) {
-        gameState = GameState(5000, []);
+        gameState = GameState(0, []);
         
         
         let heightPerc = frame.width*1.25;
@@ -71,14 +64,8 @@ class MasterView: UIView {
         
         self.addSubview(playArea);
         self.addSubview(shopButton);
-        self.getUserInfo();
         setupTouchEvents()
-        
-        infoPanel.upgradeCurrencyA(to: currencyA);
-    }
-    func getUserInfo() {
-        currencyA = gameState.currencyA;
-        
+        updateCurrencyA(by: 5000)
     }
     
     // Upgrades & shop
@@ -101,7 +88,7 @@ class MasterView: UIView {
         self.shop.purchaseUpgrade(object: object, touch: touch)
     }
     func openedShop() {
-        shop.updateAllowedCurrency(val: currencyA);
+        shop.updateAllowedCurrency(val: gameState.currencyA);
         shop.animateIn {
             
         }

@@ -59,7 +59,7 @@ class PlayArea: SKView {
     func gained(amount: Int) {
         // Change the name/delete as you like :) just left here to show how to add currency A
         if let controller = superview as? MasterView {
-            controller.addCurA(by: amount);
+            controller.updateCurrencyA(by: amount);
         }
     }
     

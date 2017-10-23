@@ -15,7 +15,7 @@ class InfoPanel: UIView {
     override init(frame: CGRect) {
         curALabel = UILabel(frame: CGRect(x: 0, y: 20, width: frame.width/3, height: 20))
         curALabel.textAlignment = NSTextAlignment.center
-        var height = min(frame.height, 50.0)
+        let height = min(frame.height, 50.0)
         let logoWidth = (183/77)*height
         
         logo = UIImageView(frame: CGRect(x: (frame.width/2)-(logoWidth/2), y: 10, width: logoWidth, height: height))
