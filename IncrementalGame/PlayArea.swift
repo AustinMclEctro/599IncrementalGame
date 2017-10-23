@@ -20,7 +20,7 @@ class PlayArea: SKView {
     
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState
-        level = Zone(size: frame.size, actual: false)
+        level = Zone(size: frame.size, zone0: true)
         gameState.zones.append(level)
         super.init(frame: frame)
         setupTouchEvents()
@@ -31,8 +31,10 @@ class PlayArea: SKView {
     func selectZone(index: Int) {
         // Displays the selected zone
         zoneNumber = index
+        
         // don't know why this is needed but zones[0] won't display right without it!!
-        if zoneNumber == 0 {gameState.zones[0] = Zone(size: frame.size, actual: false)}
+        if zoneNumber == 0 {gameState.zones[0] = Zone(size: frame.size, zone0: true)}
+        
         level = gameState.zones[index]
         presentScene(level)
     }

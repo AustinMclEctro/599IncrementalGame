@@ -17,7 +17,7 @@ class SceneShapePreview: SKView {
         self.scene?.backgroundColor = .clear;
         var counter = 1;
         for child in children {
-            if let object = child as? GameObject {
+            if let object = child as? Shape {
                 let pr = SKSpriteNode(imageNamed: String(describing: object.objectType))
                 scene?.addChild(pr)
                 pr.position = CGPoint(x: counter*20, y: 10)

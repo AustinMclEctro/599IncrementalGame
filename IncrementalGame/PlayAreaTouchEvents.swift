@@ -16,6 +16,8 @@ extension PlayArea {
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleTaps))
         doubleTap.numberOfTapsRequired = 2
         self.addGestureRecognizer(doubleTap)
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(oneTap))
+        self.addGestureRecognizer(singleTap)
         let edgePanRight = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgePan))
         edgePanRight.edges = .right
         self.addGestureRecognizer(edgePanRight)
@@ -24,18 +26,35 @@ extension PlayArea {
         self.addGestureRecognizer(edgePanLeft)
     }
     
+    @objc func oneTap(recognizer: UITapGestureRecognizer) {
+        var location = recognizer.location(in: self)
+        location = level.convertPoint(fromView: location)
+        if let shapeTapped = self.level.nodes(at: location).first as? Shape {
+            gained(amount: shapeTapped.objectType.getPoints())
+            for child in level.children {
+                if let otherShape = child as? Shape {
+                    let offset = CGVector(dx: otherShape.position.x - shapeTapped.position.x, dy: otherShape.position.y - shapeTapped.position.y)
+                    if offset.magnitudeSquared() < shapeTapped.size.width * shapeTapped.size.width * 2.25 {
+                        otherShape.physicsBody?.applyImpulse(offset)
+                    }
+                }
+            }
+        }
+    }
+    
     @objc func handleEdgePan(recognizer: UIScreenEdgePanGestureRecognizer) {
+        var index = zoneNumber
         if recognizer.state == .ended {
             if recognizer.edges == .right {
-                zoneNumber += 1
-                if zoneNumber == gameState.zones.count {zoneNumber = 0}
+                index += 1
+                if index == gameState.zones.count {index = 0}
             } else if recognizer.edges == .left {
-                zoneNumber -= 1
-                if zoneNumber < 0 {zoneNumber = gameState.zones.count - 1}
+                index -= 1
+                if index < 0 {index = gameState.zones.count - 1}
             }
         
         // Show zone at index
-            selectZone(index: zoneNumber);
+            selectZone(index: index);
         
         // just for testing
             print(zoneNumber)
@@ -83,14 +102,15 @@ extension PlayArea {
     @objc func handleTaps(recognizer: UITapGestureRecognizer) {
         if zoneNumber == 0 && gameState.currencyA >= Zone.newZonePrice {
             zoneNumber = gameState.zones.count
-            gameState.zones.append(Zone(size: frame.size))
+            level = Zone(size: frame.size)
+            gameState.zones.append(level)
             gained(amount: -Zone.newZonePrice)
-            level = gameState.zones[zoneNumber]
+            gameState.zones[0].updateZonePrice(gameState.zones.count * gameState.zones.count * 1000)
             presentScene(level)
-            Zone.newZonePrice = gameState.zones.count * gameState.zones.count * 1000
+            
             // just for testing
             addFixture(of: .Bumper, at: CGPoint(x:0, y:0))
-            addShape(of: .Triangle, at: CGPoint(x:100, y:100))
+            addShape(of: .Triangle, at: CGPoint(x:150, y:100))
             addShape(of: .Square, at: CGPoint(x:200, y:100))
         }
     }

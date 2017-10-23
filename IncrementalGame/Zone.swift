@@ -19,43 +19,53 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     static var newZonePrice = 1000
     
     
-    init(size: CGSize, actual: Bool=true) {
+    init(size: CGSize, zone0: Bool=false) {
         super.init(size: size)
         
         backgroundColor = SKColor.black
         
-        if actual {
-            motionManager.startAccelerometerUpdates()
-            
-            physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-            physicsWorld.contactDelegate = self
-            
-            let boundary = SKPhysicsBody(edgeLoopFrom: self.frame)
-            boundary.friction = 1
-            boundary.categoryBitMask = 1
-            boundary.contactTestBitMask = 1
-            boundary.collisionBitMask = 1
-            boundary.usesPreciseCollisionDetection = false
-            boundary.affectedByGravity = false
-            self.physicsBody = boundary
-            
-            addAllowedObject(type: .Triangle)
-            addAllowedObject(type: .Bumper)
-            
-            // just for MVP demo
-            addAllowedObject(type: .Square)
-            addAllowedObject(type: .Star)
-            addAllowedObject(type: .Pentagon)
-            addAllowedObject(type: .Hexagon)
-            addAllowedObject(type: .Circle)
-        }
-        else {
-            let addTap = SKLabelNode(text: "Double Tap to Add a New Zone For $\(Zone.newZonePrice)")
+        motionManager.startAccelerometerUpdates()
+        
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        physicsWorld.contactDelegate = self
+        
+        let boundary = SKPhysicsBody(edgeLoopFrom: self.frame)
+        boundary.friction = 1
+        boundary.categoryBitMask = 1
+        boundary.contactTestBitMask = 1
+        boundary.collisionBitMask = 1
+        boundary.usesPreciseCollisionDetection = false
+        boundary.affectedByGravity = false
+        self.physicsBody = boundary
+        
+        addAllowedObject(type: .Triangle)
+        addAllowedObject(type: .Bumper)
+        
+        // just for MVP demo
+        addAllowedObject(type: .Square)
+        addAllowedObject(type: .Star)
+        addAllowedObject(type: .Pentagon)
+        addAllowedObject(type: .Hexagon)
+        addAllowedObject(type: .Circle)
+
+        if zone0 {
+            let addTap = SKLabelNode(text: "Double Tap to Add a New Zone")
             addTap.fontSize = 26
             addTap.position = CGPoint(x: frame.midX, y: frame.midY)
             addChild(addTap)
+            let addPrice = SKLabelNode(text: "For $\(Zone.newZonePrice)")
+            addPrice.fontSize = 26
+            addPrice.position = CGPoint(x: frame.midX, y: frame.midY-30)
+            addChild(addPrice)
         }
         
+    }
+    
+    func updateZonePrice(_ price: Int) {
+        Zone.newZonePrice = price
+        if let priceLabel = children[1] as? SKLabelNode {
+            priceLabel.text = "For $\(Zone.newZonePrice)"
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
