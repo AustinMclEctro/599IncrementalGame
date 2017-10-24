@@ -8,20 +8,26 @@
 
 import Foundation
 import UIKit
+
+/// The table view used for displaying and interacting with the user's zones.
 class SceneTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     var zones: [Zone] = []
+    
     init(frame: CGRect) {
         super.init(frame: frame, style: .plain)
         dataSource = self
         delegate = self
     }
+    
     func setZones(zones: [Zone]) {
         self.zones = zones
         self.reloadData()
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return zones.count
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let zone = zones[indexPath.row]
         
@@ -30,6 +36,7 @@ class SceneTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
         cell.addSubview(shapes)
         return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let playArea = superview as? PlayArea {
             playArea.selectZone(index: indexPath.row)
@@ -37,6 +44,7 @@ class SceneTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
             self.removeFromSuperview()
         }
     }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

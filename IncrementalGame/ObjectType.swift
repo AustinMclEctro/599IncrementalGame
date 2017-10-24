@@ -8,6 +8,9 @@
 
 import UIKit
 
+
+/// An enumeration containing all the possible objects that can be used
+/// used within the play area.
 enum ObjectType {
     
     case Triangle
@@ -19,10 +22,17 @@ enum ObjectType {
     case Bumper
     
     
+    /// Retrieves the image for the ObjectType.
+    ///
+    /// - Returns: A UIImage object for the ObjectType.
     func getImage() -> UIImage? {
         return UIImage(named: String(describing: self))
     }
     
+    
+    /// Retrieves the price for the ObjectType.
+    ///
+    /// - Returns: The price for the ObjectType.
     func getPrice() -> Int {
         switch self {
         case .Triangle:
@@ -44,6 +54,10 @@ enum ObjectType {
         }
     }
     
+    
+    /// Gets the point value for the ObjectType.
+    ///
+    /// - Returns: The points earned on each collision for the ObjectType.
     func getPoints() -> Int {
         switch self {
         case .Triangle:

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+
 extension PlayArea {
     
     func setupTouchEvents() {
@@ -23,7 +24,6 @@ extension PlayArea {
         let edgePanLeft = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgePan))
         edgePanLeft.edges = .left
         self.addGestureRecognizer(edgePanLeft)
-        
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(drag));
         self.addGestureRecognizer(pan);
@@ -59,6 +59,7 @@ extension PlayArea {
             break;
         }
     }
+    
     @objc func oneTap(recognizer: UITapGestureRecognizer) {
         var location = recognizer.location(in: self)
         location = level.convertPoint(fromView: location)
@@ -93,7 +94,6 @@ extension PlayArea {
             print(zoneNumber)
         }
     }
-    
     
     @objc func pinchSelf(sender: UIPinchGestureRecognizer) {
         let scale = sender.scale

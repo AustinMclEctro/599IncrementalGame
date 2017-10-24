@@ -9,6 +9,8 @@
 import Foundation
 import SpriteKit
 
+
+/// Shape objects, such as the triangle and square, used for gameplay. 
 class Shape: GameObject {
     
     init(type: ObjectType, at: CGPoint, withSize: CGSize) {

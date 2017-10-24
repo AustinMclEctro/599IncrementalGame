@@ -9,6 +9,9 @@
 import Foundation
 import os.log
 
+
+/// Used to store the game state. Includes data such as
+/// currency and zones.
 class GameState: NSObject { //}, NSCoding {
     
     // MARK: Properties

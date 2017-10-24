@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 
+/// Fixtures, such as the bumper, used in gameplay. 
 class Fixture: GameObject {
     
     init(type: ObjectType, at: CGPoint, withSize: CGSize) {

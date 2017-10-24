@@ -9,9 +9,12 @@
 import Foundation
 import SpriteKit
 import UIKit
+
+
+/// A view primarily used as a container for the active zone.
 class PlayArea: SKView {
     
-    var level: Zone
+    var level: Zone // REFACTOR: Rename to zone?
     var zoneNumber = 0
     let gameState: GameState
     var tableSceneView: SceneTableView?
@@ -37,6 +40,7 @@ class PlayArea: SKView {
         self.addGestureRecognizer(rightEdgePan)
         rightEdgePan.require(toFail: pan)*/
     }
+    
     @objc func panLeftEdge(sender: UIScreenEdgePanGestureRecognizer) {
         let oneLess = String(zoneNumber-1);
         print("left from "+String(zoneNumber)+" to "+oneLess)
@@ -44,6 +48,7 @@ class PlayArea: SKView {
             selectZone(index: zoneNumber-1)
         }
     }
+    
     @objc func panRightEdge(sender: UIScreenEdgePanGestureRecognizer) {
         let oneMore = String(zoneNumber+1)
         print("right from "+String(zoneNumber)+" to "+oneMore)
@@ -53,6 +58,9 @@ class PlayArea: SKView {
     }
     
     
+    /// Selects and presents the specified zone.
+    ///
+    /// - Parameter index: The index number of the zone in the zones array.
     func selectZone(index: Int) {
         let count = gameState.zones.count
         var ind = index%count
@@ -73,7 +81,14 @@ class PlayArea: SKView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addShape(of: ObjectType, at: CGPoint) -> Shape? {
+    
+    /// Adds the specified shape to the level.
+    ///
+    /// - Parameters:
+    ///   - of: The specific type of shape.
+    ///   - at: The position where the fixture will be placed on the game screen.
+    /// - Returns: <#return value description#>
+    func addShape(of: ObjectType, at: CGPoint) -> Shape? { // REFACTOR: Could this be put in Zone?
         if level.canAdd(type: of) {
             let shape = Shape(type: of, at: at, withSize: level.size);
             level.addChild(shape);
@@ -82,7 +97,13 @@ class PlayArea: SKView {
         return nil;
     }
     
-    func addFixture(of: ObjectType, at: CGPoint) {
+    
+    /// Adds the specified fixture to the level.
+    ///
+    /// - Parameters:
+    ///   - of: The specific type of fixture.
+    ///   - at: The position where the fixture will be placed on the game screen.
+    func addFixture(of: ObjectType, at: CGPoint) { // REFACTOR: Could this be put in Zone?
         if level.canAdd(type: of) {
             let fix = Fixture(type: of, at: at, withSize: level.size);
             level.addChild(fix);
@@ -90,7 +111,11 @@ class PlayArea: SKView {
         }
     }
     
-    func gained(amount: Int) {
+    
+    /// Increases value of currencyA from gameplay.
+    ///
+    /// - Parameter amount: The amount of points gained.
+    func gained(amount: Int) { // REFACTOR: Combine this with updateCurrency in MasterView?
         // Change the name/delete as you like :) just left here to show how to add currency A
         if let controller = superview as? MasterView {
             controller.updateCurrencyA(by: amount);
