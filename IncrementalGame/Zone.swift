@@ -36,6 +36,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         boundary.collisionBitMask = 1
         boundary.usesPreciseCollisionDetection = false
         boundary.affectedByGravity = false
+        boundary.isDynamic = false
         self.physicsBody = boundary
         
         addAllowedObject(type: .Triangle)
@@ -79,18 +80,26 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        
         if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
             if let playArea = view as? PlayArea {
                 if let one = contact.bodyA.node as? Shape {
                     playArea.gained(amount: one.objectType.getPoints())
-                    let collisionEmitter =  createEmitter(sourceNode: one, location: contact.contactPoint)
-                    animateCollision(collisionEmitter: collisionEmitter)
                 }
                 if let two = contact.bodyB.node as? Shape {
                     playArea.gained(amount: two.objectType.getPoints())
-                    let collisionEmitter =  createEmitter(sourceNode: two, location: contact.contactPoint)
-                    animateCollision(collisionEmitter: collisionEmitter)
+                }
+                //the below only works because the only objects that are dynamic are shapes
+                if contact.bodyB.isDynamic && contact.bodyA.isDynamic {
+                    let A = contact.bodyA.node as? GameObject
+                    let B = contact.bodyB.node as? GameObject
+                    let spark: SKEmitterNode
+                    if A!.getType().getPoints() >= B!.getType().getPoints() {
+                        spark = createEmitter(sourceNode: contact.bodyA.node as! GameObject, location: contact.contactPoint)
+                        animateCollision(collisionEmitter: spark)
+                    } else {
+                        spark = createEmitter(sourceNode: contact.bodyB.node as! GameObject, location: contact.contactPoint)
+                        animateCollision(collisionEmitter: spark)
+                    }
                 }
             }
         }
