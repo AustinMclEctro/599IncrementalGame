@@ -16,8 +16,7 @@ extension PlayArea {
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleTaps))
         doubleTap.numberOfTapsRequired = 2
         self.addGestureRecognizer(doubleTap)
-        let singleTap = UITapGestureRecognizer(target: self, action: #selector(oneTap))
-        self.addGestureRecognizer(singleTap)
+        
         let edgePanRight = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgePan))
         edgePanRight.edges = .right
         self.addGestureRecognizer(edgePanRight)
@@ -30,6 +29,9 @@ extension PlayArea {
         self.addGestureRecognizer(pan);
         pan.require(toFail: edgePanRight);
         pan.require(toFail: edgePanLeft);
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(oneTap))
+        singleTap.require(toFail: pan)
+        self.addGestureRecognizer(singleTap)
     }
     
     @objc func drag(sender: UIPanGestureRecognizer) {
@@ -65,7 +67,7 @@ extension PlayArea {
             for child in level.children {
                 if let otherShape = child as? Shape {
                     let offset = CGVector(dx: otherShape.position.x - shapeTapped.position.x, dy: otherShape.position.y - shapeTapped.position.y)
-                    if offset.magnitudeSquared() < shapeTapped.size.width * shapeTapped.size.width * 2.25 {
+                    if offset.magnitudeSquared() < shapeTapped.size.width * shapeTapped.size.width * 1.75 {
                         otherShape.physicsBody?.applyImpulse(offset)
                     }
                 }
