@@ -50,7 +50,6 @@ extension PlayArea {
                     break;
                 }
             }
-
             
             break;
         case .changed:
@@ -73,12 +72,20 @@ extension PlayArea {
     @objc func oneTap(recognizer: UITapGestureRecognizer) {
         var location = recognizer.location(in: self)
         location = level.convertPoint(fromView: location)
-        if let shapeTapped = self.level.nodes(at: location).first as? Shape {
-            gained(amount: shapeTapped.objectType.getPoints())
+        var nodes = self.level.nodes(at: location)
+        var shapeTapped: Shape?;
+        for n in nodes {
+            if let nodeTemp = n as? Shape {
+                shapeTapped = nodeTemp;
+                break;
+            }
+        }
+        if shapeTapped != nil {
+            gained(amount: shapeTapped!.objectType.getPoints())
             for child in level.children {
                 if let otherShape = child as? Shape {
-                    let offset = CGVector(dx: otherShape.position.x - shapeTapped.position.x, dy: otherShape.position.y - shapeTapped.position.y)
-                    if offset.magnitudeSquared() < shapeTapped.size.width * shapeTapped.size.width * 1.75 {
+                    let offset = CGVector(dx: otherShape.position.x - shapeTapped!.position.x, dy: otherShape.position.y - shapeTapped!.position.y)
+                    if offset.magnitudeSquared() < shapeTapped!.size.width * shapeTapped!.size.width * 1.75 {
                         otherShape.physicsBody?.applyImpulse(offset)
                     }
                 }
