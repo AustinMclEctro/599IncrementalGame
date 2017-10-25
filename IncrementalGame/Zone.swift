@@ -143,7 +143,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         let addEmitterAction = SKAction.run({self.addChild(collisionEmitter)})
         let waitAction = SKAction.wait(forDuration: TimeInterval(duration)) //allow sparks to animate
         let remove = SKAction.run {collisionEmitter.removeFromParent()}
-        let collisionSequence = SKAction.sequence([addEmitterAction,waitAction,remove])
+        let collisionSequence = SKAction.sequence([addEmitterAction, collisionEmitter.particleAction!,waitAction,remove])
         self.run(collisionSequence)
     }
     
