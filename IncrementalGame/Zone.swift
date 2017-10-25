@@ -19,7 +19,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     static var newZonePrice = 1000
     
     
-    init(size: CGSize, zone0: Bool=false) {
+    init(size: CGSize, zone0: Bool=false, children: [SKNode]) {
+        
         super.init(size: size)
         
         backgroundColor = SKColor.black
@@ -49,6 +50,12 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         addAllowedObject(type: .Hexagon)
         addAllowedObject(type: .Circle)
 
+        if !children.isEmpty {
+            for child in children {
+                self.addChild(child)
+            }
+        }
+        
         // Add zone 0 (no zones) and setup tap gesture
         if zone0 {
             let addTap = SKLabelNode(text: "Double Tap to Add a New Zone")
@@ -180,21 +187,22 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     // MARK: NSCoding
     
-    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("zone")
-    
+    /// Keys used to reference the properties in memory
     struct PropertyKey {
         static let size = "size"
+        static let children = "children"
     }
     
     override func encode(with aCoder: NSCoder) {
         super.encode(with: aCoder)
         aCoder.encode(size, forKey: PropertyKey.size)
+        aCoder.encode(children, forKey: PropertyKey.children)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         let size = aDecoder.decodeCGSize(forKey: PropertyKey.size)
-        self.init(size: size)
+        let children = aDecoder.decodeObject(forKey: PropertyKey.children) as! [SKNode]
+        self.init(size: size, zone0: false, children: children)
     }
 }
 

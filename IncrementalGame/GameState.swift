@@ -35,7 +35,6 @@ class GameState: NSObject, NSCoding {
         static let zones = "zones"
     }
     
-    
     required convenience init?(coder aDecoder: NSCoder) {
         // The currency is required. If we cannot decode a currency string, the initializer should fail.
         let currencyA = aDecoder.decodeInteger(forKey: PropertyKey.currencyA)

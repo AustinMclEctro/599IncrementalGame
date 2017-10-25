@@ -24,8 +24,9 @@ class PlayArea: SKView {
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState
         
+        // Load zones if they exist, create zone 0 if it doesn't
         if gameState.zones.isEmpty {
-            level = Zone(size: frame.size, zone0: true)
+            level = Zone(size: frame.size, zone0: true, children: [])
             gameState.zones.append(level)
         } else {
             level = gameState.zones[1]; // REFACTOR: Should zone zero be saved in the zones array?
@@ -77,7 +78,7 @@ class PlayArea: SKView {
         zoneNumber = ind
         
         // don't know why this is needed but zones[0] won't display right without it!!
-        if zoneNumber == 0 {gameState.zones[0] = Zone(size: frame.size, zone0: true)}
+        if zoneNumber == 0 {gameState.zones[0] = Zone(size: frame.size, zone0: true, children: [])}
         
         level = gameState.zones[ind]
         presentScene(level)

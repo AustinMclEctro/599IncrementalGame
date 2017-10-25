@@ -37,10 +37,9 @@ class Fixture: GameObject {
     }
     
     // MARK: NSCoding
+    // REFACTOR: Move to GameObject
     
-    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("fixture")
-    
+    /// Keys used to reference the properties in memory
     struct PropertyKey {
         static let objectType = "objectType"
         static let lastPosition = "lastPosition"

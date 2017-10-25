@@ -135,7 +135,7 @@ extension PlayArea {
     @objc func handleTaps(recognizer: UITapGestureRecognizer) {
         if zoneNumber == 0 && gameState.currencyA >= Zone.newZonePrice {
             zoneNumber = gameState.zones.count
-            level = Zone(size: frame.size)
+            level = Zone(size: frame.size, zone0: false, children: [])
             gameState.zones.append(level)
             gained(amount: -Zone.newZonePrice)
             gameState.zones[0].updateZonePrice(gameState.zones.count * gameState.zones.count * 1000)

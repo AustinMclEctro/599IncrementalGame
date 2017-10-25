@@ -14,6 +14,7 @@ import os.log
 /// The master view for the app. Contains a number of subviews including a
 /// view for the InfoPanel, the PlayArea and the Shop. It also contains the GameState.
 class MasterView: UIView {
+    
     var infoPanel: InfoPanel;
     var playArea: PlayArea;
     var shopButton: UIButton;
@@ -61,9 +62,6 @@ class MasterView: UIView {
         setupTouchEvents()
     }
     
-    @objc func saveGame() {
-        gameState.saveGameState()
-    }
     
     /// Opens the upgrade tree for a specified GameObject.
     ///
@@ -127,8 +125,17 @@ class MasterView: UIView {
         closeStore();
     }
     
+    
+    // MARK: NSCoding
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    /// Saves the GameState
+    @objc func saveGame() {
+        gameState.saveGameState()
     }
 }
 

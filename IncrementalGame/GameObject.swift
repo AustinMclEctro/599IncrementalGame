@@ -28,10 +28,6 @@ class GameObject: SKSpriteNode {
         self.isUserInteractionEnabled = true
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     
     /// A helper method used to set up a GameObject by configuring its starting
     /// position, dimensions and its physics body.
@@ -70,4 +66,10 @@ class GameObject: SKSpriteNode {
         return objectType
     }
     
+    
+    // MARK: NSCoding
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

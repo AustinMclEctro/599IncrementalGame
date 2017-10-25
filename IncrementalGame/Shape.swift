@@ -38,10 +38,9 @@ class Shape: GameObject {
     }
     
     // MARK: NSCoding
+    // REFACTOR: Move to GameObject
     
-    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("shape")
-    
+    /// Keys used to reference the properties in memory
     struct PropertyKey {
         static let objectType = "objectType"
         static let lastPosition = "lastPosition"
@@ -49,11 +48,12 @@ class Shape: GameObject {
     }
     
     override func encode(with aCoder: NSCoder) {
-        super.encode(with: aCoder)
+        super.encode(with: aCoder)        
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(objectType, forKey: PropertyKey.objectType)
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
         aCoder.encode(self.withSize, forKey: PropertyKey.levelSize)
     }
+    
     
     required convenience init?(coder aDecoder: NSCoder) {
         let objectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
