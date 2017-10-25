@@ -12,7 +12,11 @@ import SpriteKit
 /// Fixtures, such as the bumper, used in gameplay. 
 class Fixture: GameObject {
     
+    var withSize: CGSize  // REFACTOR: This might not need to be stored
+    
     init(type: ObjectType, at: CGPoint, withSize: CGSize) {
+        self.withSize = withSize
+        
         super.init(type: type)
         super.setUp(at: at, withSize: withSize)
         let rangeX: SKRange
@@ -34,7 +38,27 @@ class Fixture: GameObject {
     
     // MARK: NSCoding
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("fixture")
+    
+    struct PropertyKey {
+        static let objectType = "objectType"
+        static let lastPosition = "lastPosition"
+        static let levelSize = "levelSize"
+    }
+    
+    override func encode(with aCoder: NSCoder) {
+        super.encode(with: aCoder)
+        try? (aCoder as! NSKeyedArchiver).encodeEncodable(objectType, forKey: PropertyKey.objectType)
+        aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
+        aCoder.encode(self.withSize, forKey: PropertyKey.levelSize)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let objectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
+        let lastPosition = aDecoder.decodeCGPoint(forKey: PropertyKey.lastPosition)
+        let withSize = aDecoder.decodeCGSize(forKey: PropertyKey.levelSize)
+        
+        self.init(type: objectType!, at: lastPosition, withSize: withSize)
     }
 }

@@ -179,8 +179,21 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     // MARK: NSCoding
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("zone")
+    
+    struct PropertyKey {
+        static let size = "size"
+    }
+    
+    override func encode(with aCoder: NSCoder) {
+        super.encode(with: aCoder)
+        aCoder.encode(size, forKey: PropertyKey.size)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let size = aDecoder.decodeCGSize(forKey: PropertyKey.size)
+        self.init(size: size)
     }
 }
 

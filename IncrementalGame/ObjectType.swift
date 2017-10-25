@@ -11,7 +11,7 @@ import UIKit
 
 /// An enumeration containing all the possible objects that can be used
 /// used within the play area.
-enum ObjectType {
+enum ObjectType: String, Codable {
     
     case Triangle
     case Square

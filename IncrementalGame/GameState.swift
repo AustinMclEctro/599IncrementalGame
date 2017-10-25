@@ -17,8 +17,12 @@ class GameState: NSObject, NSCoding {
     // MARK: Properties
     
     var currencyA: Int
-    
     var zones: [Zone]
+    
+    init(_ startingCurrency: Int, _ existingZones: [Zone]) {
+        self.currencyA = startingCurrency
+        self.zones = existingZones
+    }
     
     // MARK: NSCoding
     
@@ -32,22 +36,17 @@ class GameState: NSObject, NSCoding {
     }
     
     
-    init(_ startingCurrency: Int, _ existingZones: [Zone]) {
-        self.currencyA = startingCurrency
-        self.zones = existingZones
-    }
-    
     required convenience init?(coder aDecoder: NSCoder) {
         // The currency is required. If we cannot decode a currency string, the initializer should fail.
         let currencyA = aDecoder.decodeInteger(forKey: PropertyKey.currencyA)
-        //let zones = aDecoder.decodeObject(forKey: PropertyKey.zones) as? [Zone]
+        let zones = aDecoder.decodeObject(forKey: PropertyKey.zones) as? [Zone]
      
-        self.init(currencyA, [])
+        self.init(currencyA, zones!)
     }
      
     func encode(with aCoder: NSCoder) {
         aCoder.encode(currencyA, forKey: PropertyKey.currencyA)
-        //aCoder.encode(zones, forKey: PropertyKey.zones)
+        aCoder.encode(zones, forKey: PropertyKey.zones)
     }
      
     func saveGameState() {
