@@ -137,6 +137,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     func animateCollision(collisionEmitter: SKEmitterNode) {
         // Set up a sequence animation which deletes its node after completion.
         let duration = CGFloat(collisionEmitter.numParticlesToEmit)*collisionEmitter.particleLifetime
+        //can set particle actions with collisionEmitter.particleAction = actions
+        let gatherPoint = frame.origin
+        collisionEmitter.particleAction = SKAction.move(to: gatherPoint, duration: 2)
         let addEmitterAction = SKAction.run({self.addChild(collisionEmitter)})
         let waitAction = SKAction.wait(forDuration: TimeInterval(duration)) //allow sparks to animate
         let remove = SKAction.run {collisionEmitter.removeFromParent()}
