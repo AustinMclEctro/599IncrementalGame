@@ -58,6 +58,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             addPrice.fontSize = 26
             addPrice.position = CGPoint(x: frame.midX, y: frame.midY-30)
             addChild(addPrice)
+            allowedObjects = [];
         }
         
     }

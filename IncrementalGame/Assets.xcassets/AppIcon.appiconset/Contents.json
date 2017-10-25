@@ -87,19 +87,19 @@
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "iPhone-14.png",
+      "filename" : "iPad.png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "iPhone-15.png",
+      "filename" : "iPad-1.png",
       "scale" : "2x"
     },
     {
       "size" : "83.5x83.5",
       "idiom" : "ipad",
-      "filename" : "iPhone-16.png",
+      "filename" : "ipadPro.png",
       "scale" : "2x"
     },
     {

@@ -42,11 +42,15 @@ extension PlayArea {
         case .began:
             
             let nodes = scene?.nodes(at: location) ?? []
-            if (nodes.count > 0) {
-                if let node = nodes[0] as? GameObject {
+            for n in nodes {
+                if let node = n as? GameObject {
                     selectedNode = node;
+                    selectedNode?.physicsBody?.affectedByGravity = false;
+                    //selectedNode?.physicsBody?.isDynamic = false;
+                    break;
                 }
             }
+
             
             break;
         case .changed:
@@ -56,8 +60,12 @@ extension PlayArea {
             break;
         default: // ended, canceled etc.
             let vel = sender.velocity(in: self);
+            //selectedNode?.physicsBody?.isDynamic = true;
+            selectedNode?.physicsBody?.affectedByGravity = true;
+            // TODO - overcome gravity
             selectedNode?.physicsBody?.applyForce(CGVector(dx: vel.x, dy: -vel.y))
             selectedNode = nil;
+            
             break;
         }
     }
@@ -83,9 +91,10 @@ extension PlayArea {
         if (recognizer.state == .began) {
             let location = CGPoint(x: recognizer.location(in: self).x, y: frame.height-recognizer.location(in: self).y)
             let nodes = scene?.nodes(at: location) ?? []
-            if (nodes.count > 0) {
-                if let node = nodes[0] as? GameObject {
+            for n in nodes {
+                if let node = n as? GameObject {
                     selectedNode = node;
+                    break;
                 }
             }
         }

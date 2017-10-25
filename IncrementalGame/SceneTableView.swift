@@ -17,8 +17,12 @@ class SceneTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
         super.init(frame: frame, style: .plain)
         dataSource = self
         delegate = self
+        self.backgroundColor = .black;
     }
-    
+    override func didMoveToSuperview() {
+        //self.backgroundView = superview;
+        super.didMoveToSuperview()
+    }
     func setZones(zones: [Zone]) {
         self.zones = zones
         self.reloadData()
@@ -30,11 +34,22 @@ class SceneTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let zone = zones[indexPath.row]
-        
         let cell = UITableViewCell();
-        let shapes = SceneShapePreview(frame: cell.frame, children: zone.children);
-        cell.addSubview(shapes)
+        if indexPath.row == 0 {
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height));
+            label.text = "Add";
+            label.textColor = .white;
+            cell.addSubview(label)
+            
+        }
+        else {
+            let shapes = SceneShapePreview(frame: cell.frame, children: zone.children);
+            cell.addSubview(shapes)
+            
+        }
+        cell.backgroundColor = .clear;
         return cell
+        
     }
     // TODO - fix this, selection not allowed but highlight is
     /*func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
