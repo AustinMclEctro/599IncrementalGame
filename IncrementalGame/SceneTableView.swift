@@ -36,7 +36,10 @@ class SceneTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
         cell.addSubview(shapes)
         return cell
     }
-    
+    // TODO - fix this, selection not allowed but highlight is
+    /*func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        self.tableView(tableView, didSelectRowAt: indexPath);
+    }*/
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let playArea = superview as? PlayArea {
             playArea.selectZone(index: indexPath.row)
