@@ -49,6 +49,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         addAllowedObject(type: .Hexagon)
         addAllowedObject(type: .Circle)
 
+        // Add zone 0 (no zones) and setup tap gesture
         if zone0 {
             let addTap = SKLabelNode(text: "Double Tap to Add a New Zone")
             addTap.fontSize = 26

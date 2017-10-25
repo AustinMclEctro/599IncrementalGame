@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "IncrementalGame/Zone.swift"
-            timestampString = "530598029.521898"
+            timestampString = "530645573.300615"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
             landmarkName = "init(coder:)"
             landmarkType = "7">
             <Locations>
@@ -26,7 +26,7 @@
                   moduleName = "IncrementalGame"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/michael/Documents/GitHub/599IncrementalGame/IncrementalGame/Zone.swift"
-                  timestampString = "530598029.549276"
+                  timestampString = "530645573.317497"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -41,11 +41,11 @@
                   moduleName = "IncrementalGame"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/michael/Documents/GitHub/599IncrementalGame/IncrementalGame/Zone.swift"
-                  timestampString = "530598029.564145"
+                  timestampString = "530645573.328781"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "195"
-                  endingLineNumber = "195"
+                  startingLineNumber = "196"
+                  endingLineNumber = "196"
                   offsetFromSymbolStart = "18">
                </Location>
             </Locations>
@@ -58,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "IncrementalGame/MasterView.swift"
-            timestampString = "530598029.521979"
+            timestampString = "530645475.413105"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "35"
@@ -74,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "IncrementalGame/MasterView.swift"
-            timestampString = "530598029.52232"
+            timestampString = "530645475.413551"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "65"
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "IncrementalGame/Zone.swift"
-            timestampString = "530598029.522599"
+            timestampString = "530645573.300779"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
             landmarkName = "encode(with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,12 +138,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "IncrementalGame/Shape.swift"
-            timestampString = "530598029.522701"
+            timestampString = "530645525.992786"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "51"
             endingLineNumber = "51"
             landmarkName = "encode(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "IncrementalGame/PlayArea.swift"
+            timestampString = "530645573.300884"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "init(frame:gameState:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
