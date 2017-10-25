@@ -33,6 +33,8 @@ class Shape: GameObject {
         self.constraints = [conX,conY]
     }
     
+    // MARK: NSCoding
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

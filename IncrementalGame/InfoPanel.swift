@@ -23,7 +23,6 @@ class InfoPanel: UIView {
         // Configure currency label
         curALabel = UILabel(frame: CGRect(x: 0, y: 20, width: frame.width/3, height: 20))
         curALabel.textAlignment = NSTextAlignment.center
-        curALabel.text = "F";
         curALabel.textColor = .white;
 
         // Configure logo

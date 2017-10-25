@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import os.log
 
 
 /// The master view for the app. Contains a number of subviews including a
@@ -31,7 +32,11 @@ class MasterView: UIView {
     
     
     override init(frame: CGRect) {
-        gameState = GameState(0, []);
+        if let savedGameState = GameState.loadGameState() {
+            gameState = savedGameState
+        } else {
+            gameState = GameState(5000, [])
+        }
         
         // Configure and create the subviews
         let heightPerc = frame.width*1.25; // For the PlayArea
@@ -45,13 +50,20 @@ class MasterView: UIView {
         super.init(frame: frame)
         
         self.addSubview(infoPanel);
+        infoPanel.upgradeCurrencyA(to: self.currencyA)
         self.addSubview(playArea);
         self.addSubview(shopButton);
         
+        // Subscribe to applicationWillResignActive notification
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(MasterView.saveGame), name: Notification.Name.UIApplicationWillResignActive, object: nil)
+        
         setupTouchEvents()
-        updateCurrencyA(by: 5000) // Initialize currency
     }
     
+    @objc func saveGame() {
+        gameState.saveGameState()
+    }
     
     /// Opens the upgrade tree for a specified GameObject.
     ///

@@ -73,17 +73,13 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    
 
     override func update(_ currentTime: TimeInterval) {
         if let accelData = motionManager.accelerometerData {
             physicsWorld.gravity = CGVector(dx: accelData.acceleration.x * 30, dy: accelData.acceleration.y * 30)
         }
     }
+    
     
     func didBegin(_ contact: SKPhysicsContact) {
         if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
@@ -178,6 +174,13 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     /// - Parameter type: The ObjectType (triange, bumper, etc.)
     func removeAllowedObject(type: ObjectType) {
         allowedObjects.remove(type)
+    }
+    
+    
+    // MARK: NSCoding
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
 }
 
