@@ -338,6 +338,9 @@ class Shop: SKView {
                     
                 }
                 
+                
+            }
+            if (selectedNode != nil) {
                 self.ringOne.addChild(selectedNode!);
             }
             

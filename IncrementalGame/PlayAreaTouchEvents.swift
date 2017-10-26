@@ -15,6 +15,7 @@ extension PlayArea {
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinchSelf))
         self.addGestureRecognizer(pinch)
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleTaps))
+        doubleTap.cancelsTouchesInView = false;
         doubleTap.numberOfTapsRequired = 2
         self.addGestureRecognizer(doubleTap)
         
@@ -30,6 +31,7 @@ extension PlayArea {
         pan.require(toFail: edgePanRight);
         pan.require(toFail: edgePanLeft);
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(oneTap))
+        singleTap.cancelsTouchesInView = false;
         singleTap.require(toFail: pan)
         self.addGestureRecognizer(singleTap)
     }
@@ -40,9 +42,12 @@ extension PlayArea {
         case .began:
             
             let nodes = scene?.nodes(at: location) ?? []
-            if (nodes.count > 0) {
-                if let node = nodes[0] as? GameObject {
+            for n in nodes {
+                if let node = n as? GameObject {
                     selectedNode = node;
+                    selectedNode?.physicsBody?.affectedByGravity = false;
+                    //selectedNode?.physicsBody?.isDynamic = false;
+                    break;
                 }
             }
             
@@ -54,8 +59,12 @@ extension PlayArea {
             break;
         default: // ended, canceled etc.
             let vel = sender.velocity(in: self);
+            //selectedNode?.physicsBody?.isDynamic = true;
+            selectedNode?.physicsBody?.affectedByGravity = true;
+            // TODO - overcome gravity
             selectedNode?.physicsBody?.applyForce(CGVector(dx: vel.x, dy: -vel.y))
             selectedNode = nil;
+            
             break;
         }
     }
@@ -63,12 +72,20 @@ extension PlayArea {
     @objc func oneTap(recognizer: UITapGestureRecognizer) {
         var location = recognizer.location(in: self)
         location = level.convertPoint(fromView: location)
-        if let shapeTapped = self.level.nodes(at: location).first as? Shape {
-            gained(amount: shapeTapped.objectType.getPoints())
+        var nodes = self.level.nodes(at: location)
+        var shapeTapped: Shape?;
+        for n in nodes {
+            if let nodeTemp = n as? Shape {
+                shapeTapped = nodeTemp;
+                break;
+            }
+        }
+        if shapeTapped != nil {
+            gained(amount: shapeTapped!.objectType.getPoints())
             for child in level.children {
                 if let otherShape = child as? Shape {
-                    let offset = CGVector(dx: otherShape.position.x - shapeTapped.position.x, dy: otherShape.position.y - shapeTapped.position.y)
-                    if offset.magnitudeSquared() < shapeTapped.size.width * shapeTapped.size.width * 1.75 {
+                    let offset = CGVector(dx: otherShape.position.x - shapeTapped!.position.x, dy: otherShape.position.y - shapeTapped!.position.y)
+                    if offset.magnitudeSquared() < shapeTapped!.size.width * shapeTapped!.size.width * 1.75 {
                         otherShape.physicsBody?.applyImpulse(offset)
                     }
                 }
@@ -77,21 +94,39 @@ extension PlayArea {
     }
     
     @objc func handleEdgePan(recognizer: UIScreenEdgePanGestureRecognizer) {
-        var index = zoneNumber
-        if recognizer.state == .ended {
-            if recognizer.edges == .right {
-                index += 1
-                if index == gameState.zones.count {index = 0}
-            } else if recognizer.edges == .left {
-                index -= 1
-                if index < 0 {index = gameState.zones.count - 1}
+        // Allows draging shapes to override pan
+        if (recognizer.state == .began) {
+            let location = CGPoint(x: recognizer.location(in: self).x, y: frame.height-recognizer.location(in: self).y)
+            let nodes = scene?.nodes(at: location) ?? []
+            for n in nodes {
+                if let node = n as? GameObject {
+                    selectedNode = node;
+                    break;
+                }
             }
+        }
+        if (selectedNode == nil) {
         
-        // Show zone at index
-            selectZone(index: index);
-        
-        // just for testing
-            print(zoneNumber)
+            var index = zoneNumber
+            if recognizer.state == .ended {
+                if recognizer.edges == .right {
+                    index += 1
+                    if index == gameState.zones.count {index = 0}
+                } else if recognizer.edges == .left {
+                    index -= 1
+                    if index < 0 {index = gameState.zones.count - 1}
+                }
+                // Need to make sure selectedNode is nil, in case drag fails for some reason
+                selectedNode = nil;
+            // Show zone at index
+                selectZone(index: index);
+            
+            // just for testing
+                print(zoneNumber)
+            }
+        }
+        else { // do drag instead of pan
+            drag(sender: recognizer);
         }
     }
     
@@ -133,6 +168,7 @@ extension PlayArea {
     
     
     @objc func handleTaps(recognizer: UITapGestureRecognizer) {
+        
         if zoneNumber == 0 && gameState.currencyA >= Zone.newZonePrice {
             zoneNumber = gameState.zones.count
             level = Zone(size: frame.size, zone0: false, children: [])

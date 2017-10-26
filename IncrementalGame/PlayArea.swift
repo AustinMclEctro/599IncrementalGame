@@ -35,35 +35,7 @@ class PlayArea: SKView {
         super.init(frame: frame)
         setupTouchEvents()
         presentScene(level)
-        
-        
-        /*let leftEdgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(panLeftEdge))
-        leftEdgePan.edges = .left
-        self.addGestureRecognizer(leftEdgePan)
-        leftEdgePan.require(toFail: pan)
-        
-        let rightEdgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(panRightEdge))
-        rightEdgePan.edges = .right
-        self.addGestureRecognizer(rightEdgePan)
-        rightEdgePan.require(toFail: pan)*/
     }
-    
-    @objc func panLeftEdge(sender: UIScreenEdgePanGestureRecognizer) {
-        let oneLess = String(zoneNumber-1);
-        print("left from "+String(zoneNumber)+" to "+oneLess)
-        if sender.state == .ended {
-            selectZone(index: zoneNumber-1)
-        }
-    }
-    
-    @objc func panRightEdge(sender: UIScreenEdgePanGestureRecognizer) {
-        let oneMore = String(zoneNumber+1)
-        print("right from "+String(zoneNumber)+" to "+oneMore)
-        if sender.state == .ended {
-            selectZone(index: zoneNumber+1)
-        }
-    }
-    
     
     /// Selects and presents the specified zone.
     ///
