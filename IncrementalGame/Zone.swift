@@ -25,7 +25,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
         backgroundColor = SKColor.black
         
-        //motionManager.startAccelerometerUpdates()
+        motionManager.startAccelerometerUpdates()
         view?.showsPhysics = true
         physicsWorld.gravity = CGVector(dx: 2, dy: 3)
         physicsWorld.contactDelegate = self
@@ -84,11 +84,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
 
     override func update(_ currentTime: TimeInterval) {
-        /*
+        
         if let accelData = motionManager.accelerometerData {
             physicsWorld.gravity = CGVector(dx: accelData.acceleration.x * 30, dy: accelData.acceleration.y * 30)
         }
-        */
+ 
     }
     
     
