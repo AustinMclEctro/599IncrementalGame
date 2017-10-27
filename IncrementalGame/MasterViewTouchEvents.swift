@@ -90,14 +90,34 @@ extension MasterView {
         }
     }
     func transitionToOpen() {
-        //var animation = CABasicAnimation();
-        playArea.removeFromSuperview();
-        sceneCollection.setCurrent(playArea: playArea);
-        sceneOpen = true;
+        var fr = self.sceneCollection.zoomingTo(index: self.playArea.zoneNumber);
+        UIView.animate(withDuration: 0.5, animations: {
+            self.playArea.frame = CGRect(x: self.playAreaFrame.minX+fr.minX, y: self.playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height)
+        }) { (success) in
+            if (success) {
+                self.playArea.removeFromSuperview();
+                self.sceneCollection.setCurrent(playArea: self.playArea);
+                self.sceneOpen = true;
+            }
+            else {
+                self.transitionToClose()
+            }
+        }
+        
     }
     func transitionToClose() {
+        /*let positionAnimation = CABasicAnimation(keyPath: "scale")
+        positionAnimation.fromValue = [playArea.frame.size.x, playArea.size.y];
+        positionAnimation.toValue = [playAreaFrame.size.x, playArea.size.y];
+        
+        let scaleAnimation = CABasicAnimation(keyPath: "position")
+        scaleAnimation.fromValue = [playArea.frame.minX, playArea.frame.minY];
+        scaleAnimation.toValue = [playAreaFrame.minX, playAreaFrame.minY];*/
+        UIView.animate(withDuration: 0.5, animations: {
+            self.playArea.frame = self.playAreaFrame
+        })
         //var animation = CABasicAnimation();
-        playArea.frame = playAreaFrame;
+        //playArea.frame = playAreaFrame;
         sceneOpen = false;
         playArea.removeFromSuperview()
         self.addSubview(playArea);
@@ -134,7 +154,8 @@ extension MasterView {
             transitionToOpen()
         }
         else {
-            transitionToClose()
+            // Does all the work, some redundancy but negligible on performance
+            selectZone(index: playArea.zoneNumber);
         }
     }
 }

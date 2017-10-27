@@ -94,8 +94,6 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     func setCurrent(playArea: PlayArea) {
         var zone = playArea.zoneNumber;
         let cell = zoneCells[playArea.zoneNumber];//self.collectionView(self, cellForItemAt: indexPath)
-        print(playArea.zoneNumber);
-        cell.backgroundColor = .blue;
         
         cell.addSubview(playArea);
         playArea.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height)

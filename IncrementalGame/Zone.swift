@@ -23,7 +23,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
         super.init(size: size)
         
-        backgroundColor = SKColor.white
+        backgroundColor = SKColor.black
         
         motionManager.startAccelerometerUpdates()
         view?.showsPhysics = true

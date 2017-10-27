@@ -140,8 +140,10 @@ class MasterView: UIView {
     func selectZone(index: Int) {
         playArea.removeFromSuperview();
         self.addSubview(playArea);
-        playArea.frame = playAreaFrame;
         playArea.selectZone(index: index);
+        var fr = sceneCollection.zoomingTo(index: playArea.zoneNumber)
+        playArea.frame = CGRect(x: playAreaFrame.minX+fr.minX, y: playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height)
+        transitionToClose()
         self.addSubview(shopButton)
         self.addSubview(scenePreviewButton)
     }
