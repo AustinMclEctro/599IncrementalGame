@@ -17,8 +17,6 @@ class PlayArea: SKView {
     var level: Zone // REFACTOR: Rename to zone?
     var zoneNumber = 0
     let gameState: GameState
-    var tableSceneView: SceneTableView?
-    var tableOpen = false
     var selectedNode: GameObject?;
     
     init(frame: CGRect, gameState: GameState) {

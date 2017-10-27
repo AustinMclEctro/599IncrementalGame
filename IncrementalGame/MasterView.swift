@@ -14,14 +14,21 @@ import os.log
 /// The master view for the app. Contains a number of subviews including a
 /// view for the InfoPanel, the PlayArea and the Shop. It also contains the GameState.
 class MasterView: UIView {
+    var zoomingTo: CGRect?;
     
     var infoPanel: InfoPanel;
+    var playAreaFrame: CGRect;
     var playArea: PlayArea;
+    var sceneCollection: SceneCollectionView;
+    let scenePreviewButton: UIButton;
+    var sceneOpen = false;
     var shopButton: UIButton;
     var shop: Shop;
     var shopOpen = false;
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
+    
+    
     var currencyA: Int {
         set(val) {
             // Do we want to allow this?
@@ -43,7 +50,11 @@ class MasterView: UIView {
         let heightPerc = frame.width*1.25; // For the PlayArea
         let infoHeight = frame.height-heightPerc; // For the info panel
         infoPanel = InfoPanel(frame: CGRect(x: 0, y: 0, width: frame.width, height: infoHeight))
-        playArea = PlayArea(frame: CGRect(x: 0, y: infoHeight, width: frame.width, height: heightPerc), gameState: gameState)
+        playAreaFrame = CGRect(x: 0, y: infoHeight, width: frame.width, height: heightPerc);
+        playArea = PlayArea(frame: playAreaFrame, gameState: gameState)
+        sceneCollection = SceneCollectionView(frame: playAreaFrame, gameState: gameState);
+        scenePreviewButton = UIButton(frame: CGRect(x: 0, y: frame.height-60, width: 50, height: 50))
+        scenePreviewButton.setImage(UIImage(named: "PreviewButton"), for: .normal)
         shopButton = UIButton(frame: CGRect(x: frame.width-60, y: frame.height-60, width: 50, height: 50))
         shopButton.setImage(UIImage(named: "ShopButton"), for: .normal);
         shop = Shop(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
@@ -51,9 +62,11 @@ class MasterView: UIView {
         super.init(frame: frame)
         
         self.addSubview(infoPanel);
+        self.addSubview(sceneCollection);
         infoPanel.upgradeCurrencyA(to: self.currencyA)
         self.addSubview(playArea);
         self.addSubview(shopButton);
+        self.addSubview(scenePreviewButton);
         
         // Subscribe to applicationWillResignActive notification
         let notificationCenter = NotificationCenter.default
@@ -123,6 +136,14 @@ class MasterView: UIView {
         }
         
         closeStore();
+    }
+    func selectZone(index: Int) {
+        playArea.removeFromSuperview();
+        self.addSubview(playArea);
+        playArea.frame = playAreaFrame;
+        playArea.selectZone(index: index);
+        self.addSubview(shopButton)
+        self.addSubview(scenePreviewButton)
     }
     
     

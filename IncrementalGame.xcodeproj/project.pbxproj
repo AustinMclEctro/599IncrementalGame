@@ -16,8 +16,10 @@
 		A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A37572FC1F9286FB0006CC3B /* Assets.xcassets */; };
 		F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00D1F90485F0028A5A1 /* Shop.swift */; };
 		F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00F1F904B8D0028A5A1 /* GameState.swift */; };
-		F83FF1EA1F95497100200B30 /* SceneTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83FF1E91F95497100200B30 /* SceneTableView.swift */; };
+		F83FF1EA1F95497100200B30 /* SceneCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83FF1E91F95497100200B30 /* SceneCollectionView.swift */; };
 		F83FF1EC1F95596700200B30 /* SceneShapePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83FF1EB1F95596700200B30 /* SceneShapePreview.swift */; };
+		F852D27E1FA2A7E2008168A3 /* SceneCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F852D27D1FA2A7E2008168A3 /* SceneCollectionViewCell.swift */; };
+		F852D2811FA2D43B008168A3 /* NewSceneCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F852D2801FA2D43B008168A3 /* NewSceneCollectionViewCell.swift */; };
 		F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */; };
 		F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74211F86ED1A0057AF21 /* ViewController.swift */; };
 		F8FF74251F86ED1A0057AF21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8FF74231F86ED1A0057AF21 /* Main.storyboard */; };
@@ -59,8 +61,10 @@
 		A37572FC1F9286FB0006CC3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F804A00D1F90485F0028A5A1 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		F804A00F1F904B8D0028A5A1 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
-		F83FF1E91F95497100200B30 /* SceneTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTableView.swift; sourceTree = "<group>"; };
+		F83FF1E91F95497100200B30 /* SceneCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCollectionView.swift; sourceTree = "<group>"; };
 		F83FF1EB1F95596700200B30 /* SceneShapePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneShapePreview.swift; sourceTree = "<group>"; };
+		F852D27D1FA2A7E2008168A3 /* SceneCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCollectionViewCell.swift; sourceTree = "<group>"; };
+		F852D2801FA2D43B008168A3 /* NewSceneCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSceneCollectionViewCell.swift; sourceTree = "<group>"; };
 		F8FF741C1F86ED1A0057AF21 /* IncrementalGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IncrementalGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F8FF74211F86ED1A0057AF21 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +110,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F852D27F1FA2A7E5008168A3 /* ScenePreview */ = {
+			isa = PBXGroup;
+			children = (
+				F83FF1E91F95497100200B30 /* SceneCollectionView.swift */,
+				F852D27D1FA2A7E2008168A3 /* SceneCollectionViewCell.swift */,
+				F83FF1EB1F95596700200B30 /* SceneShapePreview.swift */,
+				F852D2801FA2D43B008168A3 /* NewSceneCollectionViewCell.swift */,
+			);
+			path = ScenePreview;
+			sourceTree = "<group>";
+		};
 		F8FF74131F86ED190057AF21 = {
 			isa = PBXGroup;
 			children = (
@@ -143,8 +158,7 @@
 				49B715281F9D05EA00132AD7 /* Fixture.swift */,
 				494605AA1F88364C00B18145 /* Zone.swift */,
 				F804A00D1F90485F0028A5A1 /* Shop.swift */,
-				F83FF1E91F95497100200B30 /* SceneTableView.swift */,
-				F83FF1EB1F95596700200B30 /* SceneShapePreview.swift */,
+				F852D27F1FA2A7E5008168A3 /* ScenePreview */,
 				F8FF74231F86ED1A0057AF21 /* Main.storyboard */,
 				F8FF742B1F86ED1A0057AF21 /* LaunchScreen.storyboard */,
 				F8FF742E1F86ED1A0057AF21 /* Info.plist */,
@@ -311,9 +325,11 @@
 				F8FF745F1F87147A0057AF21 /* ObjectType.swift in Sources */,
 				F8FF74591F86EDC60057AF21 /* PlayArea.swift in Sources */,
 				49B715251F9D024800132AD7 /* GameObject.swift in Sources */,
+				F852D27E1FA2A7E2008168A3 /* SceneCollectionViewCell.swift in Sources */,
 				F8FF74531F86ED700057AF21 /* InfoPanel.swift in Sources */,
 				F8FF74281F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld in Sources */,
-				F83FF1EA1F95497100200B30 /* SceneTableView.swift in Sources */,
+				F83FF1EA1F95497100200B30 /* SceneCollectionView.swift in Sources */,
+				F852D2811FA2D43B008168A3 /* NewSceneCollectionViewCell.swift in Sources */,
 				494605AB1F88364C00B18145 /* Zone.swift in Sources */,
 				F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */,
 				F83FF1EC1F95596700200B30 /* SceneShapePreview.swift in Sources */,

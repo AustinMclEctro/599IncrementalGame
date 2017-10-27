@@ -12,8 +12,6 @@ import UIKit
 extension PlayArea {
     
     func setupTouchEvents() {
-        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinchSelf))
-        self.addGestureRecognizer(pinch)
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleTaps))
         doubleTap.cancelsTouchesInView = false;
         doubleTap.numberOfTapsRequired = 2
@@ -130,7 +128,7 @@ extension PlayArea {
         }
     }
     
-    @objc func pinchSelf(sender: UIPinchGestureRecognizer) {
+    /*@objc func pinchSelf(sender: UIPinchGestureRecognizer) {
         let scale = sender.scale
         
         switch sender.state {
@@ -164,12 +162,13 @@ extension PlayArea {
                 tableOpen = false
             }
         }
-    }
+    }*/
     
     
     @objc func handleTaps(recognizer: UITapGestureRecognizer) {
         
         if zoneNumber == 0 && gameState.currencyA >= Zone.newZonePrice {
+            // TODO: we have to call MasterView.sceneCollection.update.reloadData()
             zoneNumber = gameState.zones.count
             level = Zone(size: frame.size, zone0: false, children: [])
             gameState.zones.append(level)
