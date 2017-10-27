@@ -145,6 +145,16 @@ class MasterView: UIView {
         self.addSubview(shopButton)
         self.addSubview(scenePreviewButton)
     }
+    func createZone() {
+        let level = Zone(size: playAreaFrame.size, zone0: false, children: [])
+        gameState.zones.append(level)
+        // TODO - change this with gameState newZonePrice
+        gameState.currencyA -= Zone.newZonePrice;
+        sceneCollection.reloadData();
+        playArea.selectZone(index: gameState.zones.count-1);
+        transitionToClose()
+        
+    }
     
     
     // MARK: NSCoding

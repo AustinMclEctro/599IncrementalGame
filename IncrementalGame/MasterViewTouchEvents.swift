@@ -28,6 +28,7 @@ extension MasterView {
                     playArea.removeFromSuperview()
                     self.addSubview(playArea);
                 }
+                sceneCollection.reloadData();
                 break;
             case .changed:
                 if (!sceneOpen) {

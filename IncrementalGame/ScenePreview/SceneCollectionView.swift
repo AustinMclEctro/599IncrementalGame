@@ -12,11 +12,12 @@ import UIKit
 /// The table view used for displaying and interacting with the user's zones.
 class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        zoneCells = [];
         return zones.count;
     }
     func zoomingTo(index: Int) -> CGRect {
         //let index = zones.index(of: zone);
-        let indexPath = IndexPath.init(row: index ?? 0, section: 0)
+        let indexPath = IndexPath.init(row: index+1 ?? 0, section: 0)
         let cell = self.collectionView(self, cellForItemAt: indexPath)
         return cell.frame;
     }
@@ -51,6 +52,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         if let controller = superview as? MasterView {
             if (row == 0) {
                 // TODO: Add new zone
+                controller.createZone();
             }
             else {
                 // need to subtract 1 to offset new button
@@ -90,8 +92,9 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         super.didMoveToSuperview()
     }
     func setCurrent(playArea: PlayArea) {
-        let indexPath = IndexPath.init(row: playArea.zoneNumber, section: 0)
+        var zone = playArea.zoneNumber;
         let cell = zoneCells[playArea.zoneNumber];//self.collectionView(self, cellForItemAt: indexPath)
+        print(playArea.zoneNumber);
         cell.backgroundColor = .blue;
         
         cell.addSubview(playArea);
