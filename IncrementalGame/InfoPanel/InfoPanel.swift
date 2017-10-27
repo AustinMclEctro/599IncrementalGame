@@ -14,24 +14,22 @@ import UIKit
 /// related to the game including the game logo and the user's current score.
 class InfoPanel: UIView {
     
-    var curALabel: UILabel;
+    var curABar: ProgressBar;
     var logo: UIImageView;
     
     override init(frame: CGRect) {
         let height = min(frame.height, 50.0)
         
         // Configure currency label
-        curALabel = UILabel(frame: CGRect(x: 0, y: 20, width: frame.width/3, height: 20))
-        curALabel.textAlignment = NSTextAlignment.center
-        curALabel.textColor = .white;
-
+        curABar = ProgressBar(frame: CGRect(x: 30, y: 30, width: height, height: height))
+        curABar.valLabel.textColor = .white;
         // Configure logo
         let logoWidth = (183/77)*height
         logo = UIImageView(frame: CGRect(x: (frame.width/2)-(logoWidth/2), y: 10, width: logoWidth, height: height))
         logo.image = UIImage(named: "colidr");
         super.init(frame: frame);
         self.backgroundColor = .black;
-        self.addSubview(curALabel)
+        self.addSubview(curABar)
         self.addSubview(logo)
     }
     
@@ -44,7 +42,7 @@ class InfoPanel: UIView {
     ///
     /// - Parameter to: The new currency value.
     func upgradeCurrencyA(to: Int) {
-        curALabel.text = "$"+String(to);
+        curABar.currency = to;
     }
     
 }
