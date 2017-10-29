@@ -30,7 +30,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVector(dx: 2, dy: 3)
         physicsWorld.contactDelegate = self
         
-        let boundary = SKPhysicsBody(edgeLoopFrom: self.frame)
+        let boundRect = CGRect(x: 0, y: 60, width: self.frame.size.width, height: self.frame.size.height-60)
+        let boundPath = UIBezierPath(roundedRect: boundRect, cornerRadius: 75.0)
+        let boundary = SKPhysicsBody(edgeLoopFrom: boundPath.cgPath)
         boundary.friction = 1
         boundary.categoryBitMask = 1
         boundary.contactTestBitMask = 1
@@ -39,6 +41,12 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         boundary.affectedByGravity = false
         boundary.isDynamic = false
         self.physicsBody = boundary
+        let outline = SKShapeNode(path: boundPath.cgPath)
+        outline.lineWidth = 5
+        outline.fillColor = .clear
+        outline.strokeColor = .white
+        outline.glowWidth = 1.5
+        self.addChild(outline)
         
         addAllowedObject(type: .Triangle)
         addAllowedObject(type: .Bumper)

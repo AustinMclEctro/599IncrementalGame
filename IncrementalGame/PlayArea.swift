@@ -32,6 +32,7 @@ class PlayArea: SKView {
         
         super.init(frame: frame)
         setupTouchEvents()
+        //self.showsPhysics = true
         presentScene(level)
     }
     
