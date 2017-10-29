@@ -23,7 +23,7 @@ class ProgressBar: UIView {
     var nextColor: CGColor {
         get {
             curIndex += 1;
-            return ringColors[curIndex].cgColor;
+            return ringColors[curIndex%ringColors.count].cgColor;
         }
     }
     var currency: Int {

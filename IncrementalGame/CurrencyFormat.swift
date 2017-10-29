@@ -15,15 +15,22 @@ extension Int {
          - use everywhere (shop)
          
          */
-        var types = ["aJ", "bJ", "cJ", "dJ"];
+        var types = ["aJ", "bJ", "cJ", "dJ", "eJ", "fJ", "gJ", "hJ"];
         var val = 0.0;
         if (self != 0) {
-            val = log(Double(self))/log(100.0)
+            // ln(100) = 4.60517018599;
+            // val = log Base 100 self
+
+            val = log(Double(self))/4.60517018599
+            
         }
         
         var typeIndex = Int(floor(val));
         
         var total = Int(Double(self)/(pow(100, Double(typeIndex))))
+        if (types.count <= typeIndex-1) {
+            return String(describing: total);
+        }
         return String(describing: total)+types[typeIndex];
     }
 }

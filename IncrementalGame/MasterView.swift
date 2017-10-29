@@ -140,6 +140,7 @@ class MasterView: UIView {
     func selectZone(index: Int) {
         playArea.removeFromSuperview();
         self.addSubview(playArea);
+        
         playArea.selectZone(index: index);
         var fr = sceneCollection.zoomingTo(index: playArea.zoneNumber)
         playArea.frame = CGRect(x: playAreaFrame.minX+fr.minX, y: playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height)

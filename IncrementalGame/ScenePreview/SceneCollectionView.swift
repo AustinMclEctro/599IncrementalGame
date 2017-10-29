@@ -19,7 +19,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         //let index = zones.index(of: zone);
         let indexPath = IndexPath.init(row: index+1 ?? 0, section: 0)
         let cell = self.collectionView(self, cellForItemAt: indexPath)
-        return cell.frame;
+        return CGRect(x: cell.frame.minX, y: cell.frame.minY-self.contentOffset.y, width: cell.frame.width, height: cell.frame.height)//cell.frame;
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if (indexPath.row == 0) {
