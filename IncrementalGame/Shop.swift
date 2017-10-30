@@ -56,12 +56,13 @@ class Shop: SKView {
         addStoreItem(ring: 1, gameObject: star);
         
         // Create structures
+        
         let bumper = GameObject(type: .Bumper);
         addStoreItem(ring: 2, gameObject: bumper)
-        let bumper2 = GameObject(type: .Bumper);
-        addStoreItem(ring: 2, gameObject: bumper2)
-        let bumper3 = GameObject(type: .Bumper);
-        addStoreItem(ring: 2, gameObject: bumper3)
+        let vortex = GameObject(type: .Vortex);
+        addStoreItem(ring: 2, gameObject: vortex)
+        let gravitron = GameObject(type: .Graviton);
+        addStoreItem(ring: 2, gameObject: gravitron)
         self.scene?.backgroundColor = .clear;
         self.backgroundColor = .clear;
         blackout();

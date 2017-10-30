@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import os.log
 
+// TODO: Is there another way to distinguish between adding fixtures and shapes?
 
 /// The master view for the app. Contains a number of subviews including a
 /// view for the InfoPanel, the PlayArea and the Shop. It also contains the GameState.
@@ -133,12 +134,24 @@ class MasterView: UIView {
             let location = CGPoint(x: loc.x, y: playArea.frame.height-loc.y); // Flipped y
             let vel = sender!.velocity(in: playArea); // UIView velocity (need to flip y)
             let velocity =  CGVector(dx: vel.x, dy: -vel.y);// Flopped y
-            let shape = playArea.addShape(of: of.objectType, at: location);
-            shape?.physicsBody?.velocity = velocity;
+            if !of.objectType.isFixture() {
+                let shape = playArea.addShape(of: of.objectType, at: location);
+                shape?.physicsBody?.velocity = velocity;
+            }
+            else {
+                playArea.addFixture(of: of.objectType, at: location);
+            }
+            
         }
         else {
             // Placed at ambiguous point
-            playArea.addShape(of: of.objectType, at: CGPoint(x: 0, y: 0));
+            let location =  CGPoint(x: 0, y: 0);
+            if !of.objectType.isFixture() {
+                playArea.addShape(of: of.objectType, at: location);
+            }
+            else {
+                playArea.addFixture(of: of.objectType, at: location);
+            }
         }
         
         closeStore();

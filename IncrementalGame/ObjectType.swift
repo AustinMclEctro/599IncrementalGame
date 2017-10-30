@@ -23,6 +23,13 @@ enum ObjectType: String, Codable {
     case Graviton
     case Vortex
     
+    /// Retrieves the type for the ObjectType (fixture or shape).
+    ///
+    /// - Returns: true if fixture.
+    func isFixture() -> Bool {
+        let fixtures: [ObjectType] = [.Bumper, .Graviton, .Vortex]
+        return fixtures.index(of: self) != nil;
+    }
     
     /// Retrieves the image for the ObjectType.
     ///

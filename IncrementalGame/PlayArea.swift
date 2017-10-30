@@ -36,10 +36,6 @@ class PlayArea: SKView {
         setupTouchEvents()
         //self.showsPhysics = true
         
-        if level.canAdd(type: .Vortex) {
-            addFixture(of: .Vortex, at: CGPoint(x: 0, y: 0))
-        }
-        
         presentScene(level)
     }
     
