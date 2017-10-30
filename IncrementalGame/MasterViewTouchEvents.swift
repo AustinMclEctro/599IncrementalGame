@@ -17,6 +17,7 @@ extension MasterView {
         shopButton.addTarget(self, action: #selector(tapDownStore), for: .touchDown)
         scenePreviewButton.addTarget(self, action: #selector(tapDownPreview), for: .touchUpInside)
         gravButton.addTarget(self, action: #selector(tapGravity), for: .touchUpInside)
+        resetButton.addTarget(self, action: #selector(onResetButtonPress), for: .touchDown)
         var pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinch));
         self.addGestureRecognizer(pinchGesture)
     }
@@ -162,6 +163,15 @@ extension MasterView {
     
     @objc func tapGravity(sender: UIButton) {
         playArea.resetGravity()
+    }
+
+    
+    /// Callback method that is called when the user presses the Reset button.
+    /// Restores the game back to the default game state.
+    ///
+    /// - Parameter sender: The UIButton that was pressed.
+    @objc func onResetButtonPress(sender: UIButton) {
+        print("I will reset the game state.")
     }
 }
 

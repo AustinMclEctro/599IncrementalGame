@@ -27,6 +27,7 @@ class InfoPanel: UIView {
         let logoWidth = (183/77)*height
         logo = UIImageView(frame: CGRect(x: (frame.width/2)-(logoWidth/2), y: 10, width: logoWidth, height: height))
         logo.image = UIImage(named: "colidr");
+        
         super.init(frame: frame);
         self.backgroundColor = .black;
         self.addSubview(curABar)

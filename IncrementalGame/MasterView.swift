@@ -29,6 +29,7 @@ class MasterView: UIView {
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
     let gravButton: UIButton
+    let resetButton: UIButton; // TESTING
     
     
     var currencyA: Int {
@@ -64,6 +65,10 @@ class MasterView: UIView {
         gravButton = UIButton(frame: CGRect(x: frame.width-60, y: 0, width: 50, height: 50))
         gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
         
+        // Configure the reset button
+        resetButton =  UIButton(frame: CGRect(x: (frame.width/3), y: 60, width: frame.width/3, height: 20))
+        resetButton.setTitle("Reset", for: .normal)
+        resetButton.setTitleColor(UIColor.white, for: .normal)
         
         super.init(frame: frame)
         
@@ -74,6 +79,7 @@ class MasterView: UIView {
         self.addSubview(shopButton);
         self.addSubview(gravButton)
         self.addSubview(scenePreviewButton);
+        self.addSubview(resetButton);
         
         // Subscribe to applicationWillResignActive notification
         let notificationCenter = NotificationCenter.default
