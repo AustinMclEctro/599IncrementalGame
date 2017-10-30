@@ -17,6 +17,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     let minVel: CGFloat = 300 * 300
     var allowedObjects: Set<ObjectType> = []
     static var newZonePrice = 1000
+    var gravityX: Double = 0
+    var gravityY: Double = 0
     
     
     init(size: CGSize, zone0: Bool=false, children: [SKNode]) {
@@ -94,11 +96,17 @@ class Zone: SKScene, SKPhysicsContactDelegate {
 
     override func update(_ currentTime: TimeInterval) {
         
-        let playArea = view as! PlayArea
         if let accelData = motionManager.accelerometerData {
-            physicsWorld.gravity = CGVector(dx: (accelData.acceleration.x - playArea.gravityX) * 30, dy: (accelData.acceleration.y - playArea.gravityY) * 30)
+            physicsWorld.gravity = CGVector(dx: (accelData.acceleration.x - gravityX) * 30, dy: (accelData.acceleration.y - gravityY) * 30)
         }
  
+    }
+    
+    func resetGravity() {
+        if let accelData = motionManager.accelerometerData {
+            gravityX = accelData.acceleration.x
+            gravityY = accelData.acceleration.y
+        }
     }
     
     

@@ -18,8 +18,6 @@ class PlayArea: SKView {
     var zoneNumber = 0
     let gameState: GameState
     var selectedNode: GameObject?;
-    var gravityX: Double = 0
-    var gravityY: Double = 0
     
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState
@@ -101,9 +99,8 @@ class PlayArea: SKView {
     }
     
     func resetGravity() {
-        if let accelData = level.motionManager.accelerometerData {
-            gravityX = accelData.acceleration.x
-            gravityY = accelData.acceleration.y
+        for zone in gameState.zones {
+            zone.resetGravity()
         }
     }
     
