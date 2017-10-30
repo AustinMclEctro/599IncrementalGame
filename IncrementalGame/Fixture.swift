@@ -25,6 +25,20 @@ class Fixture: GameObject {
         if objectType == .Bumper {
             self.physicsBody?.restitution = 2.5
         }
+        if objectType == .Graviton {
+            let grav = SKFieldNode.radialGravityField()
+            grav.categoryBitMask = 1
+            grav.isEnabled = true
+            grav.strength = 20
+            self.addChild(grav)
+        }
+        if objectType == .Vortex {
+            let vort = SKFieldNode.vortexField()
+            vort.categoryBitMask = 1
+            vort.isEnabled = true
+            vort.strength = 10
+            self.addChild(vort)
+        }
         self.physicsBody?.isDynamic = false
         self.physicsBody?.allowsRotation = false
         self.physicsBody?.affectedByGravity = false //bumper is not affected by gravity

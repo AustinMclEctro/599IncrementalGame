@@ -49,7 +49,7 @@ class GameObject: SKSpriteNode {
         
         // Configure physics body settings relative to the shape
         switch objectType {
-            case .Circle, .Bumper:
+            case .Circle, .Bumper, .Graviton, .Vortex:
                 self.physicsBody = SKPhysicsBody(circleOfRadius: dimension/2.0)
             case .Square:
                 self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: dimension, height: dimension))

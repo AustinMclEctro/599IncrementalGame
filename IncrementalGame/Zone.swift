@@ -26,8 +26,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         backgroundColor = SKColor.black
         
         motionManager.startAccelerometerUpdates()
-        view?.showsPhysics = true
-        physicsWorld.gravity = CGVector(dx: 2, dy: 3)
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
         
         let boundRect = CGRect(x: 0, y: 60, width: self.frame.size.width, height: self.frame.size.height-60)
@@ -57,6 +56,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         addAllowedObject(type: .Pentagon)
         addAllowedObject(type: .Hexagon)
         addAllowedObject(type: .Circle)
+        addAllowedObject(type: .Graviton)
+        addAllowedObject(type: .Vortex)
 
         if !children.isEmpty {
             for child in children {
@@ -93,8 +94,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
 
     override func update(_ currentTime: TimeInterval) {
         
+        let playArea = view as! PlayArea
         if let accelData = motionManager.accelerometerData {
-            physicsWorld.gravity = CGVector(dx: accelData.acceleration.x * 30, dy: accelData.acceleration.y * 30)
+            physicsWorld.gravity = CGVector(dx: (accelData.acceleration.x - playArea.gravityX) * 30, dy: (accelData.acceleration.y - playArea.gravityY) * 30)
         }
  
     }

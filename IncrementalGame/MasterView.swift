@@ -27,6 +27,7 @@ class MasterView: UIView {
     var shopOpen = false;
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
+    let gravButton: UIButton
     
     
     var currencyA: Int {
@@ -58,6 +59,10 @@ class MasterView: UIView {
         shopButton = UIButton(frame: CGRect(x: frame.width-60, y: frame.height-60, width: 50, height: 50))
         shopButton.setImage(UIImage(named: "ShopButton"), for: .normal);
         shop = Shop(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
+
+        gravButton = UIButton(frame: CGRect(x: frame.width-60, y: 0, width: 50, height: 50))
+        gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
+        
         
         super.init(frame: frame)
         
@@ -66,6 +71,7 @@ class MasterView: UIView {
         infoPanel.upgradeCurrencyA(to: self.currencyA)
         self.addSubview(playArea);
         self.addSubview(shopButton);
+        self.addSubview(gravButton)
         self.addSubview(scenePreviewButton);
         
         // Subscribe to applicationWillResignActive notification

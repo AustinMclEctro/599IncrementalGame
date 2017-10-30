@@ -20,6 +20,8 @@ enum ObjectType: String, Codable {
     case Circle
     case Star
     case Bumper
+    case Graviton
+    case Vortex
     
     
     /// Retrieves the image for the ObjectType.
@@ -49,6 +51,10 @@ enum ObjectType: String, Codable {
             return 600
         case .Bumper:
             return 1000
+        case .Graviton:
+            return 2000
+        case .Vortex:
+            return 3000
         default:
             return 0
         }
@@ -72,8 +78,6 @@ enum ObjectType: String, Codable {
             return 7
         case .Star:
             return 8
-        case .Bumper:
-            return 0
         default:
             return 0
         }

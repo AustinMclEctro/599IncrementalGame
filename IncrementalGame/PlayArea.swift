@@ -18,6 +18,8 @@ class PlayArea: SKView {
     var zoneNumber = 0
     let gameState: GameState
     var selectedNode: GameObject?;
+    var gravityX: Double = 0
+    var gravityY: Double = 0
     
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState
@@ -33,6 +35,11 @@ class PlayArea: SKView {
         super.init(frame: frame)
         setupTouchEvents()
         //self.showsPhysics = true
+        
+        if level.canAdd(type: .Vortex) {
+            addFixture(of: .Vortex, at: CGPoint(x: 0, y: 0))
+        }
+        
         presentScene(level)
     }
     
@@ -94,6 +101,13 @@ class PlayArea: SKView {
         // Change the name/delete as you like :) just left here to show how to add currency A
         if let controller = superview as? MasterView {
             controller.updateCurrencyA(by: amount);
+        }
+    }
+    
+    func resetGravity() {
+        if let accelData = level.motionManager.accelerometerData {
+            gravityX = accelData.acceleration.x
+            gravityY = accelData.acceleration.y
         }
     }
     

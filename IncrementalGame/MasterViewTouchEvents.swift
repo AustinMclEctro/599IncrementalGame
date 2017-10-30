@@ -16,6 +16,7 @@ extension MasterView {
     func setupTouchEvents() {
         shopButton.addTarget(self, action: #selector(tapDownStore), for: .touchDown)
         scenePreviewButton.addTarget(self, action: #selector(tapDownPreview), for: .touchUpInside)
+        gravButton.addTarget(self, action: #selector(tapGravity), for: .touchUpInside)
         var pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinch));
         self.addGestureRecognizer(pinchGesture)
     }
@@ -157,6 +158,10 @@ extension MasterView {
             // Does all the work, some redundancy but negligible on performance
             selectZone(index: playArea.zoneNumber);
         }
+    }
+    
+    @objc func tapGravity(sender: UIButton) {
+        playArea.resetGravity()
     }
 }
 
