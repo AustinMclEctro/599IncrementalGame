@@ -172,6 +172,7 @@ extension MasterView {
     /// - Parameter sender: The UIButton that was pressed.
     @objc func onResetButtonPress(sender: UIButton) {
         print("I will reset the game state.")
+        gameState.restoreToDefault()
     }
 }
 

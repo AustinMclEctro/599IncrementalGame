@@ -60,5 +60,12 @@ class GameState: NSObject, NSCoding {
     static func loadGameState() -> GameState?  {
         return NSKeyedUnarchiver.unarchiveObject(withFile: GameState.ArchiveURL.path) as? GameState
     }
+    
+    
+    /// Restores the game state back to a new game
+    func restoreToDefault() {
+        try! FileManager.default.removeItem(at: GameState.ArchiveURL)
+        print(GameState.ArchiveURL)
+    }
 }
 
