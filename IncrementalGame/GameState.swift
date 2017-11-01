@@ -50,6 +50,7 @@ class GameState: NSObject, NSCoding {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(currencyA, forKey: PropertyKey.currencyA)
         aCoder.encode(zones, forKey: PropertyKey.zones)
+        aCoder.encode(player, forKey: PropertyKey.player)
     }
      
     func saveGameState() {
