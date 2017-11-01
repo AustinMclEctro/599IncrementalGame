@@ -46,7 +46,8 @@ class MasterView: UIView {
         if let savedGameState = GameState.loadGameState() {
             gameState = savedGameState
         } else {
-            gameState = GameState(5000, [])
+            var player = Player(id: 1)
+            gameState = GameState(5000, [], player)
         }
         
         // Configure and create the subviews
