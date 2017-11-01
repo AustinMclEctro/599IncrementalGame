@@ -65,7 +65,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     var zones: [Zone] {
         get {
             // Just a trash zone for the new button? Not sure of a better way to do this
-            var new = Zone(size: CGSize(), children: [])
+            var new = Zone(size: CGSize(), children: [], pIG: nil)
             return [new]+gameState.zones
         }
     }

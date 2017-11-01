@@ -19,9 +19,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     static var newZonePrice = 1000
     var gravityX: Double = 0
     var gravityY: Double = 0
+    var pIG = PassiveIncomeGenerator()
     
-    
-    init(size: CGSize, zone0: Bool=false, children: [SKNode]) {
+    init(size: CGSize, zone0: Bool=false, children: [SKNode], pIG: PassiveIncomeGenerator?) {
         
         super.init(size: size)
         
@@ -60,11 +60,17 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         addAllowedObject(type: .Circle)
         addAllowedObject(type: .Graviton)
         addAllowedObject(type: .Vortex)
-
+        
         if !children.isEmpty {
             for child in children {
                 self.addChild(child)
             }
+        }
+        
+        if pIG != nil {
+            self.pIG = pIG!
+        } else {
+            self.pIG = PassiveIncomeGenerator(defaultRate: 2) // TODO: St
         }
         
         // Add zone 0 (no zones) and setup tap gesture
@@ -215,18 +221,21 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     struct PropertyKey {
         static let size = "size"
         static let children = "children"
+        static let pIG = "pIG"
     }
     
     override func encode(with aCoder: NSCoder) {
         super.encode(with: aCoder)
         aCoder.encode(size, forKey: PropertyKey.size)
         aCoder.encode(children, forKey: PropertyKey.children)
+        aCoder.encode(pIG, forKey: PropertyKey.pIG)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         let size = aDecoder.decodeCGSize(forKey: PropertyKey.size)
         let children = aDecoder.decodeObject(forKey: PropertyKey.children) as! [SKNode]
-        self.init(size: size, zone0: false, children: children)
+        let pIG = aDecoder.decodeObject(forKey: PropertyKey.pIG) as! PassiveIncomeGenerator
+        self.init(size: size, zone0: false, children: children, pIG: pIG)
     }
 }
 

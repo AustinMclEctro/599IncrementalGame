@@ -170,7 +170,7 @@ extension PlayArea {
         if zoneNumber == 0 && gameState.currencyA >= Zone.newZonePrice {
             // TODO: we have to call MasterView.sceneCollection.update.reloadData()
             zoneNumber = gameState.zones.count
-            level = Zone(size: frame.size, zone0: false, children: [])
+            level = Zone(size: frame.size, zone0: false, children: [], pIG: nil)
             gameState.zones.append(level)
             gained(amount: -Zone.newZonePrice)
             gameState.zones[0].updateZonePrice(gameState.zones.count * gameState.zones.count * 1000)

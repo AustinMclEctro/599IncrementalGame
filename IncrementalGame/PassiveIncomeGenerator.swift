@@ -10,15 +10,22 @@ import Foundation
 
 
 /// An object that is used to generate passive income for a zone.
-class PassiveIncomeGenerator {
+class PassiveIncomeGenerator: NSObject, NSCoding {
+    
+    // MARK: Constants
+    struct Rates {
+        static let `default` = 5
+    }
     
     // MARK: Properties
     var rate: Int
-    var gameState: GameState
     
-    init(defaultRate: Int, gameState: GameState) {
+    override init() {
+        self.rate = Rates.default
+    }
+    
+    init(defaultRate: Int) {
         self.rate = defaultRate
-        self.gameState = gameState
     }
     
     // TODO: Create method to get all zones and add their passive income rates
@@ -28,4 +35,22 @@ class PassiveIncomeGenerator {
     func calculateIdleIncome() {
         
     }
+    
+    // MARK: NSCoding
+    
+    struct PropertyKey {
+        static let rate = "rate"
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        // The currency is required. If we cannot decode a currency string, the initializer should fail.
+        let rate = aDecoder.decodeInteger(forKey: PropertyKey.rate)
+        
+        self.init(defaultRate: rate)
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(rate, forKey: PropertyKey.rate)
+    }
+
 }
