@@ -175,7 +175,7 @@ class MasterView: UIView {
         self.addSubview(scenePreviewButton)
     }
     func createZone() {
-        let level = Zone(size: playAreaFrame.size, zone0: false, children: [], pIG: nil)
+        let level = Zone(size: playAreaFrame.size, zone0: false, children: [], pIG: nil, allowedObjects: nil)
         gameState.zones.append(level)
         // TODO - change this with gameState newZonePrice
         gameState.currencyA -= Zone.newZonePrice;

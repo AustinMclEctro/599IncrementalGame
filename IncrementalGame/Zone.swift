@@ -21,7 +21,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var gravityY: Double = 0
     var pIG = PassiveIncomeGenerator()
     
-    init(size: CGSize, zone0: Bool=false, children: [SKNode], pIG: PassiveIncomeGenerator?) {
+    init(size: CGSize, zone0: Bool=false, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
         
         super.init(size: size)
         
@@ -61,12 +61,15 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         addAllowedObject(type: .Graviton)
         addAllowedObject(type: .Vortex)
         
+        // Load zone properties
         if !children.isEmpty {
             for child in children {
                 self.addChild(child)
             }
         }
-        
+        if allowedObjects != nil {
+            self.allowedObjects = allowedObjects!
+        }
         if pIG != nil {
             self.pIG = pIG!
         } else {
@@ -83,7 +86,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             addPrice.fontSize = 26
             addPrice.position = CGPoint(x: frame.midX, y: frame.midY-30)
             addChild(addPrice)
-            allowedObjects = [];
+            self.allowedObjects = [];
         }
         
     }
@@ -221,6 +224,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     struct PropertyKey {
         static let size = "size"
         static let children = "children"
+        static let allowedObjects = "allowedObjects"
         static let pIG = "pIG"
     }
     
@@ -229,13 +233,15 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         aCoder.encode(size, forKey: PropertyKey.size)
         aCoder.encode(children, forKey: PropertyKey.children)
         aCoder.encode(pIG, forKey: PropertyKey.pIG)
+        try? (aCoder as! NSKeyedArchiver).encodeEncodable(Array(allowedObjects), forKey: PropertyKey.allowedObjects)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         let size = aDecoder.decodeCGSize(forKey: PropertyKey.size)
         let children = aDecoder.decodeObject(forKey: PropertyKey.children) as! [SKNode]
+        let allowedObjects = Set((aDecoder as! NSKeyedUnarchiver).decodeDecodable([ObjectType].self, forKey: PropertyKey.allowedObjects)!)
         let pIG = aDecoder.decodeObject(forKey: PropertyKey.pIG) as! PassiveIncomeGenerator
-        self.init(size: size, zone0: false, children: children, pIG: pIG)
+        self.init(size: size, zone0: false, children: children, pIG: pIG, allowedObjects: allowedObjects)
     }
 }
 

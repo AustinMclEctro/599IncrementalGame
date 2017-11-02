@@ -24,7 +24,7 @@ class PlayArea: SKView {
         
         // Load zones if they exist, create zone 0 if it doesn't
         if gameState.zones.isEmpty {
-            level = Zone(size: frame.size, zone0: false, children: [], pIG: nil)
+            level = Zone(size: frame.size, zone0: false, children: [], pIG: nil, allowedObjects: nil)
             gameState.zones.append(level)
         } else {
             level = gameState.zones[0]; // REFACTOR: Should zone zero be saved in the zones array?
