@@ -31,7 +31,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
         
-        let boundRect = CGRect(x: 0, y: 60, width: self.frame.size.width, height: self.frame.size.height-60)
+        let boundRect = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
         let boundPath = UIBezierPath(roundedRect: boundRect, cornerRadius: 75.0)
         let boundary = SKPhysicsBody(edgeLoopFrom: boundPath.cgPath)
         boundary.friction = 1

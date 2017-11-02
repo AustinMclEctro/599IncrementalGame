@@ -74,10 +74,10 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         self.gameState = gameState;
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical;
-        let startWidth = frame.width/3 > 300 ? 300 : frame.width/3;
-        flowLayout.itemSize = CGSize(width: startWidth,height: startWidth*1.25)
-        flowLayout.minimumInteritemSpacing = startWidth/3;
-        flowLayout.minimumLineSpacing = startWidth/3
+        let startWidth = frame.width/4 > 100 ? 100 : frame.width/3;
+        flowLayout.itemSize = CGSize(width: startWidth,height: startWidth)
+        flowLayout.minimumInteritemSpacing = startWidth/6;
+        flowLayout.minimumLineSpacing = startWidth/6
         flowLayout.sectionInset = .init(top: 0, left: startWidth/3, bottom: 0, right: startWidth/3)
         super.init(frame: frame, collectionViewLayout: flowLayout)
         dataSource = self

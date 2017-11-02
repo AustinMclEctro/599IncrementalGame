@@ -29,7 +29,9 @@ class Fixture: GameObject {
             let grav = SKFieldNode.radialGravityField()
             grav.categoryBitMask = 1
             grav.isEnabled = true
-            grav.strength = 20
+            grav.strength = 250
+            grav.isExclusive = false
+            grav.falloff = 0.5
             self.addChild(grav)
         }
         if objectType == .Vortex {
@@ -37,6 +39,7 @@ class Fixture: GameObject {
             vort.categoryBitMask = 1
             vort.isEnabled = true
             vort.strength = 10
+            vort.isExclusive = false
             self.addChild(vort)
         }
         self.physicsBody?.isDynamic = false

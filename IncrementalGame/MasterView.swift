@@ -51,8 +51,8 @@ class MasterView: UIView {
         }
         
         // Configure and create the subviews
-        let heightPerc = frame.width*1.25; // For the PlayArea
-        let infoHeight = frame.height-heightPerc; // For the info panel
+        let heightPerc = frame.width;//*1.25; // For the PlayArea
+        let infoHeight = frame.height-heightPerc-60; // For the info panel
         infoPanel = InfoPanel(frame: CGRect(x: 0, y: 0, width: frame.width, height: infoHeight))
         playAreaFrame = CGRect(x: 0, y: infoHeight, width: frame.width, height: heightPerc);
         playArea = PlayArea(frame: playAreaFrame, gameState: gameState)
@@ -72,7 +72,7 @@ class MasterView: UIView {
         resetButton.setTitleColor(UIColor.white, for: .normal)
         
         super.init(frame: frame)
-        
+        self.backgroundColor = UIColor.black;
         self.addSubview(infoPanel);
         self.addSubview(sceneCollection);
         infoPanel.upgradeCurrencyA(to: self.currencyA)
