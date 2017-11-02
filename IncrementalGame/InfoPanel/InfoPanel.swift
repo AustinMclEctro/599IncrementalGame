@@ -38,9 +38,10 @@ class InfoPanel: UIView {
         logo.image = UIImage(named: "colidr");
         
         // Configure passive rate label
-        passiveRateLabel = UILabel(frame: CGRect(x: 30, y: 30, width: height, height: height))
-        passiveRateLabel.text = "Progress"  // TODO: Get passive rate
+        passiveRateLabel = UILabel(frame: progressBarFrame)
+        passiveRateLabel.text = "Passive Rate"  // TODO: Get passive rate
         passiveRateLabel.textColor = UIColor.white
+        passiveRateLabel.textAlignment = NSTextAlignment.center
         passiveRateLabel.isHidden = true
         
         super.init(frame: frame);

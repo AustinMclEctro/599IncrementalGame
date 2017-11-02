@@ -29,7 +29,7 @@ class MasterView: UIView {
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
     let gravButton: UIButton
-    let resetButton: UIButton; // TESTING
+    let resetButton: UIButton;
     
     
     var currencyA: Int {
@@ -67,7 +67,7 @@ class MasterView: UIView {
         gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
         
         // Configure the reset button
-        resetButton =  UIButton(frame: CGRect(x: (frame.width/3), y: 60, width: frame.width/3, height: 20))
+        resetButton =  UIButton(frame: CGRect(x: 5, y: 25, width: frame.width/3, height: 20))
         resetButton.setTitle("Reset", for: .normal)
         resetButton.setTitleColor(UIColor.white, for: .normal)
         
