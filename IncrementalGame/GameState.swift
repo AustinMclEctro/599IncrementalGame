@@ -69,8 +69,11 @@ class GameState: NSObject, NSCoding {
     
     /// Restores the game state back to a new game
     func restoreToDefault() {
-        try! FileManager.default.removeItem(at: GameState.ArchiveURL)
-        print(GameState.ArchiveURL)
+        do {
+            try FileManager.default.removeItem(at: GameState.ArchiveURL)
+        } catch {
+            os_log("No GameState to reset.", log: OSLog.default, type: .debug)
+        }
     }
 }
 
