@@ -96,6 +96,7 @@ extension PlayArea {
         let location = CGPoint(x: recognizer.location(in: self).x, y: frame.height-recognizer.location(in: self).y)
         var index = zoneNumber
         if (recognizer.state == .began) {
+            tempImageZone?.removeFromSuperview();
             if gameState.zones.count == 0 {
                 return;
             }
@@ -123,6 +124,7 @@ extension PlayArea {
             else {
                 return;
             }
+            
             tempImageZone?.image = UIImage(cgImage: (image)!)
             self.addSubview(tempImageZone!);
             
@@ -180,8 +182,14 @@ extension PlayArea {
                     })
                 }
             }
+            else if recognizer.state != .began {
+                self.selectedNode = nil;
+                self.tempImageZone?.removeFromSuperview();
+            }
         }
         else { // do drag instead of pan
+            self.selectedNode = nil;
+            self.tempImageZone?.removeFromSuperview();
             drag(sender: recognizer);
         }
     }
