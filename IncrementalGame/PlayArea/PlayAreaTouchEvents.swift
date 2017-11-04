@@ -93,8 +93,12 @@ extension PlayArea {
     
     @objc func handleEdgePan(recognizer: UIScreenEdgePanGestureRecognizer) {
         // Allows draging shapes to override pan
+        let location = CGPoint(x: recognizer.location(in: self).x, y: frame.height-recognizer.location(in: self).y)
+        var index = zoneNumber
         if (recognizer.state == .began) {
-            let location = CGPoint(x: recognizer.location(in: self).x, y: frame.height-recognizer.location(in: self).y)
+            if gameState.zones.count == 0 {
+                return;
+            }
             let nodes = scene?.nodes(at: location) ?? []
             for n in nodes {
                 if let node = n as? GameObject {
@@ -102,25 +106,79 @@ extension PlayArea {
                     break;
                 }
             }
+            
+            var image: CGImage?;
+            if recognizer.edges == .right {
+                tempImageZone = UIImageView(frame: CGRect(x: frame.width, y: 0, width: frame.width, height: frame.height))
+                index = index+1 >= gameState.zones.count ? 0 : index+1;
+                image = self.texture(from: gameState.zones[index])?.cgImage();
+            }
+            else if recognizer.edges == .left {
+                index = index-1 < 0 ? gameState.zones.count-1 : index-1;
+                
+                tempImageZone = UIImageView(frame: CGRect(x: -frame.width, y: 0, width: frame.width, height: frame.height))
+                
+                image = self.texture(from: gameState.zones[index])?.cgImage();
+            }
+            else {
+                return;
+            }
+            tempImageZone?.image = UIImage(cgImage: (image)!)
+            self.addSubview(tempImageZone!);
+            
+            
         }
         if (selectedNode == nil) {
-        
-            var index = zoneNumber
-            if recognizer.state == .ended {
-                if recognizer.edges == .right {
-                    index += 1
-                    if index == gameState.zones.count {index = 0}
-                } else if recognizer.edges == .left {
-                    index -= 1
-                    if index < 0 {index = gameState.zones.count - 1}
-                }
-                // Need to make sure selectedNode is nil, in case drag fails for some reason
-                selectedNode = nil;
-            // Show zone at index
-                selectZone(index: index);
             
-            // just for testing
-                print(zoneNumber)
+            if recognizer.state == .changed {
+                if recognizer.edges == .right {
+                    tempImageZone?.frame = CGRect(x: location.x, y: 0, width: frame.width, height: frame.height)
+                    // TODO: This wont work since level is a SKScene - "Setting the position of a SKScene has no effect."
+                    level.position = CGPoint(x: location.x-frame.width/2, y: frame.midY)
+                }
+                else if recognizer.edges == .left {
+                    tempImageZone?.frame = CGRect(x: location.x-frame.width, y: 0, width: frame.width, height: frame.height)
+                    // TODO: This wont work since level is a SKScene - "Setting the position of a SKScene has no effect."
+                    //level.position = CGPoint(x: location.x+frame.width/2, y: frame.midY)
+                }
+            }
+            else if recognizer.state == .ended {
+                // Dragged far enough
+                if (recognizer.edges == .right && location.x <= frame.midX) || (recognizer.edges == .left && location.x >= frame.midX) {
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.tempImageZone?.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
+                    }, completion: { (success) in
+                        
+                            if recognizer.edges == .right {
+                                index += 1
+                                if index == self.gameState.zones.count {index = 0}
+                            } else if recognizer.edges == .left {
+                                index -= 1
+                                if index < 0 {index = self.gameState.zones.count - 1}
+                            }
+                            // Need to make sure selectedNode is nil, in case drag fails for some reason
+                            self.selectedNode = nil;
+                            // Show zone at index
+                            self.selectZone(index: index);
+                            // remove the image after the real one is down
+                            self.tempImageZone?.removeFromSuperview();
+                    
+                        })
+                }
+                else { // Didnt drag far enough
+                    // Where it should go if it fails
+                    var dir = recognizer.edges == .left ? -frame.width : frame.width
+                    UIView.animate(withDuration: 0.5, animations: {
+                        // Put back
+                        self.tempImageZone?.frame = CGRect(x: dir, y: 0, width: self.frame.width, height: self.frame.height)
+                    }, completion: { (success) in
+                        // Need to make sure selectedNode is nil, in case drag fails for some reason
+                        self.selectedNode = nil;
+                        // remove the image
+                        self.tempImageZone?.removeFromSuperview();
+                        
+                    })
+                }
             }
         }
         else { // do drag instead of pan

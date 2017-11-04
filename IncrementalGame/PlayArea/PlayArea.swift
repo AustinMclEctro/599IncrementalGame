@@ -19,6 +19,9 @@ class PlayArea: SKView {
     let gameState: GameState
     var selectedNode: GameObject?;
     
+    // For edge pans to allow two scenes at once, with only one moving. See PlayAreaTouchEvents for more
+    var tempImageZone: UIImageView?;
+    
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState
         

@@ -50,6 +50,9 @@ class MasterView: UIView {
             gameState = GameState(5000, [], player)
         }
         
+        
+        
+        
         // Configure and create the subviews
         let heightPerc = frame.width;//*1.25; // For the PlayArea
         let infoHeight = frame.height-heightPerc-60; // For the info panel

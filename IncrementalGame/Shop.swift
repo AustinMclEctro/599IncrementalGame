@@ -332,7 +332,7 @@ class Shop: SKView {
             break;
         default: // ended, canceled etc.
             var loc = sender.location(in: self)
-            if (selectedNode != nil) && (loc.x < 0 || loc.y < 0) {
+            if (selectedNode != nil) && ((loc.x < 0 || loc.y < 0) || !inRings(location: loc)) {
                 if let controller = superview as? MasterView {
                     let location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
                     controller.purchaseObject(of: selectedNode!, sender: sender);
