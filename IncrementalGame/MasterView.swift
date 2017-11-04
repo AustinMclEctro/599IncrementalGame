@@ -29,6 +29,8 @@ class MasterView: UIView {
     var setOpen = false
     var shopOpen = false;
     let shopWidth: CGFloat = 250.0;
+    let setWidth: CGFloat = 300.0
+    let setHeight: CGFloat = 400.0
     let gameState: GameState;
     let gravButton: UIButton
     let resetButton: UIButton;
@@ -70,7 +72,10 @@ class MasterView: UIView {
         gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
         
         //settings button configuration
-        set = SettingsMenu(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
+        set = SettingsMenu(frame: CGRect(x: frame.width/2-setWidth/2, y: frame.height/2 - setHeight/2 + 50, width: setWidth, height: setHeight))
+        set.layer.cornerRadius = 25.0
+        set.clipsToBounds = true
+        set.backgroundColor = .clear
         setButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
         setButton.setImage(UIImage(named:"Settings"), for: .normal)
         
