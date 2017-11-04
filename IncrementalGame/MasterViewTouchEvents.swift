@@ -14,12 +14,26 @@ extension MasterView {
     
     /// Adds a touch event for the shop button.
     func setupTouchEvents() {
+        setButton.addTarget(self, action: #selector(touchDownSet), for: .touchDown)
         shopButton.addTarget(self, action: #selector(tapDownStore), for: .touchDown)
         scenePreviewButton.addTarget(self, action: #selector(tapDownPreview), for: .touchUpInside)
         gravButton.addTarget(self, action: #selector(tapGravity), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(onResetButtonPress), for: .touchDown)
         var pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinch));
         self.addGestureRecognizer(pinchGesture)
+    }
+    
+    
+    @objc func touchDownSet(sender: UIButton) {
+        if (!setOpen) {
+            self.addSubview(set)
+            self.addSubview(sender)
+          
+        }
+        else {
+            set.removeFromSuperview()
+        }
+        setOpen = !setOpen;
     }
     
     @objc func pinch(sender: UIPinchGestureRecognizer) {

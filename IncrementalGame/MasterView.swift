@@ -25,6 +25,8 @@ class MasterView: UIView {
     var sceneOpen = false;
     var shopButton: UIButton;
     var shop: Shop;
+    var set: SettingsMenu;
+    var setOpen = false
     var shopOpen = false;
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
@@ -67,9 +69,11 @@ class MasterView: UIView {
         gravButton = UIButton(frame: CGRect(x: frame.width-60, y: 25, width: 50, height: 50))
         gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
         
+        //settings button configuration
+        set = SettingsMenu(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
         setButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
         setButton.setImage(UIImage(named:"Settings"), for: .normal)
-        setButton.tintColor = .green
+        
         // Configure the reset button
         resetButton =  UIButton(frame: CGRect(x: 5, y: 25, width: frame.width/3, height: 20))
         resetButton.setTitle("Reset", for: .normal)
@@ -115,6 +119,14 @@ class MasterView: UIView {
             self.shop.removeFromSuperview();
         }
         
+    }
+    
+    func openSettings() {
+        self.addSubview(set)
+    }
+    
+    func closeSettings() {
+        self.set.removeFromSuperview()
     }
     
     
