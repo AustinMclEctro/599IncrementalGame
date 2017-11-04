@@ -30,6 +30,7 @@ class MasterView: UIView {
     let gameState: GameState;
     let gravButton: UIButton
     let resetButton: UIButton;
+    let setButton: UIButton;
     
     
     var currencyA: Int {
@@ -63,9 +64,12 @@ class MasterView: UIView {
         shopButton.setImage(UIImage(named: "ShopButton"), for: .normal);
         shop = Shop(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
 
-        gravButton = UIButton(frame: CGRect(x: frame.width-60, y: 0, width: 50, height: 50))
+        gravButton = UIButton(frame: CGRect(x: frame.width-60, y: 25, width: 50, height: 50))
         gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
         
+        setButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
+        setButton.setImage(UIImage(named:"Settings"), for: .normal)
+        setButton.tintColor = .green
         // Configure the reset button
         resetButton =  UIButton(frame: CGRect(x: 5, y: 25, width: frame.width/3, height: 20))
         resetButton.setTitle("Reset", for: .normal)
@@ -79,6 +83,7 @@ class MasterView: UIView {
         self.addSubview(playArea);
         self.addSubview(shopButton);
         self.addSubview(gravButton)
+        self.addSubview(setButton)
         self.addSubview(scenePreviewButton);
         self.addSubview(resetButton);
         

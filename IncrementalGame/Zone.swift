@@ -175,6 +175,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         let remove = SKAction.run {collisionEmitter.removeFromParent()}
         let collisionSequence = SKAction.sequence([addEmitterAction,waitAction,remove])
         
+        /*
+         In Progress Code!
         //set up a dummy spark node
         let dummy = SKSpriteNode(texture: collisionEmitter.particleTexture)
         dummy.position = collisionEmitter.position
@@ -200,6 +202,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         let gatherSequence = SKAction.sequence([addDummy,begin,gather,removeDummy])
         let together = SKAction.group([collisionSequence,gatherSequence])
         self.run(together)
+         */
+        self.run(collisionSequence)
     }
     
     
