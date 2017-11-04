@@ -170,14 +170,36 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     func animateCollision(collisionEmitter: SKEmitterNode) {
         // Set up a sequence animation which deletes its node after completion.
         let duration = CGFloat(collisionEmitter.numParticlesToEmit)*collisionEmitter.particleLifetime
-        //can set particle actions with collisionEmitter.particleAction = actions
-        let gatherPoint = frame.origin
-        collisionEmitter.particleAction = SKAction.move(to: gatherPoint, duration: 2)
         let addEmitterAction = SKAction.run({self.addChild(collisionEmitter)})
         let waitAction = SKAction.wait(forDuration: TimeInterval(duration)) //allow sparks to animate
         let remove = SKAction.run {collisionEmitter.removeFromParent()}
-        let collisionSequence = SKAction.sequence([addEmitterAction, collisionEmitter.particleAction!,waitAction,remove])
-        self.run(collisionSequence)
+        let collisionSequence = SKAction.sequence([addEmitterAction,waitAction,remove])
+        
+        //set up a dummy spark node
+        let dummy = SKSpriteNode(texture: collisionEmitter.particleTexture)
+        dummy.position = collisionEmitter.position
+        dummy.isHidden = true
+        let show = SKAction.fadeIn(withDuration: 1.5)
+        let scale = SKAction.scale(to: 1, duration: 1)
+        let randPulse = CGVector(dx: Int(arc4random_uniform(20)), dy: Int(arc4random_uniform(20)))
+        let start = SKAction.applyImpulse(randPulse, duration: 0.5)
+        let begin = SKAction.group([show, scale, start])
+        
+        
+        
+        let gather = SKAction.move(to: CGPoint(x: 40, y: 40), duration: 1.5)
+        
+        let addDummy = SKAction.run {
+            self.addChild(dummy)
+        }
+        
+        let removeDummy = SKAction.run {
+            dummy.removeFromParent()
+        }
+        
+        let gatherSequence = SKAction.sequence([addDummy,begin,gather,removeDummy])
+        let together = SKAction.group([collisionSequence,gatherSequence])
+        self.run(together)
     }
     
     
