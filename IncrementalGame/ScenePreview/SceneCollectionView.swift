@@ -10,7 +10,47 @@ import Foundation
 import UIKit
 
 /// The table view used for displaying and interacting with the user's zones.
-class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
+class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDragDelegate {
+    
+    // Allows dragging
+    var dragLoc: Int?;
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        if (indexPath.row == 0) {
+            // Add cell
+            return [];
+        }
+        dragLoc = indexPath.row;
+        let cell = collectionView.cellForItem(at: indexPath)
+        if let prev = cell as? SceneCollectionViewCell {
+            let dragItem = NSItemProvider(object: prev.image ?? UIImage());
+            return [UIDragItem(itemProvider: dragItem)];
+        }
+        return [];
+    }
+    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+        // TODO: allow update??
+        if let up = self.cellForItem(at: IndexPath(row: 0, section: 0)) as? NewSceneCollectionViewCell {
+            up.isNew = true;
+            
+            if (up.frame.contains(session.location(in: self))) {
+                
+            }
+        }
+
+    }
+    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+        feedbackGenerator.selectionChanged()
+        feedbackGenerator.prepare()
+        if let up = self.cellForItem(at: IndexPath(row: 0, section: 0)) as? NewSceneCollectionViewCell {
+            up.isNew = false;
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, dragSessionAllowsMoveOperation session: UIDragSession) -> Bool {
+        return true;
+    }
+    
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         zoneCells = [];
         return zones.count;
@@ -34,14 +74,16 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
             
             var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "previewZone", for: indexPath);
             //var cell = UICollectionViewCell(frame: CGRect(x: 0, y: 0, width: frame.width/3, height: frame.width/3*1.2))
-            var imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height));
+            
             if let controller = superview as? MasterView {
                 var im = controller.playArea.texture(from: zones[indexPath.row]);
-                imageView.image = UIImage(cgImage: (im?.cgImage())!)
+                if let prev = cell as? SceneCollectionViewCell {
+                    prev.image = UIImage(cgImage: (im?.cgImage())!)
+                }
+                
                 
             }
             
-            cell.addSubview(imageView);
             zoneCells.append(cell as! SceneCollectionViewCell);
             return cell;
         }
@@ -49,6 +91,8 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         var row = indexPath.row;
+        feedbackGenerator.selectionChanged()
+        feedbackGenerator.prepare()
         if let controller = superview as? MasterView {
             if (row == 0) {
                 // TODO: Add new zone
@@ -70,6 +114,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         }
     }
     var gameState: GameState;
+    var feedbackGenerator: UISelectionFeedbackGenerator
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState;
         let flowLayout = UICollectionViewFlowLayout()
@@ -79,12 +124,17 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         flowLayout.minimumInteritemSpacing = startWidth/6;
         flowLayout.minimumLineSpacing = startWidth/6
         flowLayout.sectionInset = .init(top: 0, left: startWidth/3, bottom: 0, right: startWidth/3)
+        feedbackGenerator = UISelectionFeedbackGenerator();
+        feedbackGenerator.prepare();
         super.init(frame: frame, collectionViewLayout: flowLayout)
+        
         dataSource = self
         delegate = self
         self.register(SceneCollectionViewCell.self, forCellWithReuseIdentifier: "previewZone");
         self.register(NewSceneCollectionViewCell.self, forCellWithReuseIdentifier: "newZone");
         self.backgroundColor = .black;
+        self.dragInteractionEnabled = true;
+        self.dragDelegate = self;
     }
     
     override func didMoveToSuperview() {
