@@ -12,10 +12,6 @@ import UIKit
 extension PlayArea {
     
     func setupTouchEvents() {
-        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleTaps))
-        doubleTap.cancelsTouchesInView = false;
-        doubleTap.numberOfTapsRequired = 2
-        self.addGestureRecognizer(doubleTap)
         
         let edgePanRight = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgePan))
         edgePanRight.edges = .right
@@ -69,8 +65,8 @@ extension PlayArea {
     
     @objc func oneTap(recognizer: UITapGestureRecognizer) {
         var location = recognizer.location(in: self)
-        location = level.convertPoint(fromView: location)
-        var nodes = self.level.nodes(at: location)
+        location = zone.convertPoint(fromView: location)
+        let nodes = self.zone.nodes(at: location)
         var shapeTapped: Shape?;
         for n in nodes {
             if let nodeTemp = n as? Shape {
@@ -80,7 +76,7 @@ extension PlayArea {
         }
         if shapeTapped != nil {
             gained(amount: shapeTapped!.objectType.getPoints())
-            for child in level.children {
+            for child in zone.children {
                 if let otherShape = child as? Shape {
                     let offset = CGVector(dx: otherShape.position.x - shapeTapped!.position.x, dy: otherShape.position.y - shapeTapped!.position.y)
                     if offset.magnitudeSquared() < shapeTapped!.size.width * shapeTapped!.size.width * 1.75 {
@@ -136,7 +132,7 @@ extension PlayArea {
                 if recognizer.edges == .right {
                     tempImageZone?.frame = CGRect(x: location.x, y: 0, width: frame.width, height: frame.height)
                     // TODO: This wont work since level is a SKScene - "Setting the position of a SKScene has no effect."
-                    level.position = CGPoint(x: location.x-frame.width/2, y: frame.midY)
+                    zone.position = CGPoint(x: location.x-frame.width/2, y: frame.midY)
                 }
                 else if recognizer.edges == .left {
                     tempImageZone?.frame = CGRect(x: location.x-frame.width, y: 0, width: frame.width, height: frame.height)
@@ -169,7 +165,7 @@ extension PlayArea {
                 }
                 else { // Didnt drag far enough
                     // Where it should go if it fails
-                    var dir = recognizer.edges == .left ? -frame.width : frame.width
+                    let dir = recognizer.edges == .left ? -frame.width : frame.width
                     UIView.animate(withDuration: 0.5, animations: {
                         // Put back
                         self.tempImageZone?.frame = CGRect(x: dir, y: 0, width: self.frame.width, height: self.frame.height)
@@ -230,23 +226,5 @@ extension PlayArea {
         }
     }*/
     
-    
-    @objc func handleTaps(recognizer: UITapGestureRecognizer) {
-        
-        if zoneNumber == 0 && gameState.currencyA >= Zone.newZonePrice {
-            // TODO: we have to call MasterView.sceneCollection.update.reloadData()
-            zoneNumber = gameState.zones.count
-            level = Zone(size: frame.size, zone0: false, children: [], pIG: nil, allowedObjects: nil)
-            gameState.zones.append(level)
-            gained(amount: -Zone.newZonePrice)
-            gameState.zones[0].updateZonePrice(gameState.zones.count * gameState.zones.count * 1000)
-            presentScene(level)
-            
-            // just for testing
-            addFixture(of: .Bumper, at: CGPoint(x:0, y:0))
-            addShape(of: .Triangle, at: CGPoint(x:150, y:100))
-            addShape(of: .Square, at: CGPoint(x:200, y:100))
-        }
-    }
     
 }
