@@ -18,6 +18,7 @@ class PlayArea: SKView {
     var zoneNumber = 0
     let gameState: GameState
     var selectedNode: GameObject?;
+    var pIGManager = PassiveIncomeManager()
     
     // For edge pans to allow two scenes at once, with only one moving. See PlayAreaTouchEvents for more
     var tempImageZone: UIImageView?;
@@ -32,6 +33,10 @@ class PlayArea: SKView {
         } else {
             zone = gameState.zones[0]; // REFACTOR: Should zone zero be saved in the zones array?
         }
+        
+        // Passive Income generator
+        pIGManager.startPassiveIncomeGenerator(zones: gameState.zones)
+        pIGManager.startInactiveIncomeGenerator(zones: gameState.zones)
         
         super.init(frame: frame)
         setupTouchEvents()

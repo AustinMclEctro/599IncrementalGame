@@ -19,7 +19,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     static var newZonePrice = 1000
     var gravityX: Double = 0
     var gravityY: Double = 0
-    var pIG = PassiveIncomeGenerator()
+    var pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.background, inactiveRate: PassiveIncomeGenerator.Rates.inactive)
     
     init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
         
@@ -72,7 +72,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         if pIG != nil {
             self.pIG = pIG!
         } else {
-            self.pIG = PassiveIncomeGenerator(defaultRate: 2) // TODO: St
+            self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.background, inactiveRate: PassiveIncomeGenerator.Rates.inactive)
         }
         
     }
