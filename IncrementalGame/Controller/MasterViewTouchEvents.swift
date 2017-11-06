@@ -140,7 +140,7 @@ extension MasterView {
     ///
     /// - Parameter sender: The UIButton for the store.
     @objc func tapDownStore(sender: UIButton) {
-        feedbackGenerator.selectionChanged()
+        feedbackGenerator.impactOccurred()
         feedbackGenerator.prepare()
         if (!shopOpen) {
             self.addSubview(shop)
@@ -155,7 +155,7 @@ extension MasterView {
         shopOpen = !shopOpen;
     }
     @objc func tapDownPreview(sender: UIButton) {
-        feedbackGenerator.selectionChanged()
+        feedbackGenerator.impactOccurred()
         feedbackGenerator.prepare()
         if (!sceneOpen) {
             transitionToOpen()
@@ -167,7 +167,7 @@ extension MasterView {
     }
     
     @objc func tapGravity(sender: UIButton) {
-        feedbackGenerator.selectionChanged()
+        feedbackGenerator.impactOccurred()
         feedbackGenerator.prepare()
         playArea.resetGravity()
     }

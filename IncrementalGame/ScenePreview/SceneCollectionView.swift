@@ -39,7 +39,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
 
     }
     func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
-        feedbackGenerator.selectionChanged()
+        feedbackGenerator.impactOccurred()
         feedbackGenerator.prepare()
         if let up = self.cellForItem(at: IndexPath(row: 0, section: 0)) as? NewSceneCollectionViewCell {
             up.isNew = false;
@@ -91,7 +91,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         var row = indexPath.row;
-        feedbackGenerator.selectionChanged()
+        feedbackGenerator.impactOccurred()
         feedbackGenerator.prepare()
         if let controller = superview as? MasterView {
             if (row == 0) {
@@ -114,7 +114,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         }
     }
     var gameState: GameState;
-    var feedbackGenerator: UISelectionFeedbackGenerator
+    var feedbackGenerator: UIImpactFeedbackGenerator
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState;
         let flowLayout = UICollectionViewFlowLayout()
@@ -124,7 +124,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         flowLayout.minimumInteritemSpacing = startWidth/6;
         flowLayout.minimumLineSpacing = startWidth/6
         flowLayout.sectionInset = .init(top: 0, left: startWidth/3, bottom: 0, right: startWidth/3)
-        feedbackGenerator = UISelectionFeedbackGenerator();
+        feedbackGenerator = UIImpactFeedbackGenerator();
         feedbackGenerator.prepare();
         super.init(frame: frame, collectionViewLayout: flowLayout)
         
