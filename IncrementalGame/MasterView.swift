@@ -72,7 +72,7 @@ class MasterView: UIView {
         gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
         
         //settings button configuration
-        set = SettingsMenu(frame: CGRect(x: frame.width/2-setWidth/2, y: frame.height/2 - setHeight/2 + 50, width: setWidth, height: setHeight))
+        set = SettingsMenu(frame: CGRect(x: frame.width/2-setWidth/2, y: 0 + setHeight, width: setWidth, height: setHeight))
         set.layer.cornerRadius = 25.0
         set.clipsToBounds = true
         set.backgroundColor = .clear

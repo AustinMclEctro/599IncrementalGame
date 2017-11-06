@@ -27,6 +27,19 @@ class SettingsMenu: SKView {
         self.scene?.addChild(button1)
         self.scene?.addChild(button2)
         
+        let text1 = SKLabelNode(text: "Menu Item 1")
+        let text2 = SKLabelNode(text: "Menu Item 2")
+        
+        button1.addChild(text1)
+        button2.addChild(text2)
+        
+        text1.position = button1.position
+        text2.position = button2.position
+        
+        
+        
+        
+        
         
         
     }

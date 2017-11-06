@@ -27,13 +27,29 @@ extension MasterView {
     @objc func touchDownSet(sender: UIButton) {
         if (!setOpen) {
             self.addSubview(set)
-            self.addSubview(sender)
+            //self.addSubview(sender)
+            animateSettingsMenu()
           
         }
         else {
+            animateSettingsMenu()
+            
             set.removeFromSuperview()
         }
         setOpen = !setOpen;
+    }
+    
+    func animateSettingsMenu() {
+        if (!setOpen){
+        UIView.animate(withDuration: 1, animations: {
+            self.set.frame = CGRect(x: self.frame.width/2-self.setWidth/2, y: self.frame.height/2 - self.setHeight/2 + 50, width: self.setWidth, height: self.setHeight)
+            
+        })
+        } else {
+            UIView.animate(withDuration: 1, animations: {
+                self.set.frame = self.set.frame.offsetBy(dx: 0.0, dy: -self.set.frame.height)
+            })
+        }
     }
     
     @objc func pinch(sender: UIPinchGestureRecognizer) {
