@@ -136,7 +136,7 @@ class MasterView: UIView {
     /// - Parameters:
     ///   - of: The GameObject that is being purchased.
     func purchaseObject(of: GameObject, sender: UIPanGestureRecognizer?) {
-        if (gameState.currencyA < of.objectType.getPrice() || !playArea.level.canAdd(type: of.objectType)) {
+        if (gameState.currencyA < of.objectType.getPrice() || !playArea.getZone().canAdd(type: of.objectType)) {
             return;
         }
         
@@ -174,15 +174,15 @@ class MasterView: UIView {
         self.addSubview(playArea);
         
         playArea.selectZone(index: index);
-        var fr = sceneCollection.zoomingTo(index: playArea.zoneNumber)
+        let fr = sceneCollection.zoomingTo(index: playArea.zoneNumber)
         playArea.frame = CGRect(x: playAreaFrame.minX+fr.minX, y: playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height)
         transitionToClose()
         self.addSubview(shopButton)
         self.addSubview(scenePreviewButton)
     }
     func createZone() {
-        let level = Zone(size: playAreaFrame.size, zone0: false, children: [], pIG: nil, allowedObjects: nil)
-        gameState.zones.append(level)
+        let zone = Zone(size: playAreaFrame.size, children: [], pIG: nil, allowedObjects: nil)
+        gameState.zones.append(zone)
         // TODO - change this with gameState newZonePrice
         gameState.currencyA -= Zone.newZonePrice;
         sceneCollection.reloadData();

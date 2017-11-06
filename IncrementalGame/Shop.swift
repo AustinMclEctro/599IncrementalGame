@@ -201,7 +201,7 @@ class Shop: SKView {
     }
     func applyFilter(item: GameObject, controller: MasterView) {
         // Makes store items black or normal depending on ability to add
-        if (item.objectType.getPrice() > curA || !(controller.playArea.level.canAdd(type: item.objectType))) {
+        if (item.objectType.getPrice() > curA || !(controller.playArea.getZone().canAdd(type: item.objectType))) {
             item.color = UIColor.black;
             item.colorBlendFactor = 1.0;
         }
@@ -310,7 +310,7 @@ class Shop: SKView {
                             self.tempSelectedNode = GameObject(type: (self.selectedNode?.objectType)!);
                             controller.playArea.scene?.addChild(self.tempSelectedNode!)
                             location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
-                            self.tempSelectedNode?.setUp(at: location, withSize: controller.playArea.level.size)
+                            self.tempSelectedNode?.setUp(at: location, withSize: controller.playArea.getZone().size)
                             self.tempSelectedNode?.physicsBody?.isDynamic = false;
                             break;
                         }

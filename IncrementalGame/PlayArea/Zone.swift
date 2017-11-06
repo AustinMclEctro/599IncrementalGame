@@ -14,17 +14,16 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     var motionManager = CMMotionManager()
     let maxShapes = 12
-    let minVel: CGFloat = 300 * 300
+    let minVel: CGFloat = 10
     var allowedObjects: Set<ObjectType> = []
     static var newZonePrice = 1000
     var gravityX: Double = 0
     var gravityY: Double = 0
     var pIG = PassiveIncomeGenerator()
     
-    init(size: CGSize, zone0: Bool=false, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
+    init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
         
         super.init(size: size)
-        
         backgroundColor = SKColor.black
         
         motionManager.startAccelerometerUpdates()
@@ -38,9 +37,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         boundary.categoryBitMask = 1
         boundary.contactTestBitMask = 1
         boundary.collisionBitMask = 1
-        boundary.usesPreciseCollisionDetection = false
-        boundary.affectedByGravity = false
-        boundary.isDynamic = false
+        boundary.usesPreciseCollisionDetection = true
+        //boundary.affectedByGravity = false
+        //boundary.isDynamic = false
         self.physicsBody = boundary
         let outline = SKShapeNode(path: boundPath.cgPath)
         outline.lineWidth = 5
@@ -76,19 +75,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             self.pIG = PassiveIncomeGenerator(defaultRate: 2) // TODO: St
         }
         
-        // Add zone 0 (no zones) and setup tap gesture
-        if zone0 {
-            let addTap = SKLabelNode(text: "Double Tap to Add a New Zone")
-            addTap.fontSize = 26
-            addTap.position = CGPoint(x: frame.midX, y: frame.midY)
-            addChild(addTap)
-            let addPrice = SKLabelNode(text: "For $\(Zone.newZonePrice)")
-            addPrice.fontSize = 26
-            addPrice.position = CGPoint(x: frame.midX, y: frame.midY-30)
-            addChild(addPrice)
-            self.allowedObjects = [];
-        }
-        
     }
     
     
@@ -121,26 +107,37 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
+            var spark: SKEmitterNode? = nil
+            var maxPoints: Int = 0
             if let playArea = view as? PlayArea {
                 if let one = contact.bodyA.node as? Shape {
-                    playArea.gained(amount: one.objectType.getPoints())
+                    maxPoints = one.objectType.getPoints()
+                    playArea.gained(amount: maxPoints)
+                    spark = createEmitter(sourceNode: one, location: contact.contactPoint)
                 }
                 if let two = contact.bodyB.node as? Shape {
-                    playArea.gained(amount: two.objectType.getPoints())
-                }
-                //the below only works because the only objects that are dynamic are shapes
-                if contact.bodyB.isDynamic && contact.bodyA.isDynamic {
-                    let A = contact.bodyA.node as? GameObject
-                    let B = contact.bodyB.node as? GameObject
-                    let spark: SKEmitterNode
-                    if A!.getType().getPoints() >= B!.getType().getPoints() {
-                        spark = createEmitter(sourceNode: contact.bodyA.node as! GameObject, location: contact.contactPoint)
-                        animateCollision(collisionEmitter: spark)
-                    } else {
-                        spark = createEmitter(sourceNode: contact.bodyB.node as! GameObject, location: contact.contactPoint)
-                        animateCollision(collisionEmitter: spark)
+                    let points = two.objectType.getPoints()
+                    playArea.gained(amount: points)
+                    if points > maxPoints {
+                        spark = createEmitter(sourceNode: two, location: contact.contactPoint)
                     }
                 }
+                animateCollision(collisionEmitter: spark!)
+                
+                
+//                //the below only works because the only objects that are dynamic are shapes
+//                if contact.bodyB.isDynamic && contact.bodyA.isDynamic {
+//                    let A = contact.bodyA.node as? GameObject
+//                    let B = contact.bodyB.node as? GameObject
+//                    let spark: SKEmitterNode
+//                    if A!.getType().getPoints() >= B!.getType().getPoints() {
+//                        spark = createEmitter(sourceNode: contact.bodyA.node as! GameObject, location: contact.contactPoint)
+//                        animateCollision(collisionEmitter: spark)
+//                    } else {
+//                        spark = createEmitter(sourceNode: contact.bodyB.node as! GameObject, location: contact.contactPoint)
+//                        animateCollision(collisionEmitter: spark)
+//                    }
+//                }
             }
         }
         
@@ -241,7 +238,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         let children = aDecoder.decodeObject(forKey: PropertyKey.children) as! [SKNode]
         let allowedObjects = Set((aDecoder as! NSKeyedUnarchiver).decodeDecodable([ObjectType].self, forKey: PropertyKey.allowedObjects)!)
         let pIG = aDecoder.decodeObject(forKey: PropertyKey.pIG) as! PassiveIncomeGenerator
-        self.init(size: size, zone0: false, children: children, pIG: pIG, allowedObjects: allowedObjects)
+        self.init(size: size, children: children, pIG: pIG, allowedObjects: allowedObjects)
     }
 }
 
