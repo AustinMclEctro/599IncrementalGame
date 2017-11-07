@@ -14,7 +14,7 @@ extension MasterView {
     
     /// Adds a touch event for the shop button.
     func setupTouchEvents() {
-        shopButton.addTarget(self, action: #selector(tapDownStore), for: .touchDown)
+        shopButton.addTarget(self, action: #selector(tapDownStore), for: .touchUpInside)
         scenePreviewButton.addTarget(self, action: #selector(tapDownPreview), for: .touchUpInside)
         gravButton.addTarget(self, action: #selector(tapGravity), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(onResetButtonPress), for: .touchDown)
@@ -92,6 +92,7 @@ extension MasterView {
         }
     }
     func transitionToOpen() {
+        self.shopButton.removeFromSuperview();
         var fr = self.sceneCollection.zoomingTo(index: self.playArea.zoneNumber);
         UIView.animate(withDuration: 0.5, animations: {
             self.playArea.frame = CGRect(x: self.playAreaFrame.minX+fr.minX, y: self.playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height)
@@ -139,6 +140,8 @@ extension MasterView {
     ///
     /// - Parameter sender: The UIButton for the store.
     @objc func tapDownStore(sender: UIButton) {
+        feedbackGenerator.impactOccurred()
+        feedbackGenerator.prepare()
         if (!shopOpen) {
             self.addSubview(shop)
             self.addSubview(sender)
@@ -152,6 +155,8 @@ extension MasterView {
         shopOpen = !shopOpen;
     }
     @objc func tapDownPreview(sender: UIButton) {
+        feedbackGenerator.impactOccurred()
+        feedbackGenerator.prepare()
         if (!sceneOpen) {
             transitionToOpen()
         }
@@ -162,6 +167,8 @@ extension MasterView {
     }
     
     @objc func tapGravity(sender: UIButton) {
+        feedbackGenerator.impactOccurred()
+        feedbackGenerator.prepare()
         playArea.resetGravity()
     }
 

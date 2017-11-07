@@ -41,7 +41,7 @@ class MasterView: UIView {
         }
     }
     
-    
+    var feedbackGenerator: UIImpactFeedbackGenerator;
     override init(frame: CGRect) {
         if let savedGameState = GameState.loadGameState() {
             gameState = savedGameState
@@ -73,6 +73,9 @@ class MasterView: UIView {
         resetButton =  UIButton(frame: CGRect(x: 5, y: 25, width: frame.width/3, height: 20))
         resetButton.setTitle("Reset", for: .normal)
         resetButton.setTitleColor(UIColor.white, for: .normal)
+        
+        feedbackGenerator = UIImpactFeedbackGenerator();
+        feedbackGenerator.prepare();
         
         super.init(frame: frame)
         self.backgroundColor = UIColor.black;

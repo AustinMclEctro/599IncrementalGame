@@ -10,9 +10,19 @@ import Foundation
 import UIKit
 
 class SceneCollectionViewCell: UICollectionViewCell {
+    var image: UIImage? {
+        set(val) {
+            imagePreview.image = val;
+        }
+        get {
+            return imagePreview.image;
+        }
+    }
+    var imagePreview: UIImageView;
     override init(frame: CGRect) {
-        
+        imagePreview = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height));
         super.init(frame: frame);
+        self.addSubview(imagePreview);
         backgroundColor = .red;
     }
     
