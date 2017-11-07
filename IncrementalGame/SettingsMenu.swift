@@ -28,18 +28,18 @@ class SettingsMenu: SKView {
         self.scene?.addChild(button2)
         
         let text1 = SKLabelNode(text: "Menu Item 1")
+        text1.horizontalAlignmentMode = .center
+       
         let text2 = SKLabelNode(text: "Menu Item 2")
+        text2.horizontalAlignmentMode = .center
         
         button1.addChild(text1)
         button2.addChild(text2)
         
-        text1.position = button1.position
-        text2.position = button2.position
-        
-        
-        
-        
-        
+        text1.position = CGPoint(x: frame.width/2, y:button1.frame.midY)
+        text2.position = CGPoint(x: frame.width/2, y:button2.frame.midY)
+        text1.verticalAlignmentMode = .center
+        text2.verticalAlignmentMode = .center
         
         
     }

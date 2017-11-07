@@ -72,12 +72,13 @@ class MasterView: UIView {
         gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
         
         //settings button configuration
+        setButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
+        setButton.setImage(UIImage(named:"Settings"), for: .normal)
+        
         set = SettingsMenu(frame: CGRect(x: frame.width/2-setWidth/2, y: 0 + setHeight, width: setWidth, height: setHeight))
         set.layer.cornerRadius = 25.0
         set.clipsToBounds = true
-        set.backgroundColor = .clear
-        setButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
-        setButton.setImage(UIImage(named:"Settings"), for: .normal)
+        set.backgroundColor = UIColor(red: 1, green: 1, blue: 0, alpha: 0.2)
         
         // Configure the reset button
         resetButton =  UIButton(frame: CGRect(x: 5, y: 25, width: frame.width/3, height: 20))
