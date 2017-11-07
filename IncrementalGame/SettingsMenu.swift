@@ -3,7 +3,7 @@
 //  IncrementalGame
 //
 //  Created by Luke Kissick on 2017-11-04.
-//  Copyright © 2017 Ben Grande. All rights reserved.
+//  Copyright © 2017 Luke Kissick. All rights reserved.
 //
 
 import Foundation
@@ -17,7 +17,7 @@ class SettingsMenu: SKView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        //two placeholder menu buttons
         button1 = SKShapeNode(rect: CGRect(origin: CGPoint(x: frame.width/2 - width/2, y:frame.height - height*2) , size: CGSize(width: width, height: height) ) , cornerRadius: 10)
         button2 = SKShapeNode(rect: CGRect(origin: CGPoint(x: frame.width/2 - width/2, y:frame.height - height*4), size: CGSize(width: width, height: height )) , cornerRadius: 10)
         
@@ -27,15 +27,15 @@ class SettingsMenu: SKView {
         self.scene?.addChild(button1)
         self.scene?.addChild(button2)
         
+        //add labels for the buttons
         let text1 = SKLabelNode(text: "Menu Item 1")
         text1.horizontalAlignmentMode = .center
-       
         let text2 = SKLabelNode(text: "Menu Item 2")
         text2.horizontalAlignmentMode = .center
-        
+        //add them as children to the buttons
         button1.addChild(text1)
         button2.addChild(text2)
-        
+        //position them centered in the buttons
         text1.position = CGPoint(x: frame.width/2, y:button1.frame.midY)
         text2.position = CGPoint(x: frame.width/2, y:button2.frame.midY)
         text1.verticalAlignmentMode = .center

@@ -78,7 +78,7 @@ class MasterView: UIView {
         set = SettingsMenu(frame: CGRect(x: frame.width/2-setWidth/2, y: 0 + setHeight, width: setWidth, height: setHeight))
         set.layer.cornerRadius = 25.0
         set.clipsToBounds = true
-        //below will set background color to white, but washes out the buttonsr
+        //below will set background color to white, but washes out the buttons
         //set.scene?.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 1)
 
         

@@ -45,10 +45,12 @@ extension MasterView {
             self.set.frame = CGRect(x: self.frame.width/2-self.setWidth/2, y: self.frame.height/2 - self.setHeight/2 + 50, width: self.setWidth, height: self.setHeight)
             
         })
+            print("Opening menu")
         } else {
             UIView.animate(withDuration: 0.3, animations: {
                 self.set.frame = CGRect(x: self.frame.width-60, y: 90 , width: 50, height: 50)
             })
+            print("Closing")
         }
     }
     
