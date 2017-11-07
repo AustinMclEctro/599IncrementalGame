@@ -128,12 +128,16 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                     maxPoints = one.getPoints()
                     playArea.gained(amount: maxPoints)
                     spark = createEmitter(sourceNode: one, location: contact.contactPoint)
+                    
+                    one.getType().playCollisionSound(one)
                 }
                 if let two = contact.bodyB.node as? Shape {
                     let points = two.getPoints()
                     playArea.gained(amount: points)
                     if points > maxPoints {
                         spark = createEmitter(sourceNode: two, location: contact.contactPoint)
+                        
+                        two.getType().playCollisionSound(two)
                     }
                 }
                 animateCollision(collisionEmitter: spark!)
