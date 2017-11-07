@@ -75,7 +75,7 @@ extension PlayArea {
             }
         }
         if shapeTapped != nil {
-            gained(amount: shapeTapped!.objectType.getPoints())
+            gained(amount: shapeTapped!.getPoints())
             for child in zone.children {
                 if let otherShape = child as? Shape {
                     let offset = CGVector(dx: otherShape.position.x - shapeTapped!.position.x, dy: otherShape.position.y - shapeTapped!.position.y)

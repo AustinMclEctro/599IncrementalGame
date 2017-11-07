@@ -13,44 +13,56 @@ import SpriteKit
 class Fixture: GameObject {
     
     var withSize: CGSize  // REFACTOR: This might not need to be stored
+    var upgradeLevel = 0
     
     init(type: ObjectType, at: CGPoint, withSize: CGSize) {
         self.withSize = withSize
         
         super.init(type: type)
         super.setUp(at: at, withSize: withSize)
-        let rangeX: SKRange
-        let rangeY: SKRange
-        let dimension = withSize.width/9
-        if objectType == .Bumper {
-            self.physicsBody?.restitution = 2.5
-        }
-        if objectType == .Graviton {
+        
+        switch objectType {
+        case .Graviton:
             let grav = SKFieldNode.radialGravityField()
             grav.categoryBitMask = 1
             grav.isEnabled = true
-            grav.strength = 500
+            grav.strength = 20
             grav.isExclusive = false
-            grav.falloff = 0.5
+            grav.falloff = 0.75
             self.addChild(grav)
-        }
-        if objectType == .Vortex {
+        case .Vortex:
             let vort = SKFieldNode.vortexField()
             vort.categoryBitMask = 1
             vort.isEnabled = true
             vort.strength = 5
             vort.isExclusive = false
             self.addChild(vort)
+        default:
+            self.physicsBody?.restitution = 1.25
         }
+        
         self.physicsBody?.isDynamic = false
         self.physicsBody?.allowsRotation = false
-        self.physicsBody?.affectedByGravity = false //bumper is not affected by gravity
-        rangeX = SKRange(lowerLimit: (dimension*2), upperLimit: (withSize.width-(dimension*2)))
-        rangeY = SKRange(lowerLimit: (dimension*2), upperLimit: (withSize.height-(dimension*2)))
         self.physicsBody?.usesPreciseCollisionDetection = true
+        let rangeX = SKRange(lowerLimit: (dimension*2), upperLimit: (withSize.width-(dimension*2)))
+        let rangeY = SKRange(lowerLimit: (dimension*2), upperLimit: (withSize.height-(dimension*2)))
         let conX = SKConstraint.positionX(rangeX)
         let conY = SKConstraint.positionY(rangeY)
         self.constraints = [conX,conY]
+    }
+    
+    func canUpgrade() -> Bool {
+        return upgradeLevel < 5
+    }
+    
+    func upgrade() {
+        guard upgradeLevel < 5 else {return}
+        upgradeLevel += 1
+        if let force = self.children[0] as? SKFieldNode {
+            force.strength *= 1.25
+        } else {
+            self.physicsBody?.restitution *= 1.25
+        }
     }
     
     // MARK: NSCoding

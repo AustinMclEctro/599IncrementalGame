@@ -13,13 +13,14 @@ import CoreMotion
 class Zone: SKScene, SKPhysicsContactDelegate {
     
     var motionManager = CMMotionManager()
-    let maxShapes = 12
-    let minVel: CGFloat = 10
+    var maxShapes = 3
+    let minVel: CGFloat = 250
     var allowedObjects: Set<ObjectType> = []
-    static var newZonePrice = 1000
     var gravityX: Double = 0
     var gravityY: Double = 0
     var pIG = PassiveIncomeGenerator()
+    var upgradeALevel = 0
+    var upgradeBLevel = 0
     
     init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
         
@@ -38,8 +39,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         boundary.contactTestBitMask = 1
         boundary.collisionBitMask = 1
         boundary.usesPreciseCollisionDetection = true
-        //boundary.affectedByGravity = false
-        //boundary.isDynamic = false
         self.physicsBody = boundary
         let outline = SKShapeNode(path: boundPath.cgPath)
         outline.lineWidth = 5
@@ -50,15 +49,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
         addAllowedObject(type: .Triangle)
         addAllowedObject(type: .Bumper)
-        
-        // just for MVP demo
-        addAllowedObject(type: .Square)
-        addAllowedObject(type: .Star)
-        addAllowedObject(type: .Pentagon)
-        addAllowedObject(type: .Hexagon)
-        addAllowedObject(type: .Circle)
-        addAllowedObject(type: .Graviton)
-        addAllowedObject(type: .Vortex)
         
         // Load zone properties
         if !children.isEmpty {
@@ -77,22 +67,46 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    
-    /// Updates the newZonePrice for the Zone object and updates the zone's price label.
-    ///
-    /// - Parameter price: The desired price for the zone.
-    func updateZonePrice(_ price: Int) {
-        Zone.newZonePrice = price
-        if let priceLabel = children[1] as? SKLabelNode {
-            priceLabel.text = "For $\(Zone.newZonePrice)"
-        }
+    func canUpgradeA() -> Bool {
+        return upgradeALevel < 3
     }
     
+    func upgradeA() {
+        guard upgradeALevel < 3 else {return}
+        upgradeALevel += 1
+        maxShapes += 3
+    }
+    
+    func canUpgradeB() -> Bool {
+        return upgradeBLevel < 7
+    }
+    
+    func upgradeB() {
+        upgradeBLevel += 1
+        switch upgradeBLevel {
+        case 1:
+            addAllowedObject(type: .Square)
+        case 2:
+            addAllowedObject(type: .Graviton)
+        case 3:
+            addAllowedObject(type: .Pentagon)
+        case 4:
+            addAllowedObject(type: .Hexagon)
+        case 5:
+            addAllowedObject(type: .Vortex)
+        case 6:
+            addAllowedObject(type: .Circle)
+        case 7:
+            addAllowedObject(type: .Star)
+        default:
+            return
+        }
+    }
 
     override func update(_ currentTime: TimeInterval) {
         
         if let accelData = motionManager.accelerometerData {
-            physicsWorld.gravity = CGVector(dx: (accelData.acceleration.x - gravityX) * 30, dy: (accelData.acceleration.y - gravityY) * 30)
+            physicsWorld.gravity = CGVector(dx: (accelData.acceleration.x - gravityX) * 50, dy: (accelData.acceleration.y - gravityY) * 50)
         }
  
     }
@@ -111,12 +125,12 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             var maxPoints: Int = 0
             if let playArea = view as? PlayArea {
                 if let one = contact.bodyA.node as? Shape {
-                    maxPoints = one.objectType.getPoints()
+                    maxPoints = one.getPoints()
                     playArea.gained(amount: maxPoints)
                     spark = createEmitter(sourceNode: one, location: contact.contactPoint)
                 }
                 if let two = contact.bodyB.node as? Shape {
-                    let points = two.objectType.getPoints()
+                    let points = two.getPoints()
                     playArea.gained(amount: points)
                     if points > maxPoints {
                         spark = createEmitter(sourceNode: two, location: contact.contactPoint)
@@ -124,20 +138,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                 }
                 animateCollision(collisionEmitter: spark!)
                 
-                
-//                //the below only works because the only objects that are dynamic are shapes
-//                if contact.bodyB.isDynamic && contact.bodyA.isDynamic {
-//                    let A = contact.bodyA.node as? GameObject
-//                    let B = contact.bodyB.node as? GameObject
-//                    let spark: SKEmitterNode
-//                    if A!.getType().getPoints() >= B!.getType().getPoints() {
-//                        spark = createEmitter(sourceNode: contact.bodyA.node as! GameObject, location: contact.contactPoint)
-//                        animateCollision(collisionEmitter: spark)
-//                    } else {
-//                        spark = createEmitter(sourceNode: contact.bodyB.node as! GameObject, location: contact.contactPoint)
-//                        animateCollision(collisionEmitter: spark)
-//                    }
-//                }
             }
         }
         

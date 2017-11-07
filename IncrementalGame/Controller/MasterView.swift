@@ -181,7 +181,6 @@ class MasterView: UIView {
         let zone = Zone(size: playAreaFrame.size, children: [], pIG: nil, allowedObjects: nil)
         gameState.zones.append(zone)
         // TODO - change this with gameState newZonePrice
-        gameState.currencyA -= Zone.newZonePrice;
         sceneCollection.reloadData();
         playArea.selectZone(index: gameState.zones.count-1);
         transitionToClose()
