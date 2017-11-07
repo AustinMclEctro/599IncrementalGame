@@ -107,11 +107,11 @@ enum ObjectType: String, Codable {
         case .Star:
             soundFile = "StarHit"
         case .Bumper:
-            soundFile = "tone.mp3"
+            return
         case .Graviton:
-            soundFile = "tone.mp3"
+            return
         case .Vortex:
-            soundFile = "tone.mp3"
+            return
         default:
             return
         }
