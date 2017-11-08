@@ -16,9 +16,10 @@ class PlayArea: SKView {
     
     var zone: Zone
     var zoneNumber = 0
-    let gameState: GameState
+    var gameState: GameState
     var selectedNode: GameObject?;
-    
+    var pIGManager: PassiveIncomeManager
+
     // For edge pans to allow two scenes at once, with only one moving. See PlayAreaTouchEvents for more
     var tempImageZone: UIImageView?;
     
@@ -33,6 +34,10 @@ class PlayArea: SKView {
             zone = gameState.zones[0]; // REFACTOR: Should zone zero be saved in the zones array?
         }
         
+        // Passive Income generator
+        pIGManager = PassiveIncomeManager(gameState: gameState)
+        pIGManager.startInactiveIncomeGenerator()
+        
         super.init(frame: frame)
         setupTouchEvents()
         //self.showsPhysics = true
@@ -40,16 +45,20 @@ class PlayArea: SKView {
         presentScene(zone)
     }
     
+    
     /// Selects and presents the specified zone.
     ///
     /// - Parameter index: The index number of the zone in the zones array.
     func selectZone(index: Int) {
-        // Displays the selected zone
-        zoneNumber = index
+        // Turn on inactive income generator before switch
+        zone.pIG.isInactiveGeneratorOn = true
         
+        // Get and display newly selected zone
+        zoneNumber = index
         zone = gameState.zones[zoneNumber]
         presentScene(zone)
     }
+    
     
     func getZone() -> Zone {
         return zone
@@ -100,11 +109,17 @@ class PlayArea: SKView {
         }
     }
     
+    
     func resetGravity() {
         for zone in gameState.zones {
             zone.resetGravity()
         }
     }
     
+    
+    override func presentScene(_ scene: SKScene?) {
+        super.presentScene(scene)
+        zone.pIG.isInactiveGeneratorOn = false
+    }
 }
 
