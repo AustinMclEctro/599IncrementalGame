@@ -1,0 +1,15 @@
+//
+//  Notifications.swift
+//  IncrementalGame
+//
+//  Created by Michael Lee on 2017-11-07.
+//  Copyright © 2017 Ben Grande. All rights reserved.
+//
+
+import Foundation
+
+extension Notification.Name {
+    static let currencyChanged = "pointsChanged"
+    static let inactiveIncomeRate = "inactiveIncomeRate"
+    static let willSaveGameState = "willSaveGameState"
+}

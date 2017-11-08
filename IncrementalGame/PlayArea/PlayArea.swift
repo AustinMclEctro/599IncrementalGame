@@ -16,9 +16,9 @@ class PlayArea: SKView {
     
     var zone: Zone
     var zoneNumber = 0
-    let gameState: GameState
+    var gameState: GameState
     var selectedNode: GameObject?;
-    var pIGManager = PassiveIncomeManager()
+    var pIGManager: PassiveIncomeManager
     
     // For edge pans to allow two scenes at once, with only one moving. See PlayAreaTouchEvents for more
     var tempImageZone: UIImageView?;
@@ -35,33 +35,33 @@ class PlayArea: SKView {
         }
         
         // Passive Income generator
-        pIGManager.startPassiveIncomeGenerator(zones: gameState.zones)
-        pIGManager.startInactiveIncomeGenerator(zones: gameState.zones)
+        pIGManager = PassiveIncomeManager(gameState: gameState)
+        pIGManager.startInactiveIncomeGenerator() 
         
         super.init(frame: frame)
         setupTouchEvents()
         //self.showsPhysics = true
         
         presentScene(zone)
+        zone.pIG.isInactiveGeneratorOn = false
     }
+    
     
     /// Selects and presents the specified zone.
     ///
     /// - Parameter index: The index number of the zone in the zones array.
     func selectZone(index: Int) {
-        // Displays the selected zone
-        zoneNumber = index
+        // Turn on inactive income generator before switch
+        zone.pIG.isInactiveGeneratorOn = true
         
+        // Get and display newly selected zone
+        zoneNumber = index
         zone = gameState.zones[zoneNumber]
         presentScene(zone)
     }
     
     func getZone() -> Zone {
         return zone
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     
@@ -110,6 +110,14 @@ class PlayArea: SKView {
             zone.resetGravity()
         }
     }
+
+    override func presentScene(_ scene: SKScene?) {
+        super.presentScene(scene)
+        zone.pIG.isInactiveGeneratorOn = false
+    }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 

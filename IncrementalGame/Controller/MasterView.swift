@@ -15,8 +15,8 @@ import os.log
 /// The master view for the app. Contains a number of subviews including a
 /// view for the InfoPanel, the PlayArea and the Shop. It also contains the GameState.
 class MasterView: UIView {
-    var zoomingTo: CGRect?;
     
+    var zoomingTo: CGRect?;
     var infoPanel: InfoPanel;
     var playAreaFrame: CGRect;
     var playArea: PlayArea;
@@ -30,8 +30,7 @@ class MasterView: UIView {
     let gameState: GameState;
     let gravButton: UIButton
     let resetButton: UIButton;
-    
-    
+    var feedbackGenerator: UIImpactFeedbackGenerator;
     var currencyA: Int {
         set(val) {
             // Do we want to allow this?
@@ -41,7 +40,6 @@ class MasterView: UIView {
         }
     }
     
-    var feedbackGenerator: UIImpactFeedbackGenerator;
     override init(frame: CGRect) {
         if let savedGameState = GameState.loadGameState() {
             gameState = savedGameState
@@ -49,9 +47,6 @@ class MasterView: UIView {
             var player = Player(id: 1)
             gameState = GameState(5000, [], player)
         }
-        
-        
-        
         
         // Configure and create the subviews
         let heightPerc = frame.width;//*1.25; // For the PlayArea
@@ -90,9 +85,34 @@ class MasterView: UIView {
         
         // Subscribe to applicationWillResignActive notification
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(MasterView.saveGame), name: Notification.Name.UIApplicationWillResignActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(saveGame), name: Notification.Name.UIApplicationWillResignActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onReceiveCurrencyUpdate(_:)), name: NSNotification.Name(rawValue: Notification.Name.currencyChanged), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onReceivePassiveIncomeRate(_:)), name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRate), object: nil)
         
         setupTouchEvents()
+    }
+    
+    
+    /// Callback method that is called when MasterView receives a notification
+    /// that the points have changed
+    ///
+    /// - Parameter notification: Contains an int indicating the amount
+    /// that the currency changed
+    @objc func onReceiveCurrencyUpdate(_ notification: NSNotification) {
+        if let amount = notification.userInfo?["amount"] as? Int {
+            updateCurrencyA(by: amount)
+        }
+    }
+    
+    
+    /// Callback method that is called when Masterview receives notifiaction with
+    /// the inactive income rate. Updates the info panel to display the new rate.
+    ///
+    /// - Parameter notification: Contains the rate as an int.
+    @objc func onReceivePassiveIncomeRate(_ notification: NSNotification) {
+        if let rate = notification.userInfo?["rate"] as? Int {
+            infoPanel.updateInactiveIncomeRate(rate: rate)
+        }
     }
     
     
@@ -100,7 +120,7 @@ class MasterView: UIView {
     ///
     /// - Parameter object: The GameObject that is being upgraded.
     func openUpgrade(object: GameObject) {
-        
+    
         if (!shopOpen) {
             self.addSubview(shop)
             self.addSubview(shopButton)
@@ -122,7 +142,7 @@ class MasterView: UIView {
     /// Updates the value for currencyA. Used for shop purchases.
     ///
     /// - Parameter by: The amount to add to currencyA
-    func updateCurrencyA(by: Int) { // REFACTOR: Could this be moved to GameState and combined with Gained in PlayArea?
+    func updateCurrencyA(by: Int) {
         gameState.currencyA += by;
         infoPanel.upgradeCurrencyA(to: gameState.currencyA);
         if (shopOpen) {
@@ -201,6 +221,9 @@ class MasterView: UIView {
     
     /// Saves the GameState
     @objc func saveGame() {
+        // Call pre-save gamestate functions
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.willSaveGameState), object: nil, userInfo: nil)
+
         gameState.saveGameState()
     }
 }

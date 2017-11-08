@@ -16,6 +16,7 @@
 		4C3CBA331FAA4EB10022FFC2 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3CBA321FAA4EB00022FFC2 /* Player.swift */; };
 		4C3CBA351FAA515F0022FFC2 /* PassiveIncomeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */; };
 		4C97087F1FAE66A500C6F718 /* PassiveIncomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C97087E1FAE66A500C6F718 /* PassiveIncomeManager.swift */; };
+		4CF806521FB2BAD80039E031 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF806511FB2BAD80039E031 /* Notifications.swift */; };
 		A37572FD1F9286FB0006CC3B /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = A37572FB1F9286FB0006CC3B /* MyParticle.sks */; };
 		A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A37572FC1F9286FB0006CC3B /* Assets.xcassets */; };
 		F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00D1F90485F0028A5A1 /* Shop.swift */; };
@@ -65,7 +66,8 @@
 		49FD36431FA63D9E009FABA3 /* CurrencyFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyFormat.swift; sourceTree = "<group>"; };
 		4C3CBA321FAA4EB00022FFC2 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassiveIncomeGenerator.swift; sourceTree = "<group>"; };
-		4C97087E1FAE66A500C6F718 /* PassiveIncomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PassiveIncomeManager.swift; path = IncrementalGame/Model/PassiveIncomeManager.swift; sourceTree = "<group>"; };
+		4C97087E1FAE66A500C6F718 /* PassiveIncomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassiveIncomeManager.swift; sourceTree = "<group>"; };
+		4CF806511FB2BAD80039E031 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Notifications.swift; path = IncrementalGame/Notifications.swift; sourceTree = SOURCE_ROOT; };
 		A37572FB1F9286FB0006CC3B /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
 		A37572FC1F9286FB0006CC3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F804A00D1F90485F0028A5A1 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
@@ -120,6 +122,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C24BA041FB38A5000EE91B9 /* PassiveIncomeGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				4C97087E1FAE66A500C6F718 /* PassiveIncomeManager.swift */,
+				4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */,
+			);
+			path = PassiveIncomeGenerator;
+			sourceTree = "<group>";
+		};
 		F82CA3EF1FAE3C520020DD98 /* PlayArea */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,7 +160,6 @@
 			children = (
 				F804A00F1F904B8D0028A5A1 /* GameState.swift */,
 				4C3CBA321FAA4EB00022FFC2 /* Player.swift */,
-				4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -177,7 +187,6 @@
 		F8FF74131F86ED190057AF21 = {
 			isa = PBXGroup;
 			children = (
-				4C97087E1FAE66A500C6F718 /* PassiveIncomeManager.swift */,
 				F8FF741E1F86ED1A0057AF21 /* IncrementalGame */,
 				F8FF74361F86ED1A0057AF21 /* IncrementalGameTests */,
 				F8FF74411F86ED1A0057AF21 /* IncrementalGameUITests */,
@@ -198,6 +207,8 @@
 		F8FF741E1F86ED1A0057AF21 /* IncrementalGame */ = {
 			isa = PBXGroup;
 			children = (
+				4CF806511FB2BAD80039E031 /* Notifications.swift */,
+				4C24BA041FB38A5000EE91B9 /* PassiveIncomeGenerator */,
 				F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */,
 				F82CA3F01FAE3C6E0020DD98 /* Controller */,
 				F898DEBE1FA2FDEA0028425B /* InfoPanel */,
@@ -384,6 +395,7 @@
 				F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */,
 				F83FF1EC1F95596700200B30 /* SceneShapePreview.swift in Sources */,
 				F8FF745D1F870DD20057AF21 /* MasterViewTouchEvents.swift in Sources */,
+				4CF806521FB2BAD80039E031 /* Notifications.swift in Sources */,
 				49B715271F9D04FD00132AD7 /* Shape.swift in Sources */,
 				F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */,
 				F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */,

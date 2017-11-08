@@ -16,7 +16,7 @@ class InfoPanel: UIView {
     
     var curABar: ProgressBar;
     var logo: UIImageView;
-    var passiveRateLabel: UILabel;
+    var inactiveIncomeRateLabel: UILabel;
     
     override init(frame: CGRect) {
         let height = min(frame.height, 50.0)
@@ -38,17 +38,17 @@ class InfoPanel: UIView {
         logo.image = UIImage(named: "colidr");
         
         // Configure passive rate label
-        passiveRateLabel = UILabel(frame: progressBarFrame)
-        passiveRateLabel.text = "Passive Rate"  // TODO: Get passive rate
-        passiveRateLabel.textColor = UIColor.white
-        passiveRateLabel.textAlignment = NSTextAlignment.center
-        passiveRateLabel.isHidden = true
+        inactiveIncomeRateLabel = UILabel(frame: progressBarFrame)
+        inactiveIncomeRateLabel.text = "Passive Rate"  // TODO: Get passive rate
+        inactiveIncomeRateLabel.textColor = UIColor.white
+        inactiveIncomeRateLabel.textAlignment = NSTextAlignment.center
+        inactiveIncomeRateLabel.isHidden = true
         
         super.init(frame: frame);
         
         self.backgroundColor = .black;
         self.addSubview(curABar)
-        self.addSubview(passiveRateLabel);
+        self.addSubview(inactiveIncomeRateLabel);
         self.addSubview(logo)
         
         curABar.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPress)))
@@ -62,6 +62,14 @@ class InfoPanel: UIView {
     }
     
     
+    /// Updates the inactive income rate label
+    ///
+    /// - Parameter amount: The rate at which inactive income is generated.
+    func updateInactiveIncomeRate(rate: Int) {
+        inactiveIncomeRateLabel.text = "\(rate)/second"
+    }
+    
+    
     /// Callback method that is called when the user presses and holds the
     /// progress bar. Changes the progress bar to display the passive income rate.
     ///
@@ -69,11 +77,11 @@ class InfoPanel: UIView {
     @objc func longPress(sender: UITapGestureRecognizer) {
         if (sender.state == UIGestureRecognizerState.began) {
             curABar.isHidden = true
-            passiveRateLabel.isHidden = false
+            inactiveIncomeRateLabel.isHidden = false
         }
         if (sender.state == UIGestureRecognizerState.ended) {
             curABar.isHidden = false
-            passiveRateLabel.isHidden = true
+            inactiveIncomeRateLabel.isHidden = true
         }
     }
     

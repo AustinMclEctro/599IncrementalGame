@@ -15,9 +15,9 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     // MARK: Constants
    
     struct Rates {
-        static let `default` = 2
-        static let inactive = 2
-        static let background = 2
+        static let `default` = 50
+        static let inactive = 50
+        static let background = 50
     }
     
     // MARK: Properties
@@ -37,21 +37,40 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     }
     
     // States
-    private(set) var isOn = false
-    var isInactiveGeneratorOn = false  // When the zone is not presented but the game is being played
-    var isBackgroundGeneratorOn = false  // When the game is not being played
+    private(set) var isOn = true
+    var isInactiveGeneratorOn = true  // When the zone is not presented but the game is being played
+    var isBackgroundGeneratorOn = true  // When the game is not being played
 
     // Timers
-    var backgroundGeneratorStartTime: Date
-    var backgroundGeneratorStopTime: Date
+    var backgroundGeneratorStartTime = Date()
+    var backgroundGeneratorStopTime = Date()
     
     // MARK: Initializers
     
     init(backgroundRate: Int, inactiveRate: Int, bGStartTime: Date = Date(), bGStopTime: Date = Date()) {
         self._backgroundRate = backgroundRate
         self._inactiveRate = inactiveRate
-        self.backgroundGeneratorStartTime = bGStartTime
-        self.backgroundGeneratorStopTime = bGStopTime
+        
+        super.init()
+        
+        // Subscribe to notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(startBackgroundGenerator), name: NSNotification.Name(rawValue: Notification.Name.willSaveGameState), object: nil)
+    }
+    
+    
+    /// Saves the date and time when the app goes to the background
+    @objc func startBackgroundGenerator() {
+        if isBackgroundGeneratorOn {
+            backgroundGeneratorStartTime = Date()
+        }
+    }
+    
+    
+    /// Saves the date and time when the app becomes active
+    func stopBackgroundGenerator() {
+        if isBackgroundGeneratorOn {
+            backgroundGeneratorStopTime = Date()
+        }
     }
     
     
@@ -59,11 +78,11 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     /// zone is not being presented) for a given duration by multiplying the inactive
     /// income rate by the amount of time.
     ///
-    /// - Parameter inactiveMinutes: The number of minutes used to calculate the income.
+    /// - Parameter inactiveSeconds: The number of seconds used to calculate the income.
     /// - Returns: The amount of points earned by the inactive income generator.
-    func calculateInactiveIncome(inactiveMinutes: Int) -> Int {
+    func calculateInactiveIncome(inactiveSeconds: Int) -> Int {
         if isInactiveGeneratorOn {
-            return inactiveMinutes * inactiveRate
+            return inactiveSeconds * inactiveRate
         } else {
             return 0
         }
@@ -71,15 +90,15 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     
     
     /// Calculates the income that was generated while the
-    /// game was in the phone's background by multiplying the number of minutes
+    /// game was in the phone's background by multiplying the number of seconds
     /// the game spent in the background with the background rate.
     ///
     /// - Returns: Returns an integer representing the amount of points
     /// earned while the game was running in the background
     func calculateBackgroundIncome() -> Int {
         if isBackgroundGeneratorOn {
-            let minutesInBackground = Int(floor((backgroundGeneratorStopTime.timeIntervalSince1970 - backgroundGeneratorStartTime.timeIntervalSince1970)/60)) // TODO: Check if minutes correct
-            return minutesInBackground * backgroundRate
+            let secondsInBackground = Int(backgroundGeneratorStopTime.timeIntervalSince(backgroundGeneratorStartTime))
+            return secondsInBackground * backgroundRate
         } else {
             return 0
         }
