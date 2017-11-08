@@ -75,7 +75,7 @@ class MasterView: UIView {
         setButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
         setButton.setImage(UIImage(named:"Settings"), for: .normal)
         
-        set = SettingsMenu(frame: CGRect(x: frame.width/2-setWidth/2, y: 0 + setHeight, width: setWidth, height: setHeight))
+        set = SettingsMenu(frame: CGRect(x: frame.width-60, y: 90 , width: setWidth, height: setHeight))
         set.layer.cornerRadius = 25.0
         set.clipsToBounds = true
         //below will set background color to white, but washes out the buttons

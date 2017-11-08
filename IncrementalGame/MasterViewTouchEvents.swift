@@ -33,8 +33,6 @@ extension MasterView {
         }
         else {
             animateSettingsMenu()
-            
-            set.removeFromSuperview()
         }
         setOpen = !setOpen;
     }
@@ -49,6 +47,9 @@ extension MasterView {
         } else {
             UIView.animate(withDuration: 0.3, animations: {
                 self.set.frame = CGRect(x: self.frame.width-60, y: 90 , width: 50, height: 50)
+            },completion: {
+                success in
+                self.set.removeFromSuperview()
             })
             print("Closing")
         }
