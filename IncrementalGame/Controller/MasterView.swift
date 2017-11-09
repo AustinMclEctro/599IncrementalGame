@@ -16,7 +16,7 @@ import os.log
 /// view for the InfoPanel, the PlayArea and the Shop. It also contains the GameState.
 class MasterView: UIView {
     
-    var isSavingOn = false
+    var isSavingOn = true
     
     var zoomingTo: CGRect?;
     var infoPanel: InfoPanel;
