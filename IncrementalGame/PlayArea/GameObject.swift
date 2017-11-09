@@ -38,7 +38,6 @@ class GameObject: SKSpriteNode {
     ///   - at: The position at which the GameObject was placed on the game screen.
     ///   - withSize: The size of the zone/play area.
     func setUp(at: CGPoint, withSize: CGSize) {
-        
         // Set starting position
         if at.x == 0 && at.y == 0 {
             self.position = CGPoint(x: withSize.width*0.5, y: withSize.height*0.5)

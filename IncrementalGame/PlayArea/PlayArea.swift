@@ -37,6 +37,7 @@ class PlayArea: SKView {
         // Passive Income generator
         pIGManager = PassiveIncomeManager(gameState: gameState)
         pIGManager.startInactiveIncomeGenerator()
+
         
         super.init(frame: frame)
         setupTouchEvents()
@@ -62,10 +63,6 @@ class PlayArea: SKView {
     
     func getZone() -> Zone {
         return zone
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     
@@ -115,11 +112,14 @@ class PlayArea: SKView {
             zone.resetGravity()
         }
     }
-    
-    
+
     override func presentScene(_ scene: SKScene?) {
         super.presentScene(scene)
         zone.pIG.isInactiveGeneratorOn = false
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

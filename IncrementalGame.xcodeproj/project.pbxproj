@@ -17,6 +17,8 @@
 		4C24BA101FB3C1FF00EE91B9 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C24BA0F1FB3C1FE00EE91B9 /* Notifications.swift */; };
 		4C3CBA331FAA4EB10022FFC2 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3CBA321FAA4EB00022FFC2 /* Player.swift */; };
 		4C3CBA351FAA515F0022FFC2 /* PassiveIncomeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */; };
+		4C97087F1FAE66A500C6F718 /* PassiveIncomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C97087E1FAE66A500C6F718 /* PassiveIncomeManager.swift */; };
+		4CF806521FB2BAD80039E031 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF806511FB2BAD80039E031 /* Notifications.swift */; };
 		A37572FD1F9286FB0006CC3B /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = A37572FB1F9286FB0006CC3B /* MyParticle.sks */; };
 		A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A37572FC1F9286FB0006CC3B /* Assets.xcassets */; };
 		F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00D1F90485F0028A5A1 /* Shop.swift */; };
@@ -68,6 +70,8 @@
 		4C24BA0F1FB3C1FE00EE91B9 /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		4C3CBA321FAA4EB00022FFC2 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassiveIncomeGenerator.swift; sourceTree = "<group>"; };
+		4C97087E1FAE66A500C6F718 /* PassiveIncomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassiveIncomeManager.swift; sourceTree = "<group>"; };
+		4CF806511FB2BAD80039E031 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Notifications.swift; path = IncrementalGame/Notifications.swift; sourceTree = SOURCE_ROOT; };
 		A37572FB1F9286FB0006CC3B /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
 		A37572FC1F9286FB0006CC3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F804A00D1F90485F0028A5A1 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
@@ -308,9 +312,6 @@
 		F8FF74141F86ED190057AF21 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				KnownAssetTags = (
-					Sounds,
-				);
 				LastSwiftUpdateCheck = 0900;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Ben Grande";
@@ -575,10 +576,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75QFN3WHS9;
+				DEVELOPMENT_TEAM = VG7RQ2WKA6;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = austintest.599incremental;
+				PRODUCT_BUNDLE_IDENTIFIER = bentest.599incremental;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -590,10 +591,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75QFN3WHS9;
+				DEVELOPMENT_TEAM = VG7RQ2WKA6;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = austintest.599incremental;
+				PRODUCT_BUNDLE_IDENTIFIER = bentest.599incremental;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -42,7 +42,7 @@ class MasterView: UIView {
         }
     }
     
-   
+
     override init(frame: CGRect) {
         if let savedGameState = GameState.loadGameState(), isSavingOn {
             gameState = savedGameState
@@ -88,7 +88,6 @@ class MasterView: UIView {
         
         // Subscribe to applicationWillResignActive notification
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(MasterView.saveGame), name: Notification.Name.UIApplicationWillResignActive, object: nil)
         notificationCenter.addObserver(self, selector: #selector(saveGame), name: Notification.Name.UIApplicationWillResignActive, object: nil)
         notificationCenter.addObserver(self, selector: #selector(onReceiveCurrencyUpdate(_:)), name: NSNotification.Name(rawValue: Notification.Name.currencyChanged), object: nil)
         notificationCenter.addObserver(self, selector: #selector(onReceivePassiveIncomeRate(_:)), name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRate), object: nil)
@@ -124,7 +123,7 @@ class MasterView: UIView {
     ///
     /// - Parameter object: The GameObject that is being upgraded.
     func openUpgrade(object: GameObject) {
-        
+    
         if (!shopOpen) {
             self.addSubview(shop)
             self.addSubview(shopButton)
@@ -146,7 +145,7 @@ class MasterView: UIView {
     /// Updates the value for currencyA. Used for shop purchases.
     ///
     /// - Parameter by: The amount to add to currencyA
-    func updateCurrencyA(by: Int) { // REFACTOR: Could this be moved to GameState and combined with Gained in PlayArea?
+    func updateCurrencyA(by: Int) {
         gameState.currencyA += by;
         infoPanel.upgradeCurrencyA(to: gameState.currencyA);
         if (shopOpen) {
@@ -178,7 +177,6 @@ class MasterView: UIView {
             else {
                 playArea.addFixture(of: of.objectType, at: location);
             }
-            
         }
         else {
             // Placed at ambiguous point
@@ -193,6 +191,8 @@ class MasterView: UIView {
         
         closeStore();
     }
+    
+    
     func selectZone(index: Int) {
         playArea.removeFromSuperview();
         self.addSubview(playArea);
@@ -204,10 +204,13 @@ class MasterView: UIView {
         self.addSubview(shopButton)
         self.addSubview(scenePreviewButton)
     }
+    
+    
     func createZone() {
         let zone = Zone(size: playAreaFrame.size, children: [], pIG: nil, allowedObjects: nil)
         gameState.zones.append(zone)
         // TODO - change this with gameState newZonePrice
+        // gameState.currencyA -= Zone.newZonePrice;
         sceneCollection.reloadData();
         playArea.selectZone(index: gameState.zones.count-1);
         transitionToClose()
