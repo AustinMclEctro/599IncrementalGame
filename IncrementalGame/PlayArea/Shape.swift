@@ -14,27 +14,66 @@ import SpriteKit
 class Shape: GameObject {
     
     var withSize: CGSize // REFACTOR: Might need to remove
+    var pointMultiplier = 1
+    var upgradeALevel = 0
+    var upgradeBLevel = 0
+    var upgradeCLevel = 0
     
     init(type: ObjectType, at: CGPoint, withSize: CGSize) {
         self.withSize = withSize
         
         super.init(type: type)
         super.setUp(at: at, withSize: withSize)
-        let rangeX: SKRange
-        let rangeY: SKRange
-        let dimension = withSize.width/9
+        
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = true
         self.physicsBody?.restitution = 0.75
         self.physicsBody?.angularDamping = 0.5
-        self.physicsBody?.friction = 0
+        self.physicsBody?.friction = 0.5
         self.physicsBody?.linearDamping = 0.5
-        rangeX = SKRange(lowerLimit: (dimension/2)+1, upperLimit: (withSize.width-(dimension/2)-1))
-        rangeY = SKRange(lowerLimit: (dimension/2)+1, upperLimit: (withSize.height-(dimension/2)-1))
+        self.physicsBody?.mass = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
+        let rangeX = SKRange(lowerLimit: (dimension/2), upperLimit: (withSize.width-(dimension/2)))
+        let rangeY = SKRange(lowerLimit: (dimension/2), upperLimit: (withSize.height-(dimension/2)))
         let conX = SKConstraint.positionX(rangeX)
         let conY = SKConstraint.positionY(rangeY)
         self.constraints = [conX,conY]
+    }
+    
+    func canUpgradeA() -> Bool {
+        return upgradeALevel < 10
+    }
+    
+    func upgradeA() {
+        guard upgradeALevel < 10 else {return}
+        upgradeALevel += 1
+        pointMultiplier += 1
+    }
+    
+    func canUpgradeB() -> Bool {
+        return upgradeBLevel < 5
+    }
+    
+    func upgradeB() {
+        guard upgradeBLevel < 5 else {return}
+        upgradeBLevel += 1
+        self.physicsBody?.restitution *= 1.25
+    }
+    
+    func canUpgradeC() -> Bool {
+        return upgradeCLevel < 5
+    }
+    
+    func upgradeC() {
+        guard upgradeCLevel < 5 else {return}
+        upgradeCLevel += 1
+        self.physicsBody?.linearDamping *= 0.8
+    }
+    
+    
+    
+    func getPoints() -> Int {
+        return self.objectType.getPoints() * pointMultiplier
     }
     
     // MARK: NSCoding

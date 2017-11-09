@@ -15,6 +15,7 @@ import SpriteKit
 class GameObject: SKSpriteNode {
     
     var objectType: ObjectType
+    var dimension: CGFloat
 
     init(type: ObjectType) {
         objectType = type
@@ -22,6 +23,7 @@ class GameObject: SKSpriteNode {
         // Configure the appearance of the object
         let im = type.getImage() ?? UIImage()
         let texture = SKTexture(image: im)
+        dimension = 1
         
         super.init(texture: texture, color: UIColor.clear, size: im.size)
         
@@ -44,7 +46,7 @@ class GameObject: SKSpriteNode {
         }
         
         // Set size depending on screen dimensions
-        let dimension = withSize.width/9
+        dimension = withSize.width/9
         self.scale(to: CGSize(width: dimension, height: dimension))
         
         // Configure physics body settings relative to the shape

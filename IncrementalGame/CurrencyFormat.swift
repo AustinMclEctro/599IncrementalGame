@@ -9,28 +9,36 @@
 import Foundation
 extension Int {
     func toCurrency() -> String {
-        // TODO:
-        /* - Need a faster way of doing this
-         - Actual units
-         - use everywhere (shop)
-         
-         */
-        var types = ["aJ", "bJ", "cJ", "dJ", "eJ", "fJ", "gJ", "hJ"];
-        var val = 0.0;
-        if (self != 0) {
-            // ln(100) = 4.60517018599;
-            // val = log Base 100 self
-
-            val = log(Double(self))/4.60517018599
-            
+        let symbols = ["µJ","mJ","J","kJ","MJ","GJ","TJ"]
+        
+        var val = Double(self)
+        var suffix: Double
+        
+        switch self {
+        case 0...999:
+            suffix = 0
+        case 1000...999_999:
+            val /= 1000
+            suffix = 1
+        case 1_000_000...999_999_999:
+            val /= 1_000_000
+            suffix = 2
+        case 1_000_000_000...999_999_999_999:
+            val /= 1_000_000_000
+            suffix = 3
+        case 1_000_000_000_000...999_999_999_999_999:
+            val /= 1_000_000_000_000
+            suffix = 4
+        case 1_000_000_000_000_000...999_999_999_999_999_999:
+            val /= 1_000_000_000_000_000
+            suffix = 5
+        default:
+            val /= 1_000_000_000_000_000_000
+            suffix = 6
         }
         
-        var typeIndex = Int(floor(val));
+        let display = String(format: "%.4g ", val) + symbols[Int(suffix)]
         
-        var total = Int(Double(self)/(pow(100, Double(typeIndex))))
-        if (types.count <= typeIndex-1) {
-            return String(describing: total);
-        }
-        return String(describing: total)+types[typeIndex];
+        return display
     }
 }
