@@ -231,9 +231,17 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     override func encode(with aCoder: NSCoder) {
         super.encode(with: aCoder)
         aCoder.encode(size, forKey: PropertyKey.size)
-        aCoder.encode(children, forKey: PropertyKey.children)
         aCoder.encode(pIG, forKey: PropertyKey.pIG)
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(Array(allowedObjects), forKey: PropertyKey.allowedObjects)
+        
+        //Save only GameObjects
+        var childrenToSave = [SKNode]()
+        for child in children {
+            if let gameObject = child as? GameObject {
+                childrenToSave.append(gameObject)
+            }
+        }
+        aCoder.encode(childrenToSave, forKey: PropertyKey.children)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {

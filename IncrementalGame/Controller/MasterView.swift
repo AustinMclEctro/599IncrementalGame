@@ -16,6 +16,8 @@ import os.log
 /// view for the InfoPanel, the PlayArea and the Shop. It also contains the GameState.
 class MasterView: UIView {
     
+    var isSavingOn = false
+    
     var zoomingTo: CGRect?;
     var infoPanel: InfoPanel;
     var playAreaFrame: CGRect;
@@ -42,7 +44,7 @@ class MasterView: UIView {
     
    
     override init(frame: CGRect) {
-        if let savedGameState = GameState.loadGameState() {
+        if let savedGameState = GameState.loadGameState(), isSavingOn {
             gameState = savedGameState
         } else {
             var player = Player(id: 1)
@@ -225,7 +227,9 @@ class MasterView: UIView {
         // Call pre-save gamestate functions
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.willSaveGameState), object: nil, userInfo: nil)
         
-        gameState.saveGameState()
+        if isSavingOn {
+            gameState.saveGameState()
+        }
     }
 }
 
