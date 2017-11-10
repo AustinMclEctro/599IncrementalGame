@@ -14,12 +14,44 @@ extension MasterView {
     
     /// Adds a touch event for the shop button.
     func setupTouchEvents() {
+        setButton.addTarget(self, action: #selector(touchDownSet), for: .touchDown)
         shopButton.addTarget(self, action: #selector(tapDownStore), for: .touchUpInside)
         scenePreviewButton.addTarget(self, action: #selector(tapDownPreview), for: .touchUpInside)
         gravButton.addTarget(self, action: #selector(tapGravity), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(onResetButtonPress), for: .touchDown)
         var pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinch));
         self.addGestureRecognizer(pinchGesture)
+    }
+    
+    @objc func touchDownSet(sender: UIButton) {
+        if (!setOpen) {
+            self.addSubview(set)
+            //self.addSubview(sender)
+            animateSettingsMenu()
+            
+        }
+        else {
+            animateSettingsMenu()
+        }
+        setOpen = !setOpen;
+    }
+    
+    func animateSettingsMenu() {
+        if (!setOpen){
+            UIView.animate(withDuration: 0.3, animations: {
+                self.set.frame = CGRect(x: self.frame.width/2-self.setWidth/2, y: self.frame.height/2 - self.setHeight/2 + 50, width: self.setWidth, height: self.setHeight)
+                
+            })
+            print("Opening menu")
+        } else {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.set.frame = CGRect(x: self.frame.width-60, y: 90 , width: 50, height: 50)
+            },completion: {
+                success in
+                self.set.removeFromSuperview()
+            })
+            print("Closing")
+        }
     }
     
     @objc func pinch(sender: UIPinchGestureRecognizer) {
