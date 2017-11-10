@@ -33,6 +33,12 @@ class MasterView: UIView {
     let gravButton: UIButton
     let resetButton: UIButton;
     var feedbackGenerator: UIImpactFeedbackGenerator;
+    var set: SettingsMenu;
+    var setOpen = false
+    let setWidth: CGFloat = 300.0
+    let setHeight: CGFloat = 400.0
+    let setButton: UIButton;
+    
     var currencyA: Int {
         set(val) {
             // Do we want to allow this?
@@ -64,8 +70,20 @@ class MasterView: UIView {
         shopButton.setImage(UIImage(named: "ShopButton"), for: .normal);
         shop = Shop(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
 
-        gravButton = UIButton(frame: CGRect(x: frame.width-60, y: 0, width: 50, height: 50))
+        gravButton = UIButton(frame: CGRect(x: frame.width-60, y: 25, width: 50, height: 50))
         gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
+        
+        //settings button configuration
+        setButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
+        setButton.setImage(UIImage(named:"Settings"), for: .normal)
+        
+        set = SettingsMenu(frame: CGRect(x: frame.width-60, y: 90 , width: setWidth, height: setHeight))
+        set.layer.cornerRadius = 25.0
+        set.clipsToBounds = true
+        //below will set background color to white, but washes out the buttons
+        set.scene?.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.5)
+        
+        
         
         // Configure the reset button
         resetButton =  UIButton(frame: CGRect(x: 5, y: 25, width: frame.width/3, height: 20))
@@ -85,6 +103,7 @@ class MasterView: UIView {
         self.addSubview(gravButton)
         self.addSubview(scenePreviewButton);
         self.addSubview(resetButton);
+        self.addSubview(setButton)
         
         // Subscribe to applicationWillResignActive notification
         let notificationCenter = NotificationCenter.default
