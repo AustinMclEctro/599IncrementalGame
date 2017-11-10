@@ -19,28 +19,28 @@ class SettingsMenu: SKView {
         super.init(frame: frame)
         //two placeholder menu buttons
         button1 = SKShapeNode(rect: CGRect(origin: CGPoint(x: frame.width/2 - width/2, y:frame.height - height*2) , size: CGSize(width: width, height: height) ) , cornerRadius: 10)
-        button2 = SKShapeNode(rect: CGRect(origin: CGPoint(x: frame.width/2 - width/2, y:frame.height - height*4), size: CGSize(width: width, height: height )) , cornerRadius: 10)
-        
         button1.fillColor = UIColor.blue.withAlphaComponent(1)
-        button2.fillColor = UIColor.green.withAlphaComponent(1)
-        presentScene(SKScene(size: frame.size))
         self.scene?.addChild(button1)
+
+        button2 = SKShapeNode(rect: CGRect(origin: CGPoint(x: frame.width/2 - width/2, y:frame.height - height*4), size: CGSize(width: width, height: height )) , cornerRadius: 10)
+        button2.fillColor = UIColor.green.withAlphaComponent(1)
         self.scene?.addChild(button2)
-        
+
+        presentScene(SKScene(size: frame.size))
+
         //add labels for the buttons
         let text1 = SKLabelNode(text: "Menu Item 1")
         text1.horizontalAlignmentMode = .center
+        button1.addChild(text1)
+        text1.position = CGPoint(x: frame.width/2, y:button1.frame.midY)
+        text1.verticalAlignmentMode = .center
+        text1.fontName = "Helvetica-Bold"
+
         let text2 = SKLabelNode(text: "Menu Item 2")
         text2.horizontalAlignmentMode = .center
-        //add them as children to the buttons
-        button1.addChild(text1)
         button2.addChild(text2)
-        //position them centered in the buttons
-        text1.position = CGPoint(x: frame.width/2, y:button1.frame.midY)
         text2.position = CGPoint(x: frame.width/2, y:button2.frame.midY)
-        text1.verticalAlignmentMode = .center
         text2.verticalAlignmentMode = .center
-        text1.fontName = "Helvetica-Bold"
         text2.fontName = "Helvetica-Bold"
         
         
