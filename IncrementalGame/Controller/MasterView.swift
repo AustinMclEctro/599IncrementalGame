@@ -81,7 +81,7 @@ class MasterView: UIView {
         set.layer.cornerRadius = 25.0
         set.clipsToBounds = true
         //below will set background color to white, but washes out the buttons
-        set.scene?.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.5)
+        set.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         
         
         
