@@ -12,4 +12,5 @@ extension Notification.Name {
     static let currencyChanged = "pointsChanged"
     static let inactiveIncomeRate = "inactiveIncomeRate"
     static let willSaveGameState = "willSaveGameState"
+    static let shapesChanged = "shapesChanged"
 }

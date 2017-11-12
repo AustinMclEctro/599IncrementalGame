@@ -141,7 +141,8 @@ class MasterView: UIView {
     /// Opens the upgrade tree for a specified GameObject.
     ///
     /// - Parameter object: The GameObject that is being upgraded.
-    func openUpgrade(object: GameObject) {
+    //TODO: Can delete if we use new ugrade
+    /*func openUpgrade(object: GameObject) {
     
         if (!shopOpen) {
             self.addSubview(shop)
@@ -158,8 +159,27 @@ class MasterView: UIView {
             self.shop.removeFromSuperview();
         }
         
+    }*/
+    func upgradeShape(obj: GameObject, path: Int) {
+        if let shape = obj as? Shape {
+            switch path {
+                case 1:
+                    shape.upgradeA();
+                    break;
+                case 2:
+                    shape.upgradeB();
+                    break;
+                case 3:
+                    shape.upgradeC();
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if let fixture = obj as? Fixture {
+            
+        }
     }
-    
     
     /// Updates the value for currencyA. Used for shop purchases.
     ///
@@ -177,34 +197,34 @@ class MasterView: UIView {
     ///
     /// - Parameters:
     ///   - of: The GameObject that is being purchased.
-    func purchaseObject(of: GameObject, sender: UIPanGestureRecognizer?) {
-        if (gameState.currencyA < of.objectType.getPrice() || !playArea.getZone().canAdd(type: of.objectType)) {
+    func purchaseObject(of: ObjectType, sender: UIPanGestureRecognizer?) {
+        if (gameState.currencyA < of.getPrice() || !playArea.getZone().canAdd(type: of)) {
             return;
         }
         
-        updateCurrencyA(by: -of.objectType.getPrice())
+        updateCurrencyA(by: -of.getPrice())
         
         if sender != nil {
             let loc = sender!.location(in: playArea); // UIView location (need to flip y)
             let location = CGPoint(x: loc.x, y: playArea.frame.height-loc.y); // Flipped y
             let vel = sender!.velocity(in: playArea); // UIView velocity (need to flip y)
             let velocity =  CGVector(dx: vel.x, dy: -vel.y);// Flopped y
-            if !of.objectType.isFixture() {
-                let shape = playArea.addShape(of: of.objectType, at: location);
+            if !of.isFixture() {
+                let shape = playArea.addShape(of: of, at: location);
                 shape?.physicsBody?.velocity = velocity;
             }
             else {
-                playArea.addFixture(of: of.objectType, at: location);
+                playArea.addFixture(of: of, at: location);
             }
         }
         else {
             // Placed at ambiguous point
             let location =  CGPoint(x: 0, y: 0);
-            if !of.objectType.isFixture() {
-                playArea.addShape(of: of.objectType, at: location);
+            if !of.isFixture() {
+                playArea.addShape(of: of, at: location);
             }
             else {
-                playArea.addFixture(of: of.objectType, at: location);
+                playArea.addFixture(of: of, at: location);
             }
         }
         

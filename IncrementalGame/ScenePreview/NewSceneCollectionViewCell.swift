@@ -17,10 +17,16 @@ class NewSceneCollectionViewCell: UICollectionViewCell {
         set(val) {
             // TODO - change to upgrade cell
             if (val) {
-                self.backgroundColor = .clear;
+                self.addSubview(newSceneButton);
+                self.addSubview(newScenePrice);
+                upgradeA.removeFromSuperview();
+                upgradeB.removeFromSuperview();
             }
             else {
-                self.backgroundColor = .blue;
+                self.newSceneButton.removeFromSuperview();
+                self.newScenePrice.removeFromSuperview();
+                self.addSubview(upgradeA);
+                self.addSubview(upgradeB);
             }
             _isNew = val;
         }
@@ -28,7 +34,22 @@ class NewSceneCollectionViewCell: UICollectionViewCell {
             return _isNew;
         }
     }
+    var upgradeA = UIView();
+    var upgradeB = UIView();
     override init(frame: CGRect) {
+        let upgradeImage = UIImageView();
+        upgradeImage.image = UIImage(named: "ShapeUpgrade");
+        let size = upgradeImage.image?.size;
+        upgradeImage.frame = CGRect(x: 0, y: 0, width: frame.width/2, height: (frame.width/2)*(size!.height/size!.width));
+        upgradeA.addSubview(upgradeImage);
+        let upgradeLabel = UILabel(frame: CGRect(x: frame.width/2, y: 0, width: frame.width/2, height: frame.height/2));
+        upgradeLabel.text = "+ Upgrade A Price";
+        upgradeLabel.textColor = .white;
+        upgradeA.addSubview(upgradeLabel);
+        
+        upgradeB.frame = CGRect(x: frame.height/2, y: 0, width: frame.width, height: frame.height/2);
+        
+        
         newSceneButton = UIImageView(frame: CGRect(x: frame.width/4, y: 0, width: frame.width/2, height: frame.width/2))
         newScenePrice = UILabel(frame: CGRect(x: 0, y: frame.height/2, width: frame.width, height: frame.height/2))
         newScenePrice.textAlignment = .center

@@ -10,47 +10,11 @@ import Foundation
 import UIKit
 
 /// The table view used for displaying and interacting with the user's zones.
-class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDragDelegate {
+class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    // Allows dragging
+    // Allows dragging - used in delegates
     var dragLoc: Int?;
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        if (indexPath.row == 0) {
-            // Add cell
-            return [];
-        }
-        dragLoc = indexPath.row;
-        let cell = collectionView.cellForItem(at: indexPath)
-        if let prev = cell as? SceneCollectionViewCell {
-            let dragItem = NSItemProvider(object: prev.image ?? UIImage());
-            return [UIDragItem(itemProvider: dragItem)];
-        }
-        return [];
-    }
-    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
-        // TODO: allow update??
-        if let up = self.cellForItem(at: IndexPath(row: 0, section: 0)) as? NewSceneCollectionViewCell {
-            up.isNew = true;
-            
-            if (up.frame.contains(session.location(in: self))) {
-                
-            }
-        }
 
-    }
-    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
-        feedbackGenerator.impactOccurred()
-        feedbackGenerator.prepare()
-        if let up = self.cellForItem(at: IndexPath(row: 0, section: 0)) as? NewSceneCollectionViewCell {
-            up.isNew = false;
-        }
-    }
-    func collectionView(_ collectionView: UICollectionView, dragSessionAllowsMoveOperation session: UIDragSession) -> Bool {
-        return true;
-    }
-    
-    
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         zoneCells = [];
         return zones.count;
@@ -77,9 +41,23 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
             
             if let controller = superview as? MasterView {
                 var im = controller.playArea.texture(from: zones[indexPath.row]);
+                var playArea = controller.playArea;
+                if indexPath.row-1 == playArea.zoneNumber {
+                    // If the play area is not displayed
+                    if let _ = playArea.superview as? MasterView {
+                        
+                    }
+                    else {
+                        // Show live view
+                        cell.addSubview(playArea);
+                        playArea.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height)
+                    }
+                }
                 if let prev = cell as? SceneCollectionViewCell {
                     prev.image = UIImage(cgImage: (im?.cgImage())!)
                 }
+                
+                
                 
                 
             }
@@ -130,11 +108,13 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         
         dataSource = self
         delegate = self
+        
         self.register(SceneCollectionViewCell.self, forCellWithReuseIdentifier: "previewZone");
         self.register(NewSceneCollectionViewCell.self, forCellWithReuseIdentifier: "newZone");
         self.backgroundColor = .black;
         self.dragInteractionEnabled = true;
         self.dragDelegate = self;
+        self.dropDelegate = self;
     }
     
     override func didMoveToSuperview() {
@@ -142,11 +122,16 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         super.didMoveToSuperview()
     }
     func setCurrent(playArea: PlayArea) {
-        var zone = playArea.zoneNumber;
-        let cell = zoneCells[playArea.zoneNumber];//self.collectionView(self, cellForItemAt: indexPath)
+       // var zone = playArea.zoneNumber;
+        /*if playArea.zoneNumber >= zoneCells.count  {
+            return;
+        }*/
+        /*let cell = self.collectionView(self, cellForItemAt: IndexPath(row: playArea.zoneNumber, section: 0));
+        //let cell = zoneCells[playArea.zoneNumber];//self.collectionView(self, cellForItemAt: indexPath)
         
         cell.addSubview(playArea);
-        playArea.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height)
+        playArea.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height)*/
+        self.reloadData()
     }
     
     

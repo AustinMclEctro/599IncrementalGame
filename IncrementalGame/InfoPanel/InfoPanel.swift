@@ -17,18 +17,21 @@ class InfoPanel: UIView {
     var curABar: ProgressBar;
     var logo: UIImageView;
     var inactiveRateLabel: UILabel;
-    
+    var currentShapes: CurrentShapes;
+    var progressStore: ProgressStore
+
+    var feedbackGenerator = UIImpactFeedbackGenerator();
     override init(frame: CGRect) {
         let height = min(frame.height, 50.0)
-        let navButtonsHeight: CGFloat = 60.0
+        let navButtonsHeight: CGFloat = 20.0
         // Configure currency label
         var progressBarFrame = CGRect(x: 30, y: 30, width: height, height: height);
         // TODO - remove menu buttons too?
         let roomLeft = min(frame.height-height-navButtonsHeight, frame.width);
-        
-        if (roomLeft > 100) {
-            progressBarFrame = CGRect(x: (frame.width/2)-((roomLeft-20)/2), y: height+10, width: roomLeft-20, height: roomLeft-20)
-        }
+        // TODO: remove if successful - had the progress bar in the left corner
+        //if (roomLeft > 100) {
+        progressBarFrame = CGRect(x: (frame.width/2)-((roomLeft-20)/2), y: height+10, width: roomLeft-20, height: roomLeft-20)
+        //}
         curABar = ProgressBar(frame: progressBarFrame)
         curABar.valLabel.textColor = .white;
         
@@ -44,22 +47,57 @@ class InfoPanel: UIView {
         inactiveRateLabel.textAlignment = NSTextAlignment.center
         inactiveRateLabel.isHidden = true
         
+        currentShapes = CurrentShapes(frame: CGRect(x: curABar.frame.minX-25, y: curABar.frame.minY-25, width: curABar.frame.width+50, height: curABar.frame.height+50))
+        currentShapes.progressBar = curABar;
+        
+        progressStore = ProgressStore(frame: CGRect(x: curABar.frame.minX-50, y: curABar.frame.minY, width: curABar.frame.width+100, height: curABar.frame.height+100))
+        
         super.init(frame: frame);
         
         self.backgroundColor = .black;
+        
         self.addSubview(curABar)
+        self.addSubview(currentShapes)
         self.addSubview(inactiveRateLabel);
         self.addSubview(logo)
         
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
         curABar.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPress)))
+        NotificationCenter.default.addObserver(self, selector: #selector(shapesChanged), name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil)
     }
-    
-    
+    @objc func shapesChanged(sender: Notification) {
+        if let zone = sender.userInfo?["zone"] as? Zone {
+            removeStore()
+        }
+    }
+    @objc func tap(sender: UITapGestureRecognizer) {
+        if !curABar.frame.contains(sender.location(in: self)) {
+            return;
+        }
+        feedbackGenerator.prepare();
+        feedbackGenerator.impactOccurred();
+        if progressStore.superview == nil {
+            self.addSubview(progressStore);
+            progressStore.animateIn();
+        }
+        else {
+            removeStore()
+        }
+        
+    }
+    func removeStore() {
+        progressStore.animateOut(callback: {
+            self.progressStore.removeFromSuperview()
+        })
+    }
     /// Updates the currency label to a new value.
     ///
     /// - Parameter to: The new currency value.
     func upgradeCurrencyA(to: Int) {
         curABar.currency = to;
+        if (progressStore.superview != nil) {
+            progressStore.curA = to;
+        }
     }
     
     

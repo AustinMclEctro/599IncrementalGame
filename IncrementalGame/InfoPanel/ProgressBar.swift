@@ -20,6 +20,8 @@ class ProgressBar: UIView {
     var needsUpdate = false;
     var curColor = UIColor.red.cgColor;
     var curIndex = 0
+    var selectionFeedback = UISelectionFeedbackGenerator()
+    var feedbackGenerator = UIImpactFeedbackGenerator();
     var nextColor: CGColor {
         get {
             curIndex += 1;
@@ -83,7 +85,33 @@ class ProgressBar: UIView {
     var backCircleLayer: CAShapeLayer;
     var valLabel: UILabel;
     
+    let upgradeOne: UILabel;
+    let upgradeTwo: UILabel;
+    let upgradeThree: UILabel;
+    let upgradesStack: UIStackView;
     override init(frame: CGRect) {
+        var thirdHeight = (frame.height-(circleStroke*2))/3;
+        upgradeOne = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width-(circleStroke*3), height: 10))
+        upgradeTwo = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width-(circleStroke*3), height: 10))
+        upgradeThree = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width-(circleStroke*3), height: 10))
+        upgradeOne.textAlignment = .center;
+        upgradeTwo.textAlignment = .center;
+        upgradeThree.textAlignment = .center;
+        upgradeOne.textColor = .white;
+        upgradeTwo.textColor = .white;
+        upgradeThree.textColor = .white;
+        upgradeOne.backgroundColor = .black;
+        upgradeTwo.backgroundColor = .black
+        upgradeThree.backgroundColor = .black
+        upgradesStack = UIStackView(frame: CGRect(x: circleStroke*1.5, y: circleStroke*1.5, width: frame.width-(circleStroke*3), height: thirdHeight*3))
+        upgradesStack.axis = .vertical;
+        upgradesStack.addArrangedSubview(upgradeOne);
+        upgradesStack.addArrangedSubview(upgradeTwo);
+        upgradesStack.addArrangedSubview(upgradeThree);
+        upgradesStack.alignment = .fill;
+        upgradesStack.distribution = .fillEqually;
+        
+        
         circleStroke = frame.width*0.05
         let circlePath = UIBezierPath(arcCenter: CGPoint(x: frame.width/2, y: frame.width/2), radius: (frame.width/2)-circleStroke, startAngle: 3*CGFloat.pi/2, endAngle:7*CGFloat.pi/2, clockwise: true)
         
@@ -109,11 +137,8 @@ class ProgressBar: UIView {
         layer.addSublayer(circleLayer);
         self.addSubview(valLabel);
         currency = 0
-        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
     }
-    @objc func tap(sender: UITapGestureRecognizer) {
-        currency += 1;
-    }
+
     
     
     
@@ -128,6 +153,87 @@ class ProgressBar: UIView {
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    var availUpgrades: [Int] = [];
+    func updatesFor(gameObject: GameObject?) {
+        if (gameObject != nil) {
+            // TODO: if fixture
+            availUpgrades = [];
+            upgradeOne.textColor = .gray;
+            upgradeTwo.textColor = .gray;
+            upgradeThree.textColor = .gray;
+            if let shape = gameObject as? Shape {
+                if (shape.canUpgradeA()) {
+                    availUpgrades.append(1);
+                    upgradeOne.textColor = .white;
+                }
+                if (shape.canUpgradeB()) {
+                    availUpgrades.append(2);
+                    upgradeTwo.textColor = .white;
+                }
+                if (shape.canUpgradeC()) {
+                    availUpgrades.append(3);
+                    upgradeThree.textColor = .white;
+                }
+            }
+            else if let fixt = gameObject as? Fixture {
+                
+            }
+            self.addSubview(upgradesStack);
+            
+            upgradeOne.text = "Upgrade 1";
+            upgradeTwo.text = "Upgrade 2";
+            upgradeThree.text = "Upgrade 3";
+        }
+        else {
+            lastUpgrade = nil;
+            upgradesStack.removeFromSuperview()
+            
+        }
+    }
+    var lastUpgrade: Int? = nil;
+    
+    func updatesPos(pos: CGPoint) {
+        upgradeThree.backgroundColor = .black;
+        upgradeTwo.backgroundColor = .black;
+        upgradeOne.backgroundColor = .black;
+        var fr = upgradeThree.frame;
+        var newLastUpgrade: Int? = nil;
+        if upgradeThree.frame.contains(pos) && availUpgrades.index(of: 3) != nil {
+            // Upgrade 3
+            newLastUpgrade = 3;
+            upgradeThree.backgroundColor = UIColor.green;
+        }
+        else if upgradeTwo.frame.contains(pos) && availUpgrades.index(of: 2) != nil {
+            // Upgrade 2
+            newLastUpgrade = 2;
+            upgradeTwo.backgroundColor = UIColor.green;
+        }
+        else if upgradeOne.frame.contains(pos) && availUpgrades.index(of: 1) != nil {
+            // Upgrade 1
+            newLastUpgrade = 1;
+            upgradeOne.backgroundColor = UIColor.green;
+        }
+        if newLastUpgrade != lastUpgrade {
+            selectionFeedback.prepare();
+            selectionFeedback.selectionChanged()
+        }
+        lastUpgrade = newLastUpgrade;
+    }
+    func pathFor(pos: CGPoint) -> Int {
+        if upgradeThree.frame.contains(pos) && availUpgrades.index(of: 3) != nil {
+            // Upgrade 3
+            return 3
+        }
+        else if upgradeTwo.frame.contains(pos) && availUpgrades.index(of: 2) != nil {
+            // Upgrade 2
+            return 2
+        }
+        else if upgradeOne.frame.contains(pos) && availUpgrades.index(of: 1) != nil {
+            // Upgrade 1
+            return 1
+        }
+        return -1;
     }
     
 }

@@ -279,9 +279,9 @@ class Shop: SKView {
             if (nodes.count > 0) {
                 var ind = 0;
                 while ind < nodes.count {
-                    if let node = nodes[ind] as? GameObject {
+                    if let node = nodes[ind] as? StoreItem {
                         if let controller = self.superview as? MasterView {
-                            controller.purchaseObject(of: node, sender: nil)
+                            controller.purchaseObject(of: node.objectType, sender: nil)
                             break;
                         }
                     }
@@ -335,7 +335,7 @@ class Shop: SKView {
             if (selectedNode != nil) && ((loc.x < 0 || loc.y < 0) || !inRings(location: loc)) {
                 if let controller = superview as? MasterView {
                     let location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
-                    controller.purchaseObject(of: selectedNode!, sender: sender);
+                    controller.purchaseObject(of: selectedNode!.objectType, sender: sender);
                     
                 }
                 

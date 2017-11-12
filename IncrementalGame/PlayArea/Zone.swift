@@ -124,7 +124,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
             var spark: SKEmitterNode? = nil
             var maxPoints: Int = 0
-            if let playArea = view as? PlayArea {
+            /*if let playArea = view as? PlayArea {
                 if let one = contact.bodyA.node as? Shape {
                     maxPoints = one.getPoints()
                     playArea.gained(amount: maxPoints)
@@ -139,7 +139,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                 }
                 animateCollision(collisionEmitter: spark!)
                 
-            }
+            }*/
         }
         
     }

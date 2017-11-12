@@ -44,6 +44,8 @@ class PlayArea: SKView {
         //self.showsPhysics = true
         
         presentScene(zone)
+        let data: [String: Zone] = ["zone": zone]
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
     }
     
     
@@ -58,6 +60,8 @@ class PlayArea: SKView {
         zoneNumber = index
         zone = gameState.zones[zoneNumber]
         presentScene(zone)
+        let data: [String: Zone] = ["zone": zone]
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
     }
     
     
@@ -76,6 +80,8 @@ class PlayArea: SKView {
         if zone.canAdd(type: of) {
             let shape = Shape(type: of, at: at, withSize: zone.size);
             zone.addChild(shape);
+            let data: [String: Zone] = ["zone": zone]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
             return shape;
         }
         return nil;
