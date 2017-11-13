@@ -79,8 +79,9 @@ extension PlayArea {
             for child in zone.children {
                 if let otherShape = child as? Shape {
                     let offset = CGVector(dx: otherShape.position.x - shapeTapped!.position.x, dy: otherShape.position.y - shapeTapped!.position.y)
-                    if offset.magnitudeSquared() < shapeTapped!.size.width * shapeTapped!.size.width * 1.75 {
-                        otherShape.physicsBody?.applyImpulse(offset)
+                    if offset.magnitudeSquared() < shapeTapped!.size.width * shapeTapped!.size.width * 1.1 {
+                        let push = CGVector(dx: offset.dx * 5, dy: offset.dy * 5)
+                        otherShape.physicsBody?.applyImpulse(push)
                     }
                 }
             }

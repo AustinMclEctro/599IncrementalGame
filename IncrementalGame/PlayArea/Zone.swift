@@ -21,6 +21,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.background, inactiveRate: PassiveIncomeGenerator.Rates.inactive)
     var upgradeALevel = 0
     var upgradeBLevel = 0
+    var sparksAvail = 12
+    let maxSparks = 12
     
     init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
         
@@ -122,24 +124,28 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
-            var spark: SKEmitterNode? = nil
+            var hit: Shape? = nil
             var maxPoints: Int = 0
-            /*if let playArea = view as? PlayArea {
+            if let playArea = view as? PlayArea {
                 if let one = contact.bodyA.node as? Shape {
                     maxPoints = one.getPoints()
+                    hit = one
                     playArea.gained(amount: maxPoints)
-                    spark = createEmitter(sourceNode: one, location: contact.contactPoint)
                 }
                 if let two = contact.bodyB.node as? Shape {
                     let points = two.getPoints()
                     playArea.gained(amount: points)
                     if points > maxPoints {
-                        spark = createEmitter(sourceNode: two, location: contact.contactPoint)
+                        hit = two
                     }
                 }
-                animateCollision(collisionEmitter: spark!)
                 
-            }*/
+                if sparksAvail > 0 {
+                    let spark = createEmitter(sourceNode: hit!, location: contact.contactPoint)
+                    animateCollision(collisionEmitter: spark)
+                }
+                
+            }
         }
         
     }
@@ -157,6 +163,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         emitter?.particleTexture = SKTexture(image: sourceNode.getType().getImage()!)
         emitter?.particlePosition = location
         emitter?.numParticlesToEmit = 5
+        sparksAvail -= 1
+        if sparksAvail < 0 {sparksAvail = 0}
         return emitter!
     }
     
@@ -176,6 +184,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         let remove = SKAction.run {collisionEmitter.removeFromParent()}
         let collisionSequence = SKAction.sequence([addEmitterAction, collisionEmitter.particleAction!,waitAction,remove])
         self.run(collisionSequence)
+        sparksAvail += 1
+        if sparksAvail > maxSparks {sparksAvail = maxSparks}
         
         /* IN PROGRESS - BROKEN CODE
          //set up a dummy spark node
@@ -217,9 +227,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     /// - Parameter type: The ObjectType (triange, bumper, etc.)
     /// - Returns: True if the object can be added, otherwise false.
     func canAdd(type: ObjectType) -> Bool {
-        var addOK = true
+        guard allowedObjects.contains(type) else {return false}
+        
+        guard !type.isFixture() else {return true}
+        
         var shapeCount = 0
-        if !allowedObjects.contains(type) {addOK = false}
         
         // Get and check shape count
         for object in self.children {
@@ -227,8 +239,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                 shapeCount += 1
             }
         }
-        if shapeCount >= maxShapes {addOK = false}
-        return addOK
+        return shapeCount < maxShapes
     }
     
     
