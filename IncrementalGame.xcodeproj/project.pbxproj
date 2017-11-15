@@ -18,6 +18,8 @@
 		4C3CBA331FAA4EB10022FFC2 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3CBA321FAA4EB00022FFC2 /* Player.swift */; };
 		4C3CBA351FAA515F0022FFC2 /* PassiveIncomeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */; };
 		4C4898AC1FBBECC500D6C420 /* StartupPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4898AB1FBBECC500D6C420 /* StartupPopup.swift */; };
+		4C4898B01FBBFB1D00D6C420 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4C4898AF1FBBFB1D00D6C420 /* Settings.bundle */; };
+		4C4898B21FBBFE3900D6C420 /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4898B11FBBFE3900D6C420 /* SettingsBundleHelper.swift */; };
 		A37572FD1F9286FB0006CC3B /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = A37572FB1F9286FB0006CC3B /* MyParticle.sks */; };
 		A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A37572FC1F9286FB0006CC3B /* Assets.xcassets */; };
 		A37CF7931FB6467200697D70 /* SettingsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37CF7921FB6467200697D70 /* SettingsMenu.swift */; };
@@ -75,6 +77,8 @@
 		4C3CBA321FAA4EB00022FFC2 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassiveIncomeGenerator.swift; sourceTree = "<group>"; };
 		4C4898AB1FBBECC500D6C420 /* StartupPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupPopup.swift; sourceTree = "<group>"; };
+		4C4898AF1FBBFB1D00D6C420 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		4C4898B11FBBFE3900D6C420 /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
 		A37572FB1F9286FB0006CC3B /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
 		A37572FC1F9286FB0006CC3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A37CF7921FB6467200697D70 /* SettingsMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMenu.swift; sourceTree = "<group>"; };
@@ -242,6 +246,8 @@
 				A37572FC1F9286FB0006CC3B /* Assets.xcassets */,
 				49FD36431FA63D9E009FABA3 /* CurrencyFormat.swift */,
 				4C4898AB1FBBECC500D6C420 /* StartupPopup.swift */,
+				4C4898AF1FBBFB1D00D6C420 /* Settings.bundle */,
+				4C4898B11FBBFE3900D6C420 /* SettingsBundleHelper.swift */,
 			);
 			path = IncrementalGame;
 			sourceTree = "<group>";
@@ -373,6 +379,7 @@
 			files = (
 				F8FF742D1F86ED1A0057AF21 /* LaunchScreen.storyboard in Resources */,
 				A37572FD1F9286FB0006CC3B /* MyParticle.sks in Resources */,
+				4C4898B01FBBFB1D00D6C420 /* Settings.bundle in Resources */,
 				A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */,
 				F8FF74251F86ED1A0057AF21 /* Main.storyboard in Resources */,
 			);
@@ -399,6 +406,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C4898B21FBBFE3900D6C420 /* SettingsBundleHelper.swift in Sources */,
 				4C3CBA331FAA4EB10022FFC2 /* Player.swift in Sources */,
 				49FD36441FA63D9E009FABA3 /* CurrencyFormat.swift in Sources */,
 				F8FF745F1F87147A0057AF21 /* ObjectType.swift in Sources */,

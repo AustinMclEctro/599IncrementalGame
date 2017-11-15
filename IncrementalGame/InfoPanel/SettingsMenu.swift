@@ -18,19 +18,21 @@ class SettingsMenu: UIView {
         super.init(frame: frame)
         
         //start copy paste below for more buttons
-        let button1 =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: 0 + height, width: width, height: height) )
-        button1.layer.cornerRadius = 15
-        button1.setTitle("Sound", for: .normal)
-        button1.backgroundColor = UIColor.red
-        button1.addTarget(self, action: #selector(settings1), for: .touchUpInside)
-        self.addSubview(button1)
+        let soundButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: 0 + height, width: width, height: height) )
+        soundButton.layer.cornerRadius = 15
+        soundButton.setTitle("Sound", for: .normal)
+        soundButton.backgroundColor = UIColor.red
+        soundButton.addTarget(self, action: #selector(onSoundButtonPressed), for: .touchDown)
+        self.addSubview(soundButton)
         // end copy paste
 
-        let button2 = UIButton(frame: CGRect(x: frame.width/2 - width/2, y:0 + height*3, width: width, height: height ))
-        button2.layer.cornerRadius =  15
-        button2.setTitle("Vibration", for: .normal)
-        button2.backgroundColor = UIColor.red
-        self.addSubview(button2)
+        let vibrationButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y:0 + height*3, width: width, height: height ))
+        vibrationButton.layer.cornerRadius =  15
+        vibrationButton.setTitle("Vibration", for: .normal)
+        vibrationButton.backgroundColor = UIColor.red
+        vibrationButton.addTarget(self, action: #selector(onVibrationButtonPressed), for: .touchDown)
+        self.addSubview(soundButton)
+        self.addSubview(vibrationButton)
         
         let button3 = UIButton(frame: CGRect(x: frame.width/2 - width/2, y:0 + height*5, width: width, height: height ))
         button3.layer.cornerRadius =  15
@@ -40,8 +42,12 @@ class SettingsMenu: UIView {
         
     }
     
-    @objc func settings1 (sender: UIButton){
-        
+    @objc func onSoundButtonPressed (sender: UIButton){
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.soundPreferenceChanged), object: nil, userInfo: nil)
+    }
+    
+    @objc func onVibrationButtonPressed (sender: UIButton){
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.vibrationPreferenceChanged), object: nil, userInfo: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {

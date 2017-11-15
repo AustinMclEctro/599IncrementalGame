@@ -39,6 +39,7 @@ class MasterView: UIView {
     let setHeight: CGFloat = 400.0
     let setButton: UIButton;
     let startupPopup: StartupPopup
+    let settingsHelper = SettingsBundleHelper()
     
     var currencyA: Int {
         set(val) {
@@ -51,6 +52,7 @@ class MasterView: UIView {
     
     
     override init(frame: CGRect) {
+        // Load gamestate
         if let savedGameState = GameState.loadGameState(), isSavingOn {
             gameState = savedGameState
         } else {
