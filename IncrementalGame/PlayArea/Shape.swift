@@ -33,8 +33,8 @@ class Shape: GameObject {
         self.physicsBody?.linearDamping = 0.5
         self.physicsBody?.mass = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
-        let rangeX = SKRange(lowerLimit: (dimension/2), upperLimit: (withSize.width-(dimension/2)))
-        let rangeY = SKRange(lowerLimit: (dimension/2), upperLimit: (withSize.height-(dimension/2)))
+        let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (withSize.width-(dimension/2)+5))
+        let rangeY = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (withSize.height-(dimension/2)+5))
         let conX = SKConstraint.positionX(rangeX)
         let conY = SKConstraint.positionY(rangeY)
         self.constraints = [conX,conY]
