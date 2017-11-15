@@ -16,7 +16,7 @@ import os.log
 /// view for the InfoPanel, the PlayArea and the Shop. It also contains the GameState.
 class MasterView: UIView {
     
-    var isSavingOn = true
+    var isSavingOn = false
     
     var zoomingTo: CGRect?;
     var infoPanel: InfoPanel;
@@ -38,6 +38,7 @@ class MasterView: UIView {
     let setWidth: CGFloat = 300.0
     let setHeight: CGFloat = 400.0
     let setButton: UIButton;
+    let startupPopup: StartupPopup
     
     var currencyA: Int {
         set(val) {
@@ -48,7 +49,7 @@ class MasterView: UIView {
         }
     }
     
-
+    
     override init(frame: CGRect) {
         if let savedGameState = GameState.loadGameState(), isSavingOn {
             gameState = savedGameState
@@ -69,7 +70,7 @@ class MasterView: UIView {
         shopButton = UIButton(frame: CGRect(x: frame.width-60, y: frame.height-60, width: 50, height: 50))
         shopButton.setImage(UIImage(named: "ShopButton"), for: .normal);
         shop = Shop(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
-
+        
         gravButton = UIButton(frame: CGRect(x: frame.width-60, y: 25, width: 50, height: 50))
         gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
         
@@ -83,12 +84,14 @@ class MasterView: UIView {
         //below will set background color to white, but washes out the buttons
         set.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         
-        
-        
         // Configure the reset button
         resetButton =  UIButton(frame: CGRect(x: 5, y: 25, width: frame.width/3, height: 20))
         resetButton.setTitle("Reset", for: .normal)
         resetButton.setTitleColor(UIColor.white, for: .normal)
+        
+        // Create and configure the startup popup
+        startupPopup = StartupPopup(frame: CGRect(x: ((frame.width/2) - StartupPopup.Dimensions.width/2), y: ((frame.height/2) - StartupPopup.Dimensions.height/2), width: setWidth, height: setHeight))
+        startupPopup.isHidden = true
         
         feedbackGenerator = UIImpactFeedbackGenerator();
         feedbackGenerator.prepare();
@@ -110,8 +113,24 @@ class MasterView: UIView {
         notificationCenter.addObserver(self, selector: #selector(saveGame), name: Notification.Name.UIApplicationWillResignActive, object: nil)
         notificationCenter.addObserver(self, selector: #selector(onReceiveCurrencyUpdate(_:)), name: NSNotification.Name(rawValue: Notification.Name.currencyChanged), object: nil)
         notificationCenter.addObserver(self, selector: #selector(onReceivePassiveIncomeRate(_:)), name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRate), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onReceivedBackgroundIncome(_:)), name: NSNotification.Name(rawValue: Notification.Name.backgroundIncomeEarned), object: nil)
         
         setupTouchEvents()
+    }
+    
+    
+    /// Callback method that is called when the PassiveIncomeManager sends the background income earned after startup.
+    ///
+    /// - Parameter notification: Contains an int with the amount of background income earned. The key is "amount".
+    @objc func onReceivedBackgroundIncome(_ notification: Notification) {
+        if let amount = notification.userInfo?["amount"] as? Int {
+            self.addSubview(startupPopup)
+            
+            updateCurrencyA(by: amount)
+            startupPopup.displayPopup(incomeEarned: amount)
+            startupPopup.bringSubview(toFront: startupPopup)
+            startupPopup.isHidden = false
+        }
     }
     
     
@@ -143,37 +162,37 @@ class MasterView: UIView {
     /// - Parameter object: The GameObject that is being upgraded.
     //TODO: Can delete if we use new ugrade
     /*func openUpgrade(object: GameObject) {
-    
-        if (!shopOpen) {
-            self.addSubview(shop)
-            self.addSubview(shopButton)
-        }
-        shop.upgradeTree(object: object)
-    }
-    
-    
-    /// Closes the upgrade tree.
-    func closeUpgrade() {
-        self.shop.closeUpgradeTree();
-        if (!shopOpen) {
-            self.shop.removeFromSuperview();
-        }
-        
-    }*/
+     
+     if (!shopOpen) {
+     self.addSubview(shop)
+     self.addSubview(shopButton)
+     }
+     shop.upgradeTree(object: object)
+     }
+     
+     
+     /// Closes the upgrade tree.
+     func closeUpgrade() {
+     self.shop.closeUpgradeTree();
+     if (!shopOpen) {
+     self.shop.removeFromSuperview();
+     }
+     
+     }*/
     func upgradeShape(obj: GameObject, path: Int) {
         if let shape = obj as? Shape {
             switch path {
-                case 1:
-                    shape.upgradeA();
-                    break;
-                case 2:
-                    shape.upgradeB();
-                    break;
-                case 3:
-                    shape.upgradeC();
-                    break;
-                default:
-                    break;
+            case 1:
+                shape.upgradeA();
+                break;
+            case 2:
+                shape.upgradeB();
+                break;
+            case 3:
+                shape.upgradeC();
+                break;
+            default:
+                break;
             }
         }
         else if let fixture = obj as? Fixture {

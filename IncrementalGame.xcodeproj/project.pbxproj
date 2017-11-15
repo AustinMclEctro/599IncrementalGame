@@ -17,6 +17,7 @@
 		4C24BA101FB3C1FF00EE91B9 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C24BA0F1FB3C1FE00EE91B9 /* Notifications.swift */; };
 		4C3CBA331FAA4EB10022FFC2 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3CBA321FAA4EB00022FFC2 /* Player.swift */; };
 		4C3CBA351FAA515F0022FFC2 /* PassiveIncomeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */; };
+		4C4898AC1FBBECC500D6C420 /* StartupPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4898AB1FBBECC500D6C420 /* StartupPopup.swift */; };
 		A37572FD1F9286FB0006CC3B /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = A37572FB1F9286FB0006CC3B /* MyParticle.sks */; };
 		A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A37572FC1F9286FB0006CC3B /* Assets.xcassets */; };
 		A37CF7931FB6467200697D70 /* SettingsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37CF7921FB6467200697D70 /* SettingsMenu.swift */; };
@@ -73,6 +74,7 @@
 		4C24BA0F1FB3C1FE00EE91B9 /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		4C3CBA321FAA4EB00022FFC2 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		4C3CBA341FAA515E0022FFC2 /* PassiveIncomeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassiveIncomeGenerator.swift; sourceTree = "<group>"; };
+		4C4898AB1FBBECC500D6C420 /* StartupPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartupPopup.swift; sourceTree = "<group>"; };
 		A37572FB1F9286FB0006CC3B /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
 		A37572FC1F9286FB0006CC3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A37CF7921FB6467200697D70 /* SettingsMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMenu.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				A37572FB1F9286FB0006CC3B /* MyParticle.sks */,
 				A37572FC1F9286FB0006CC3B /* Assets.xcassets */,
 				49FD36431FA63D9E009FABA3 /* CurrencyFormat.swift */,
+				4C4898AB1FBBECC500D6C420 /* StartupPopup.swift */,
 			);
 			path = IncrementalGame;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 				F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */,
 				4C3CBA351FAA515F0022FFC2 /* PassiveIncomeGenerator.swift in Sources */,
 				49B715291F9D05EA00132AD7 /* Fixture.swift in Sources */,
+				4C4898AC1FBBECC500D6C420 /* StartupPopup.swift in Sources */,
 				F898DEBD1FA2FD850028425B /* ProgressBar.swift in Sources */,
 				49B7152B1F9D58D100132AD7 /* PlayAreaTouchEvents.swift in Sources */,
 			);

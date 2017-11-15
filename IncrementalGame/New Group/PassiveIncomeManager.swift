@@ -35,11 +35,11 @@ class PassiveIncomeManager {
             zone.pIG.stopBackgroundGenerator()
             totalBackgroundIncome += zone.pIG.calculateBackgroundIncome()
         }
-
+        
         print("Collecting background income: \(totalBackgroundIncome)")
         
         let data: [String: Int] = ["amount": totalBackgroundIncome]
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.currencyChanged), object: nil, userInfo: data)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.backgroundIncomeEarned), object: nil, userInfo: data)
     }
     
     
@@ -104,3 +104,4 @@ class PassiveIncomeManager {
         }
     }
 }
+
