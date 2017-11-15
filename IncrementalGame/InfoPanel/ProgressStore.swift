@@ -119,8 +119,8 @@ class ProgressStore: SKView {
     func animateIn() {
         blackout()
         updateStores()
-        let move = SKAction.move(to: CGPoint(x: 0, y: 0), duration:0.45)
-        let scale = SKAction.scale(by: 10, duration: 0.45)
+        let move = SKAction.move(to: CGPoint(x: 0, y: 0), duration:0.2)
+        let scale = SKAction.scale(by: 10, duration: 0.2)
         
         self.storeNode.run(scale);
         self.storeNode.run(move);

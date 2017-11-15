@@ -98,6 +98,8 @@ class PlayArea: SKView {
             let fix = Fixture(type: of, at: at, withSize: zone.size);
             zone.addChild(fix);
             zone.removeAllowedObject(type: of)
+            let data: [String: Zone] = ["zone": zone]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
         }
     }
     

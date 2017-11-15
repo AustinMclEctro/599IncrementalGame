@@ -183,7 +183,7 @@ class ProgressBar: UIView {
             
             upgradeOne.text = "Earning +1 -0$";
             upgradeTwo.text = "Bounciness +1 -0$";
-            upgradeThree.text = "Mass +1 -0$";
+            upgradeThree.text = "Drag -1 -0$";
         }
         else {
             lastUpgrade = nil;
