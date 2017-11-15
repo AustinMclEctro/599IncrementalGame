@@ -181,9 +181,9 @@ class ProgressBar: UIView {
             }
             self.addSubview(upgradesStack);
             
-            upgradeOne.text = "Upgrade 1";
-            upgradeTwo.text = "Upgrade 2";
-            upgradeThree.text = "Upgrade 3";
+            upgradeOne.text = "Earning +1 -0$";
+            upgradeTwo.text = "Bounciness +1 -0$";
+            upgradeThree.text = "Mass +1 -0$";
         }
         else {
             lastUpgrade = nil;

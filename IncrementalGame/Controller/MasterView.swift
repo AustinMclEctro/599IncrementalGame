@@ -40,6 +40,7 @@ class MasterView: UIView {
     let setButton: UIButton;
     let startupPopup: StartupPopup
     let settingsHelper = SettingsBundleHelper()
+
     
     var currencyA: Int {
         set(val) {
@@ -118,9 +119,9 @@ class MasterView: UIView {
         notificationCenter.addObserver(self, selector: #selector(onReceivedBackgroundIncome(_:)), name: NSNotification.Name(rawValue: Notification.Name.backgroundIncomeEarned), object: nil)
         
         setupTouchEvents()
+        
     }
-    
-    
+
     /// Callback method that is called when the PassiveIncomeManager sends the background income earned after startup.
     ///
     /// - Parameter notification: Contains an int with the amount of background income earned. The key is "amount".

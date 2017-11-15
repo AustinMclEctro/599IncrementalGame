@@ -30,7 +30,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
             var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newZone", for: indexPath);
             if let new = cell as? NewSceneCollectionViewCell {
                 // TODO: add game state price
-                new.newScenePrice.text = "GAME STATE PRICE"
+                new.newScenePrice.text = "-0$"
             }
             return cell;
         }

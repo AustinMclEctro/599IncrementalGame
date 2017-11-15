@@ -24,6 +24,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var sparksAvail = 12
     let maxSparks = 12
     
+    var hapticXLightGenerator = UISelectionFeedbackGenerator()
+    var hapticLightGenerator = UIImpactFeedbackGenerator(style: .light);
+    var hapticMediumGenerator = UIImpactFeedbackGenerator(style: .medium);
+    var hapticHeavyGenerator = UIImpactFeedbackGenerator(style: .heavy);
+    
     init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
         
         super.init(size: size)
@@ -120,9 +125,41 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             gravityY = accelData.acceleration.y
         }
     }
-    
+    func hasSounds() -> Bool {
+        return false;
+    }
+    func hapticFor(contact: SKPhysicsContact) {
+        let hasHaptics = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Vibration);
+        if hasHaptics {
+            let fakeFA = contact.bodyA.angularVelocity*contact.bodyA.mass;
+            let fakeFB = contact.bodyB.angularVelocity*contact.bodyB.mass;
+            
+            let totFakeF = abs(fakeFA)+abs(fakeFB);
+            if (totFakeF < 5) {
+                return;
+            }
+            if totFakeF < 10 {
+                hapticXLightGenerator.prepare()
+                hapticXLightGenerator.selectionChanged()
+            }
+            else if (totFakeF < 15) {
+                hapticLightGenerator.prepare()
+                hapticLightGenerator.impactOccurred()
+            }
+            else if (totFakeF < 25) {
+                hapticMediumGenerator.prepare()
+                hapticMediumGenerator.impactOccurred()
+            }
+            else {
+                hapticHeavyGenerator.prepare()
+                hapticHeavyGenerator.impactOccurred()
+            }
+        }
+        
+    }
     
     func didBegin(_ contact: SKPhysicsContact) {
+        hapticFor(contact: contact);
         if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
             var hit: Shape? = nil
             var maxPoints: Int = 0

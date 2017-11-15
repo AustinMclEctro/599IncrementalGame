@@ -13,20 +13,43 @@ class SettingsMenu: UIView {
    
     let width: CGFloat = 200.0
     let height: CGFloat = 50.0
-    
+    private var _soundOn: Bool = false;
+    var soundOn: Bool {
+        set(val) {
+            _soundOn = val;
+            soundButton.backgroundColor = val ? .green : .red;
+        }
+        get {
+            return _soundOn;
+        }
+    }
+    private var _vibrationOn: Bool = false;
+    var vibrationOn: Bool {
+        set(val) {
+            _vibrationOn = val;
+            vibrationButton.backgroundColor = val ? .green : .red;
+        }
+        get {
+            return _vibrationOn;
+        }
+    }
+    let soundButton: UIButton;
+    let vibrationButton: UIButton;
     override init(frame: CGRect) {
+        soundButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: 0 + height, width: width, height: height) )
+        vibrationButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y:0 + height*3, width: width, height: height ))
         super.init(frame: frame)
         
         //start copy paste below for more buttons
-        let soundButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: 0 + height, width: width, height: height) )
+        
         soundButton.layer.cornerRadius = 15
         soundButton.setTitle("Sound", for: .normal)
         soundButton.backgroundColor = UIColor.red
         soundButton.addTarget(self, action: #selector(onSoundButtonPressed), for: .touchDown)
         self.addSubview(soundButton)
         // end copy paste
-
-        let vibrationButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y:0 + height*3, width: width, height: height ))
+        
+        
         vibrationButton.layer.cornerRadius =  15
         vibrationButton.setTitle("Vibration", for: .normal)
         vibrationButton.backgroundColor = UIColor.red
@@ -40,13 +63,18 @@ class SettingsMenu: UIView {
         button3.backgroundColor = UIColor.red
         self.addSubview(button3)
         
+        vibrationOn = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Vibration);
+        soundOn = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound);
+        
     }
     
     @objc func onSoundButtonPressed (sender: UIButton){
+        soundOn = !soundOn;
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.soundPreferenceChanged), object: nil, userInfo: nil)
     }
     
     @objc func onVibrationButtonPressed (sender: UIButton){
+        vibrationOn = !vibrationOn
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.vibrationPreferenceChanged), object: nil, userInfo: nil)
     }
     

@@ -7,14 +7,14 @@
 //
 
 import Foundation
-
+struct SettingsBundleKeys {
+    static let Sound = "sound_preference"
+    static let Vibration = "vibration_preference"
+    static let BuildVersionKey = "build_preference"
+    static let AppVersionKey = "version_preference"
+}
 class SettingsBundleHelper {
-    struct SettingsBundleKeys {
-        static let Sound = "sound_preference"
-        static let Vibration = "vibration_preference"
-        static let BuildVersionKey = "build_preference"
-        static let AppVersionKey = "version_preference"
-    }
+    
     
     init() {
         // Register for notifications
