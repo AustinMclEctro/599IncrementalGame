@@ -78,10 +78,10 @@ class PlayArea: SKView {
     /// - Returns: <#return value description#>
     func addShape(of: ObjectType, at: CGPoint) -> Shape? { // REFACTOR: Could this be put in Zone?
         if zone.canAdd(type: of) {
-            let shape = Shape(type: of, at: at, withSize: zone.size);
+            let shape = Shape(type: of, at: at, inZone: zone);
             zone.addChild(shape);
             //the below is so fucked up, do not touch targetNode
-            shape.emitter?.targetNode = zone
+            //shape.emitter?.targetNode = zone
             let data: [String: Zone] = ["zone": zone]
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
             return shape;
@@ -97,7 +97,7 @@ class PlayArea: SKView {
     ///   - at: The position where the fixture will be placed on the game screen.
     func addFixture(of: ObjectType, at: CGPoint) { // REFACTOR: Could this be put in Zone?
         if zone.canAdd(type: of) {
-            let fix = Fixture(type: of, at: at, withSize: zone.size);
+            let fix = Fixture(type: of, at: at, inZone: zone);
             zone.addChild(fix);
             zone.removeAllowedObject(type: of)
             let data: [String: Zone] = ["zone": zone]

@@ -14,18 +14,19 @@ import SpriteKit
 class Shape: GameObject {
     
     
-    
-    var withSize: CGSize // REFACTOR: Might need to remove
+    var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+    //var withSize: CGSize // REFACTOR: Might need to remove
+    var inZone: Zone
     var pointMultiplier = 1
     var upgradeALevel = 0
     var upgradeBLevel = 0
     var upgradeCLevel = 0
     
-    init(type: ObjectType, at: CGPoint, withSize: CGSize) {
-        self.withSize = withSize
+    override init(type: ObjectType, at: CGPoint, inZone: Zone) {
+        self.inZone = inZone
         
-        super.init(type: type)
-        super.setUp(at: at, withSize: withSize)
+        super.init(type: type, at: at, inZone: inZone)
+        //super.setUp(at: at, withSize: withSize)
         
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = true
@@ -35,11 +36,20 @@ class Shape: GameObject {
         self.physicsBody?.linearDamping = 0.5
         self.physicsBody?.mass = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
-        let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (withSize.width-(dimension/2)+5))
-        let rangeY = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (withSize.height-(dimension/2)+5))
+        let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.width-(dimension/2)+5))
+        let rangeY = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.height-(dimension/2)+5))
+        let rangeD = SKRange(upperLimit: inZone.size.width * 0.6) // Need to tweak value still!!!!
         let conX = SKConstraint.positionX(rangeX)
         let conY = SKConstraint.positionY(rangeY)
-        self.constraints = [conX,conY]
+        let conD = SKConstraint.distance(rangeD, to: CGPoint(x: inZone.size.width * 0.5, y: inZone.size.width * 0.5), in: inZone)
+        self.constraints = [conX,conY,conD]
+        emitter?.particleTexture = SKTexture(image: self.getType().getImage()!)
+        emitter?.numParticlesToEmit = 10
+        emitter?.particleLifetime = 0.25
+        emitter?.position = CGPoint(x:self.size.width/2 , y:self.size.height/2)
+        emitter?.particleSize = CGSize(width: 40, height: 40)
+        emitter?.targetNode = inZone
+        self.addChild(emitter!)
     }
     
     /// Animates the collision after being passed an emitter node by setting the proper duration,
@@ -96,22 +106,22 @@ class Shape: GameObject {
     struct PropertyKey {
         static let objectType = "objectType"
         static let lastPosition = "lastPosition"
-        static let levelSize = "levelSize"
+        static let zone = "zone"
     }
     
     override func encode(with aCoder: NSCoder) {
         super.encode(with: aCoder)        
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(objectType, forKey: PropertyKey.objectType)
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
-        aCoder.encode(self.withSize, forKey: PropertyKey.levelSize)
+        aCoder.encode(self.inZone, forKey: PropertyKey.zone)
     }
     
     
     required convenience init?(coder aDecoder: NSCoder) {
         let objectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
         let lastPosition = aDecoder.decodeCGPoint(forKey: PropertyKey.lastPosition)
-        let withSize = aDecoder.decodeCGSize(forKey: PropertyKey.levelSize)
+        let zone = aDecoder.decodeObject(forKey: PropertyKey.zone) as! Zone
         
-        self.init(type: objectType!, at: lastPosition, withSize: withSize)
+        self.init(type: objectType!, at: lastPosition, inZone: zone)
     }
 }

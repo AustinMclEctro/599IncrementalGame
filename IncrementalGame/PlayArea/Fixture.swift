@@ -12,14 +12,15 @@ import SpriteKit
 /// Fixtures, such as the bumper, used in gameplay. 
 class Fixture: GameObject {
     
-    var withSize: CGSize  // REFACTOR: This might not need to be stored
+    //var withSize: CGSize  // REFACTOR: This might not need to be stored
+    var inZone: Zone
     var upgradeLevel = 0
     
-    init(type: ObjectType, at: CGPoint, withSize: CGSize) {
-        self.withSize = withSize
+    override init(type: ObjectType, at: CGPoint, inZone: Zone) {
+        self.inZone = inZone
         
-        super.init(type: type)
-        super.setUp(at: at, withSize: withSize)
+        super.init(type: type, at: at, inZone: inZone)
+        //super.setUp(at: at, withSize: withSize)
         
         switch objectType {
         case .Graviton:
@@ -44,8 +45,8 @@ class Fixture: GameObject {
         self.physicsBody?.isDynamic = false
         self.physicsBody?.allowsRotation = false
         self.physicsBody?.usesPreciseCollisionDetection = true
-        let rangeX = SKRange(lowerLimit: (dimension*2), upperLimit: (withSize.width-(dimension*2)))
-        let rangeY = SKRange(lowerLimit: (dimension*2), upperLimit: (withSize.height-(dimension*2)))
+        let rangeX = SKRange(lowerLimit: (dimension*2), upperLimit: (inZone.size.width-(dimension*2)))
+        let rangeY = SKRange(lowerLimit: (dimension*2), upperLimit: (inZone.size.height-(dimension*2)))
         let conX = SKConstraint.positionX(rangeX)
         let conY = SKConstraint.positionY(rangeY)
         self.constraints = [conX,conY]
@@ -72,21 +73,21 @@ class Fixture: GameObject {
     struct PropertyKey {
         static let objectType = "objectType"
         static let lastPosition = "lastPosition"
-        static let levelSize = "levelSize"
+        static let zone = "zone"
     }
     
     override func encode(with aCoder: NSCoder) {
         super.encode(with: aCoder)
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(objectType, forKey: PropertyKey.objectType)
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
-        aCoder.encode(self.withSize, forKey: PropertyKey.levelSize)
+        aCoder.encode(self.inZone, forKey: PropertyKey.zone)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         let objectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
         let lastPosition = aDecoder.decodeCGPoint(forKey: PropertyKey.lastPosition)
-        let withSize = aDecoder.decodeCGSize(forKey: PropertyKey.levelSize)
+        let zone = aDecoder.decodeObject(forKey: PropertyKey.zone) as! Zone
         
-        self.init(type: objectType!, at: lastPosition, withSize: withSize)
+        self.init(type: objectType!, at: lastPosition, inZone: zone)
     }
 }

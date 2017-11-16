@@ -16,7 +16,45 @@ class GameObject: SKSpriteNode {
     
     var objectType: ObjectType
     var dimension: CGFloat
-    var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+    //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+    
+    init(type: ObjectType, at: CGPoint, inZone: Zone) {
+        objectType = type
+        
+        // Configure the appearance of the object
+        let im = type.getImage() ?? UIImage()
+        let texture = SKTexture(image: im)
+        dimension = 1
+        
+        super.init(texture: texture, color: UIColor.clear, size: im.size)
+        
+        self.isUserInteractionEnabled = true
+        
+        // Set starting position
+        if at.x == 0 && at.y == 0 {
+            self.position = CGPoint(x: inZone.size.width*0.5, y: inZone.size.height*0.5)
+        } else {
+            self.position = at
+        }
+        
+        // Set size depending on screen dimensions
+        dimension = inZone.size.width/9
+        self.scale(to: CGSize(width: dimension, height: dimension))
+        
+        // Configure physics body settings relative to the shape
+        switch objectType {
+        case .Circle, .Bumper, .Graviton, .Vortex:
+            self.physicsBody = SKPhysicsBody(circleOfRadius: dimension/2.0)
+        case .Square:
+            self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: dimension, height: dimension))
+        default:
+            self.physicsBody = SKPhysicsBody(texture: self.texture!, size: CGSize(width: dimension, height: dimension))
+        }
+        
+        self.physicsBody?.categoryBitMask = 1
+        self.physicsBody?.contactTestBitMask = 1
+        self.physicsBody?.collisionBitMask = 1
+    }
 
     init(type: ObjectType) {
         objectType = type
@@ -28,10 +66,9 @@ class GameObject: SKSpriteNode {
         
         super.init(texture: texture, color: UIColor.clear, size: im.size)
 
-        self.isUserInteractionEnabled = true
     }
     
-    
+    /*
     /// A helper method used to set up a GameObject by configuring its starting
     /// position, dimensions and its physics body.
     ///
@@ -71,7 +108,7 @@ class GameObject: SKSpriteNode {
             emitter?.particleSize = CGSize(width: 40, height: 40)
             self.addChild(emitter!)
         }
-    }
+    }*/
     
     func getType() -> ObjectType {
         return objectType
