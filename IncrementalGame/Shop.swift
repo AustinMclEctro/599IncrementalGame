@@ -25,10 +25,10 @@ class Shop: SKView {
     override init(frame: CGRect) {
         // Outer ring
         ringOne = SKShapeNode(ellipseIn: CGRect(x: 0, y: -frame.height, width: frame.width*2, height: frame.height*2))
-        ringOne.fillColor = UIColor.green.withAlphaComponent(0.3);
+        ringOne.fillColor = appColor.withAlphaComponent(0.3);//UIColor(hue: 202, saturation: 91, brightness: 92, alpha: 0.3)//UIColor.green.withAlphaComponent(0.3);
         // inner ring - placed within the outer ring
         ringTwo = SKShapeNode(ellipseIn: CGRect(x: frame.width/4, y: -3*frame.height/4, width: 3*frame.width/2, height: 3*frame.height/2))
-        ringTwo.fillColor = UIColor.green.withAlphaComponent(0.3);
+        ringTwo.fillColor = appColor.withAlphaComponent(0.3);
         super.init(frame: frame)
         
         // Sets up the store scene

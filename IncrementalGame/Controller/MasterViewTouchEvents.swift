@@ -126,6 +126,7 @@ extension MasterView {
     func transitionToOpen() {
         self.shopButton.removeFromSuperview();
         var fr = self.sceneCollection.zoomingTo(index: self.playArea.zoneNumber);
+        closeStore()
         UIView.animate(withDuration: 0.5, animations: {
             self.playArea.frame = CGRect(x: self.playAreaFrame.minX+fr.minX, y: self.playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height)
         }) { (success) in
@@ -155,6 +156,7 @@ extension MasterView {
         //playArea.frame = playAreaFrame;
         sceneOpen = false;
         playArea.removeFromSuperview()
+        
         self.addSubview(playArea);
         self.addSubview(shopButton)
         self.addSubview(scenePreviewButton)

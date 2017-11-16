@@ -89,7 +89,15 @@ class ProgressBar: UIView {
     let upgradeTwo: UILabel;
     let upgradeThree: UILabel;
     let upgradesStack: UIStackView;
+    var shopButton: UIImageView
+    var upgradeLabel: UILabel;
     override init(frame: CGRect) {
+        upgradeLabel = UILabel(frame: CGRect(x: 0, y: (frame.height/2)-50, width: frame.width, height: 50))
+        upgradeLabel.textAlignment = .center
+        upgradeLabel.text = "Drag shape to upgrade"
+        upgradeLabel.textColor = .gray
+        shopButton = UIImageView(frame: CGRect(x: (frame.width/2)-25, y: (frame.height/2)+30, width: 50, height: 50))
+        shopButton.image = UIImage(named: "ShopButton");
         var thirdHeight = (frame.height-(circleStroke*2))/3;
         upgradeOne = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width-(circleStroke*3), height: 10))
         upgradeTwo = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width-(circleStroke*3), height: 10))
@@ -133,6 +141,8 @@ class ProgressBar: UIView {
         valLabel.textAlignment = .center;
         
         super.init(frame: frame);
+        self.addSubview(upgradeLabel)
+        self.addSubview(shopButton)
         layer.addSublayer(backCircleLayer)
         layer.addSublayer(circleLayer);
         self.addSubview(valLabel);
@@ -202,17 +212,18 @@ class ProgressBar: UIView {
         if upgradeThree.frame.contains(pos) && availUpgrades.index(of: 3) != nil {
             // Upgrade 3
             newLastUpgrade = 3;
-            upgradeThree.backgroundColor = UIColor.green;
+            
+            upgradeThree.backgroundColor = appColor//UIColor(hue: 202, saturation: 91, brightness: 92, alpha: 0.3);//UIColor.green;
         }
         else if upgradeTwo.frame.contains(pos) && availUpgrades.index(of: 2) != nil {
             // Upgrade 2
             newLastUpgrade = 2;
-            upgradeTwo.backgroundColor = UIColor.green;
+            upgradeTwo.backgroundColor = appColor;//UIColor(hue: 202, saturation: 91, brightness: 92, alpha: 0.3);//UIColor.green;
         }
         else if upgradeOne.frame.contains(pos) && availUpgrades.index(of: 1) != nil {
             // Upgrade 1
             newLastUpgrade = 1;
-            upgradeOne.backgroundColor = UIColor.green;
+            upgradeOne.backgroundColor = appColor;//UIColor(hue: 202, saturation: 91, brightness: 92, alpha: 0.3);//UIColor.green;
         }
         if newLastUpgrade != lastUpgrade {
             selectionFeedback.prepare();

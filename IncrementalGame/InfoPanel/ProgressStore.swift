@@ -49,8 +49,7 @@ class ProgressStore: SKView {
         
         super.init(frame: frame);
         
-        
-        storeNode.fillColor = UIColor.green.withAlphaComponent(0.3);
+        storeNode.fillColor = appColor.withAlphaComponent(0.3);
         presentScene(SKScene(size: frame.size));
         scene?.addChild(storeNode);
         

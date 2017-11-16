@@ -74,7 +74,7 @@ class StartupPopup : UIView {
         // Create and configure OK button
         okButton.frame = CGRect(x: frame.width/2 - Dimensions.okButtonWidth/2, y: (Dimensions.margin * 5) + Dimensions.headerLabelHeight + Dimensions.backgroundLabelHeight + Dimensions.adHeaderLabelHeight + Dimensions.adHeight, width: Dimensions.okButtonWidth, height: Dimensions.okButtonHeight )
         okButton.layer.cornerRadius = 15
-        okButton.backgroundColor = UIColor.red
+        okButton.backgroundColor = appColor;//UIColor.red
         okButton.setTitle("Ok", for: .normal)
         okButton.titleLabel?.textAlignment = .center
         okButton.setTitleColor(UIColor.white, for: .normal)

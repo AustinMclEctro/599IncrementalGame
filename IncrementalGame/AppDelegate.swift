@@ -9,7 +9,10 @@
 import UIKit
 import CoreData
 
+var appColor = UIColor(red:0.08, green:0.62, blue:0.93, alpha:1.0);//UIColor(red: 21, green: 159, blue: 238, alpha: 1);//UIColor(displayP3Red: 21, green: 159, blue: 238, alpha: 1);//UIColor(hue: 202, saturation: 91, brightness: 92, alpha: 0.3);
+
 @UIApplicationMain
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?

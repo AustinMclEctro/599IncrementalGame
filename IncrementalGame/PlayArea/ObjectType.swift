@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SpriteKit
 
 
 /// An enumeration containing all the possible objects that can be used
@@ -88,6 +89,32 @@ enum ObjectType: String, Codable {
         default:
             return 0
         }
+    }
+    
+    // Plays collision sound for a given object.
+    func playCollisionSound(_ object: GameObject) {
+        var soundFile: String
+        
+        switch self {
+        case .Triangle:
+            soundFile = "TriangleHit.mp3"
+        case .Square:
+            soundFile = "SquareHit"
+        case .Pentagon:
+            soundFile = "PentagonHit"
+        case .Hexagon:
+            soundFile = "HexagonHit"
+        case .Circle:
+            soundFile = "CircleHit"
+        case .Star:
+            soundFile = "StarHit"
+        default:
+            return
+        }
+            
+        let sound = SKAction.playSoundFileNamed(soundFile, waitForCompletion: false)
+        object.run(sound)
+        
     }
     
 }

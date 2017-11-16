@@ -59,7 +59,7 @@ class NewSceneCollectionViewCell: UICollectionViewCell {
         
         super.init(frame: frame);
         newSceneButton.image = UIImage(named: "NewButton");
-        newScenePrice.textColor = .green;
+        newScenePrice.textColor = appColor//;.green;
         newScenePrice.text = "";
         self.addSubview(newSceneButton)
         self.addSubview(newScenePrice)

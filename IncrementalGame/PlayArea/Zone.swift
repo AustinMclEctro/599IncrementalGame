@@ -32,7 +32,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
         
         super.init(size: size)
-        backgroundColor = SKColor.black
+        //backgroundColor = SKColor.black
         
         motionManager.startAccelerometerUpdates()
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
@@ -52,6 +52,10 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         outline.fillColor = .clear
         outline.strokeColor = .white
         outline.glowWidth = 1.5
+        let background = SKSpriteNode(imageNamed: "DefaultSquares")
+        background.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
+        background.scale(to: frame.size);
+        self.addChild(background)
         self.addChild(outline)
         
         addAllowedObject(type: .Triangle)
@@ -158,6 +162,13 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func soundFor(_ object: GameObject) {
+        let hasSound = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound);
+        if hasSound {
+            object.getType().playCollisionSound(object)
+        }
+    }
+    
     func didBegin(_ contact: SKPhysicsContact) {
         hapticFor(contact: contact);
         if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
@@ -168,18 +179,23 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                     maxPoints = one.getPoints()
                     hit = one
                     playArea.gained(amount: maxPoints)
+                    //soundFor(one)
+                    one.getType().playCollisionSound(one)
                 }
+                
                 if let two = contact.bodyB.node as? Shape {
                     let points = two.getPoints()
                     playArea.gained(amount: points)
                     if points > maxPoints {
                         hit = two
                     }
+                    //soundFor(two)
+                    two.getType().playCollisionSound(two)
                 }
                 
                 if sparksAvail > 0 {
-                    let spark = createEmitter(sourceNode: hit!, location: contact.contactPoint)
-                    animateCollision(collisionEmitter: spark)
+                    //let spark = createEmitter(sourceNode: hit!, location: contact.contactPoint)
+                    //animateCollision(collisionEmitter: spark)
                 }
                 
             }
