@@ -16,6 +16,7 @@ class GameObject: SKSpriteNode {
     
     var objectType: ObjectType
     var dimension: CGFloat
+    var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
 
     init(type: ObjectType) {
         objectType = type
@@ -26,7 +27,7 @@ class GameObject: SKSpriteNode {
         dimension = 1
         
         super.init(texture: texture, color: UIColor.clear, size: im.size)
-        
+
         self.isUserInteractionEnabled = true
     }
     
@@ -62,6 +63,14 @@ class GameObject: SKSpriteNode {
         self.physicsBody?.categoryBitMask = 1
         self.physicsBody?.contactTestBitMask = 1
         self.physicsBody?.collisionBitMask = 1
+        if self is Shape {
+            emitter?.particleTexture = SKTexture(image: self.getType().getImage()!)
+            emitter?.numParticlesToEmit = 10
+            emitter?.particleLifetime = 0.25
+            emitter?.position = CGPoint(x:self.size.width/2 , y:self.size.height/2)
+            emitter?.particleSize = CGSize(width: 40, height: 40)
+            self.addChild(emitter!)
+        }
     }
     
     func getType() -> ObjectType {
