@@ -80,6 +80,8 @@ class PlayArea: SKView {
         if zone.canAdd(type: of) {
             let shape = Shape(type: of, at: at, withSize: zone.size);
             zone.addChild(shape);
+            //the below is so fucked up, do not touch targetNode
+            shape.emitter?.targetNode = zone
             let data: [String: Zone] = ["zone": zone]
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
             return shape;

@@ -192,87 +192,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                     //soundFor(two)
                     two.getType().playCollisionSound(two)
                 }
-                
-                if sparksAvail > 0 {
-                    //let spark = createEmitter(sourceNode: hit!, location: contact.contactPoint)
-                    //animateCollision(collisionEmitter: spark)
-                }
-                
+            
+                hit?.animateCollision()
             }
         }
-        
     }
-    
-    
-    /// Creates an emitter node to emit the collision animation.
-    ///
-    /// - Parameters:
-    ///   - sourceNode: The SKNode containing the animation for the emitter.
-    ///   - location: The location where the emitter will emit.
-    /// - Returns: An SKNode that emits an animation.
-    func createEmitter(sourceNode: GameObject, location: CGPoint) -> SKEmitterNode {
-        let emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
-        // Now set the emitter to have the right texture of the passed node
-        emitter?.particleTexture = SKTexture(image: sourceNode.getType().getImage()!)
-        emitter?.particlePosition = location
-        emitter?.numParticlesToEmit = 5
-        sparksAvail -= 1
-        if sparksAvail < 0 {sparksAvail = 0}
-        return emitter!
-    }
-    
-    
-    /// Animates the collision after being passed an emitter node by setting the proper duration,
-    /// adding a child node and then letting the animation play before removing itself
-    ///
-    /// - Parameter collisionEmitter: The SKEmitterNode that contains the settings for the animation.
-    func animateCollision(collisionEmitter: SKEmitterNode) {
-        // Set up a sequence animation which deletes its node after completion.
-        let duration = CGFloat(collisionEmitter.numParticlesToEmit)*collisionEmitter.particleLifetime
-        //can set particle actions with collisionEmitter.particleAction = actions
-        let gatherPoint = frame.origin
-        collisionEmitter.particleAction = SKAction.move(to: gatherPoint, duration: 2)
-        let addEmitterAction = SKAction.run({self.addChild(collisionEmitter)})
-        let waitAction = SKAction.wait(forDuration: TimeInterval(duration)) //allow sparks to animate
-        let remove = SKAction.run {collisionEmitter.removeFromParent()}
-        let collisionSequence = SKAction.sequence([addEmitterAction, collisionEmitter.particleAction!,waitAction,remove])
-        self.run(collisionSequence)
-        sparksAvail += 1
-        if sparksAvail > maxSparks {sparksAvail = maxSparks}
-        
-        /* IN PROGRESS - BROKEN CODE
-         //set up a dummy spark node
-         let dummy = SKSpriteNode(texture: collisionEmitter.particleTexture)
-         dummy.position = self.frame.origin
-         //dummy.isHidden = true
-         dummy.physicsBody = SKPhysicsBody(circleOfRadius: 5.0)
-         dummy.physicsBody?.isDynamic = true
-         dummy.physicsBody?.collisionBitMask = 0
-         dummy.physicsBody?.affectedByGravity = true
-         let show = SKAction.fadeIn(withDuration: 1.5)
-         let scale = SKAction.scale(to: 1, duration: 1)
-         let randPulse = CGVector(dx: Int(arc4random_uniform(20)), dy: Int(arc4random_uniform(20)))
-         let start = SKAction.applyImpulse(randPulse, duration: 0.5)
-         let begin = SKAction.group([show, scale, start])
-         
-         
-         
-         let gather = SKAction.move(to: CGPoint(x: 40, y: 40), duration: 1.5)
-         
-         let addDummy = SKAction.run {
-         collisionEmitter.addChild(dummy)
-         }
-         
-         let removeDummy = SKAction.run {
-         dummy.removeFromParent()
-         }
-         
-         let gatherSequence = SKAction.sequence([addDummy,begin,gather,removeDummy])
-         let together = SKAction.group([collisionSequence,gatherSequence])
-         self.run(together)
-         */
-    }
-    
     
     /// Returns a Boolean indicating whether the ObjectType can be added. Only allowed objects
     /// below the maximum permitted amount of items under that ObjectType can be added.

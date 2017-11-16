@@ -13,6 +13,8 @@ import SpriteKit
 /// Shape objects, such as the triangle and square, used for gameplay. 
 class Shape: GameObject {
     
+    
+    
     var withSize: CGSize // REFACTOR: Might need to remove
     var pointMultiplier = 1
     var upgradeALevel = 0
@@ -38,6 +40,17 @@ class Shape: GameObject {
         let conX = SKConstraint.positionX(rangeX)
         let conY = SKConstraint.positionY(rangeY)
         self.constraints = [conX,conY]
+    }
+    
+    /// Animates the collision after being passed an emitter node by setting the proper duration,
+    /// adding a child node and then letting the animation play before removing itself
+    ///
+    /// - Parameter collisionEmitter: The SKEmitterNode that contains the settings for the animation.
+    func animateCollision() {
+        // Set up a sequence animation which deletes its node after completion.
+        let duration = Double((emitter?.particleLifetime)!*CGFloat((emitter?.numParticlesToEmit)!))
+        emitter?.resetSimulation()
+        emitter?.advanceSimulationTime(duration)
     }
     
     func canUpgradeA() -> Bool {
