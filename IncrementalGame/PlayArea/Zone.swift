@@ -23,6 +23,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var upgradeBLevel = 0
     var sparksAvail = 12
     let maxSparks = 12
+    var timer = Timer()
+    //var timer = Timer(timeInterval: <#T##TimeInterval#>, repeats: <#T##Bool#>, block: <#T##(Timer) -> Void#>)
     
     var hapticXLightGenerator = UISelectionFeedbackGenerator()
     var hapticLightGenerator = UIImpactFeedbackGenerator(style: .light);
@@ -75,8 +77,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         } else {
             self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.background, inactiveRate: PassiveIncomeGenerator.Rates.inactive)
         }
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gravAcclimate), userInfo: nil, repeats: true)
     }
-    
+ 
     
     func canUpgradeA() -> Bool {
         return upgradeALevel < 3
@@ -115,12 +118,33 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     
+    @objc func gravAcclimate() {
+        
+         if let grav = motionManager.accelerometerData {
+            if gravityX < grav.acceleration.x {
+                gravityX = grav.acceleration.x
+            }
+            else {
+                gravityX = (gravityX - grav.acceleration.x)/5
+            }
+            if gravityY < grav.acceleration.y {
+                gravityY = grav.acceleration.y
+            }
+            else {
+                gravityY = (gravityY - grav.acceleration.y)
+            }
+         //physicsWorld.gravity = CGVector(dx: (grav.acceleration.x - gravityX) * 50, dy: (grav.acceleration.y - gravityY) * 50)
+         }
+        
+        print("Adjusting, current gravity: y:  \(physicsWorld.gravity.dy)  x: \(physicsWorld.gravity.dx)")
+        
+    }
+    
     override func update(_ currentTime: TimeInterval) {
         
         if let accelData = motionManager.accelerometerData {
             physicsWorld.gravity = CGVector(dx: (accelData.acceleration.x - gravityX) * 50, dy: (accelData.acceleration.y - gravityY) * 50)
         }
- 
     }
     
     func resetGravity() {
