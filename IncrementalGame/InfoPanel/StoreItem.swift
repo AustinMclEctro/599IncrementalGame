@@ -14,6 +14,7 @@ class StoreItem: SKSpriteNode {
     
     var objectType: ObjectType
     var object: GameObject?
+    var unlocked = false;
     convenience init(obj: GameObject) {
         self.init(objType: obj.objectType);
         object = obj;
@@ -23,10 +24,27 @@ class StoreItem: SKSpriteNode {
         // Configure the appearance of the object
         let im = objectType.getImage() ?? UIImage()
         let texture = SKTexture(image: im)
-        
+        unlocked = false;
         super.init(texture: texture, color: UIColor.clear, size: im.size)
         
         self.isUserInteractionEnabled = true
+    }
+    func canUpgrade(_ zone: Zone) {
+        
+        if (self.objectType == nil) {
+            return;
+        }
+        
+        if !zone.allowedObjects.contains(self.objectType) {
+            unlocked = false;
+            let lock = UIImage(named: "Lock") ?? UIImage();
+            self.texture = SKTexture(image: lock);
+        }
+        else {
+            unlocked = true;
+            let im = objectType.getImage() ?? UIImage()
+            self.texture = SKTexture(image: im);
+        }
     }
     override func copy() -> Any {
         if (object != nil) {

@@ -25,12 +25,12 @@ class MasterView: UIView {
     var sceneCollection: SceneCollectionView;
     let scenePreviewButton: UIButton;
     var sceneOpen = false;
-    var shopButton: UIButton;
-    var shop: Shop;
     var shopOpen = false;
+    var tapToClose: UIButton;
+    var shop: ShopCollectionView;
+    var progressStore: ProgressStore;
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
-    let gravButton: UIButton
     let resetButton: UIButton;
     var feedbackGenerator: UIImpactFeedbackGenerator;
     var set: SettingsMenu;
@@ -40,7 +40,6 @@ class MasterView: UIView {
     let setButton: UIButton;
     let startupPopup: StartupPopup
     let settingsHelper = SettingsBundleHelper()
-
     
     var currencyA: Int {
         set(val) {
@@ -68,15 +67,17 @@ class MasterView: UIView {
         playAreaFrame = CGRect(x: 0, y: infoHeight, width: frame.width, height: heightPerc);
         playArea = PlayArea(frame: playAreaFrame, gameState: gameState)
         sceneCollection = SceneCollectionView(frame: playAreaFrame, gameState: gameState);
-        scenePreviewButton = UIButton(frame: CGRect(x: 0, y: frame.height-60, width: 50, height: 50))
+        scenePreviewButton = UIButton(frame: CGRect(x: 0, y: infoHeight, width: 50, height: 50))
         scenePreviewButton.setImage(UIImage(named: "PreviewButton"), for: .normal)
-        shopButton = UIButton(frame: CGRect(x: frame.width-60, y: frame.height-60, width: 50, height: 50))
-        shopButton.setImage(UIImage(named: "ShopButton"), for: .normal);
-        shop = Shop(frame: CGRect(x: frame.width-shopWidth, y: frame.height-shopWidth, width: shopWidth, height: shopWidth))
         
-        gravButton = UIButton(frame: CGRect(x: frame.width-60, y: 25, width: 50, height: 50))
-        gravButton.setImage(UIImage(named: "Gravity"), for: .normal);
+        shop = ShopCollectionView(frame: CGRect(x: 0, y:playAreaFrame.maxY, width: frame.width, height: frame.height-playAreaFrame.maxY))
+        tapToClose = UIButton(frame: shop.frame);
+        tapToClose.setTitle("Tap To Close", for: .normal)
+        tapToClose.setTitleColor(.white, for: .normal)
+        tapToClose.backgroundColor = .black
         
+        progressStore = ProgressStore(frame: CGRect(x: 0, y: frame.height-(frame.width/2)-shop.frame.height, width: frame.width, height: frame.width))
+        progressStore.curA = gameState.currencyA;
         //settings button configuration
         setButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
         setButton.setImage(UIImage(named:"Settings"), for: .normal)
@@ -105,11 +106,11 @@ class MasterView: UIView {
         self.addSubview(sceneCollection);
         infoPanel.upgradeCurrencyA(to: self.currencyA)
         self.addSubview(playArea);
-        self.addSubview(shopButton);
-        self.addSubview(gravButton)
+        //self.addSubview(shopButton);
         self.addSubview(scenePreviewButton);
         self.addSubview(resetButton);
         self.addSubview(setButton)
+        self.addSubview(shop);
         
         // Subscribe to applicationWillResignActive notification
         let notificationCenter = NotificationCenter.default
@@ -209,11 +210,57 @@ class MasterView: UIView {
     func updateCurrencyA(by: Int) {
         gameState.currencyA += by;
         infoPanel.upgradeCurrencyA(to: gameState.currencyA);
+        shop.curA = gameState.currencyA;
         if (shopOpen) {
-            shop.updateStores();
+            progressStore.curA = gameState.currencyA;
         }
     }
-    
+    func closeShop() {
+        if progressStore.isShape {
+            openShapeShop()
+        }
+        else {
+            openFixtureShop()
+        }
+    }
+    func openShapeShop() {
+        progressStore.isShape = true;
+        if (shopOpen) {
+            tapToClose.removeFromSuperview()
+            progressStore.animateOut {
+                self.progressStore.removeFromSuperview();
+            }
+        }
+        else {
+            progressStore.updateStores();
+            self.addSubview(progressStore);
+            
+            progressStore.animateIn()
+            self.addSubview(tapToClose);
+            
+        }
+        shopOpen = !shopOpen;
+        
+        
+    }
+    func openFixtureShop() {
+        progressStore.isShape = false;
+        if (shopOpen) {
+            tapToClose.removeFromSuperview();
+            progressStore.animateOut {
+                self.progressStore.removeFromSuperview();
+            }
+        }
+        else {
+            progressStore.updateStores();
+            self.addSubview(progressStore);
+            self.addSubview(shop);
+            progressStore.animateIn()
+            self.addSubview(tapToClose);
+            
+        }
+        shopOpen = !shopOpen;
+    }
     
     /// Purchases an object for gameplay and adds the object to the playarea.
     ///
@@ -249,8 +296,9 @@ class MasterView: UIView {
                 playArea.addFixture(of: of, at: location);
             }
         }
+        shop.currentShapes = playArea.getGameObjects();
+        closeShop();
         
-        closeStore();
     }
     
     
@@ -262,8 +310,8 @@ class MasterView: UIView {
         let fr = sceneCollection.zoomingTo(index: playArea.zoneNumber)
         playArea.frame = CGRect(x: playAreaFrame.minX+fr.minX, y: playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height)
         transitionToClose()
-        self.addSubview(shopButton)
         self.addSubview(scenePreviewButton)
+        shop.currentShapes = playArea.getGameObjects();
     }
     
     
@@ -275,6 +323,7 @@ class MasterView: UIView {
         sceneCollection.reloadData();
         playArea.selectZone(index: gameState.zones.count-1);
         transitionToClose()
+        shop.currentShapes = playArea.getGameObjects();
         
     }
     

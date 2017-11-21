@@ -62,7 +62,15 @@ class Shape: GameObject {
         emitter?.resetSimulation()
         emitter?.advanceSimulationTime(duration)
     }
-    
+    func upgradePriceA() -> Int {
+        return 1000000000;
+    }
+    func upgradePriceB() -> Int {
+        return objectType.getPrice();
+    }
+    func upgradePriceC() -> Int {
+        return objectType.getPrice();
+    }
     func canUpgradeA() -> Bool {
         return upgradeALevel < 10
     }

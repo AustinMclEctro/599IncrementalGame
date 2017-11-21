@@ -15,14 +15,21 @@ extension MasterView {
     /// Adds a touch event for the shop button.
     func setupTouchEvents() {
         setButton.addTarget(self, action: #selector(touchDownSet), for: .touchUpInside)
-        shopButton.addTarget(self, action: #selector(tapDownStore), for: .touchUpInside)
         scenePreviewButton.addTarget(self, action: #selector(tapDownPreview), for: .touchUpInside)
-        gravButton.addTarget(self, action: #selector(tapGravity), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(onResetButtonPress), for: .touchUpInside)
         var pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinch));
         self.addGestureRecognizer(pinchGesture)
+        tapToClose.addTarget(self, action: #selector(tapToClosePress), for: .touchUpInside)
+        //tapToClose.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapToClosePress)))
     }
-    
+    @objc func tapToClosePress(sender: UIButton) {
+        if shopOpen {
+            closeShop();
+        }
+        else if sceneOpen {
+            transitionToClose();
+        }
+    }
     @objc func touchDownSet(sender: UIButton) {
         if (!setOpen) {
             self.addSubview(set)
@@ -124,9 +131,7 @@ extension MasterView {
         }
     }
     func transitionToOpen() {
-        self.shopButton.removeFromSuperview();
         var fr = self.sceneCollection.zoomingTo(index: self.playArea.zoneNumber);
-        closeStore()
         UIView.animate(withDuration: 0.5, animations: {
             self.playArea.frame = CGRect(x: self.playAreaFrame.minX+fr.minX, y: self.playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height)
         }) { (success) in
@@ -139,6 +144,8 @@ extension MasterView {
                 self.transitionToClose()
             }
         }
+        self.addSubview(tapToClose);
+        scenePreviewButton.removeFromSuperview();
         
     }
     func transitionToClose() {
@@ -158,37 +165,15 @@ extension MasterView {
         playArea.removeFromSuperview()
         
         self.addSubview(playArea);
-        self.addSubview(shopButton)
         self.addSubview(scenePreviewButton)
+        tapToClose.removeFromSuperview()
     }
     
-    /// Closes the shop by removing the view from the master view.
-    func closeStore() {
-        shop.removeFromSuperview()
-        shopOpen = false;
-    }
-    
-    
-    /// Callback function that is called when the user presses the store button.
-    /// Presents the store on the game screen.
-    ///
-    /// - Parameter sender: The UIButton for the store.
-    @objc func tapDownStore(sender: UIButton) {
-        feedbackGenerator.impactOccurred()
-        feedbackGenerator.prepare()
-        if (!shopOpen) {
-            self.addSubview(shop)
-            self.addSubview(sender)
-            shop.animateIn {
-                
-            }
-        }
-        else {
-            shop.removeFromSuperview()
-        }
-        shopOpen = !shopOpen;
-    }
+   
     @objc func tapDownPreview(sender: UIButton) {
+        if shopOpen {
+            closeShop();
+        }
         feedbackGenerator.impactOccurred()
         feedbackGenerator.prepare()
         if (!sceneOpen) {
@@ -200,11 +185,6 @@ extension MasterView {
         }
     }
     
-    @objc func tapGravity(sender: UIButton) {
-        feedbackGenerator.impactOccurred()
-        feedbackGenerator.prepare()
-        playArea.resetGravity()
-    }
 
     
     /// Callback method that is called when the user presses the Reset button.

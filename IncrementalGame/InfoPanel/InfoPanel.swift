@@ -17,8 +17,8 @@ class InfoPanel: UIView {
     var curABar: ProgressBar;
     var logo: UIImageView;
     var inactiveRateLabel: UILabel;
-    var currentShapes: CurrentShapes;
-    var progressStore: ProgressStore
+    //var currentShapes: CurrentShapes;
+    //var progressStore: ProgressStore
 
     var feedbackGenerator = UIImpactFeedbackGenerator();
     override init(frame: CGRect) {
@@ -47,57 +47,35 @@ class InfoPanel: UIView {
         inactiveRateLabel.textAlignment = NSTextAlignment.center
         inactiveRateLabel.isHidden = true
         
-        currentShapes = CurrentShapes(frame: CGRect(x: curABar.frame.minX-25, y: curABar.frame.minY-25, width: curABar.frame.width+50, height: curABar.frame.height+50))
-        currentShapes.progressBar = curABar;
         
-        progressStore = ProgressStore(frame: CGRect(x: curABar.frame.minX-50, y: curABar.frame.minY, width: curABar.frame.width+100, height: curABar.frame.height+100))
         
         super.init(frame: frame);
         
         self.backgroundColor = .black;
         
         self.addSubview(curABar)
-        self.addSubview(currentShapes)
         self.addSubview(inactiveRateLabel);
         self.addSubview(logo)
         
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
         curABar.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPress)))
-        NotificationCenter.default.addObserver(self, selector: #selector(shapesChanged), name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil)
+
     }
-    @objc func shapesChanged(sender: Notification) {
-        if let zone = sender.userInfo?["zone"] as? Zone {
-            removeStore()
-        }
-    }
+
     @objc func tap(sender: UITapGestureRecognizer) {
         if !curABar.frame.contains(sender.location(in: self)) {
             return;
         }
         feedbackGenerator.prepare();
         feedbackGenerator.impactOccurred();
-        if progressStore.superview == nil {
-            self.addSubview(progressStore);
-            progressStore.animateIn();
-        }
-        else {
-            removeStore()
-        }
         
     }
-    func removeStore() {
-        progressStore.animateOut(callback: {
-            self.progressStore.removeFromSuperview()
-        })
-    }
+    
     /// Updates the currency label to a new value.
     ///
     /// - Parameter to: The new currency value.
     func upgradeCurrencyA(to: Int) {
         curABar.currency = to;
-        if (progressStore.superview != nil) {
-            progressStore.curA = to;
-        }
     }
     
     

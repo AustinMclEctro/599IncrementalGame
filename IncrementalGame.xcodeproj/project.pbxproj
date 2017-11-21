@@ -40,6 +40,12 @@
 		F8B7C8861FB6867700F072D9 /* CurrentShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7C8851FB6867700F072D9 /* CurrentShapes.swift */; };
 		F8B7C8881FB69F8100F072D9 /* StoreItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7C8871FB69F8100F072D9 /* StoreItem.swift */; };
 		F8B7C88A1FB6BB8A00F072D9 /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7C8891FB6BB8A00F072D9 /* ProgressStore.swift */; };
+		F8F307C71FC3416400054D37 /* ShopCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307C61FC3416400054D37 /* ShopCollectionView.swift */; };
+		F8F307C91FC3417300054D37 /* ShopCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307C81FC3417300054D37 /* ShopCollectionViewCell.swift */; };
+		F8F307CB1FC3417C00054D37 /* UpgradeShapeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307CA1FC3417C00054D37 /* UpgradeShapeCell.swift */; };
+		F8F307CD1FC3418700054D37 /* UpgradeFixtureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307CC1FC3418700054D37 /* UpgradeFixtureCell.swift */; };
+		F8F307CF1FC3419100054D37 /* PurchaseShapeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307CE1FC3419100054D37 /* PurchaseShapeCell.swift */; };
+		F8F307D11FC3419E00054D37 /* PurchaseFixtureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307D01FC3419E00054D37 /* PurchaseFixtureCell.swift */; };
 		F8F7D5131FB64ED900D28CA1 /* SceneCollectionDrag.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F7D5121FB64ED900D28CA1 /* SceneCollectionDrag.swift */; };
 		F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */; };
 		F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74211F86ED1A0057AF21 /* ViewController.swift */; };
@@ -106,6 +112,12 @@
 		F8B7C8851FB6867700F072D9 /* CurrentShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentShapes.swift; sourceTree = "<group>"; };
 		F8B7C8871FB69F8100F072D9 /* StoreItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreItem.swift; sourceTree = "<group>"; };
 		F8B7C8891FB6BB8A00F072D9 /* ProgressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStore.swift; sourceTree = "<group>"; };
+		F8F307C61FC3416400054D37 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
+		F8F307C81FC3417300054D37 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
+		F8F307CA1FC3417C00054D37 /* UpgradeShapeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeShapeCell.swift; sourceTree = "<group>"; };
+		F8F307CC1FC3418700054D37 /* UpgradeFixtureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeFixtureCell.swift; sourceTree = "<group>"; };
+		F8F307CE1FC3419100054D37 /* PurchaseShapeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseShapeCell.swift; sourceTree = "<group>"; };
+		F8F307D01FC3419E00054D37 /* PurchaseFixtureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseFixtureCell.swift; sourceTree = "<group>"; };
 		F8F7D5121FB64ED900D28CA1 /* SceneCollectionDrag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCollectionDrag.swift; sourceTree = "<group>"; };
 		F8FF741C1F86ED1A0057AF21 /* IncrementalGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IncrementalGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -250,6 +262,19 @@
 			path = InfoPanel;
 			sourceTree = "<group>";
 		};
+		F8F307C51FC3415400054D37 /* Shop */ = {
+			isa = PBXGroup;
+			children = (
+				F8F307C61FC3416400054D37 /* ShopCollectionView.swift */,
+				F8F307C81FC3417300054D37 /* ShopCollectionViewCell.swift */,
+				F8F307CE1FC3419100054D37 /* PurchaseShapeCell.swift */,
+				F8F307CC1FC3418700054D37 /* UpgradeFixtureCell.swift */,
+				F8F307D01FC3419E00054D37 /* PurchaseFixtureCell.swift */,
+				F8F307CA1FC3417C00054D37 /* UpgradeShapeCell.swift */,
+			);
+			path = Shop;
+			sourceTree = "<group>";
+		};
 		F8FF74131F86ED190057AF21 = {
 			isa = PBXGroup;
 			children = (
@@ -273,6 +298,7 @@
 		F8FF741E1F86ED1A0057AF21 /* IncrementalGame */ = {
 			isa = PBXGroup;
 			children = (
+				F8F307C51FC3415400054D37 /* Shop */,
 				F80E29FE1FBCF6A5003E3A2E /* Sounds */,
 				4C24BA0F1FB3C1FE00EE91B9 /* Notifications.swift */,
 				4C24BA0C1FB3C04100EE91B9 /* PassiveIncomeGenerator */,
@@ -464,13 +490,16 @@
 				F8FF745F1F87147A0057AF21 /* ObjectType.swift in Sources */,
 				F8F7D5131FB64ED900D28CA1 /* SceneCollectionDrag.swift in Sources */,
 				F8FF74591F86EDC60057AF21 /* PlayArea.swift in Sources */,
+				F8F307CB1FC3417C00054D37 /* UpgradeShapeCell.swift in Sources */,
 				49B715251F9D024800132AD7 /* GameObject.swift in Sources */,
 				F852D27E1FA2A7E2008168A3 /* SceneCollectionViewCell.swift in Sources */,
 				4C24BA0E1FB3C08C00EE91B9 /* PassiveIncomeManager.swift in Sources */,
+				F8F307CF1FC3419100054D37 /* PurchaseShapeCell.swift in Sources */,
 				F8FF74531F86ED700057AF21 /* InfoPanel.swift in Sources */,
 				F8FF74281F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld in Sources */,
 				F83FF1EA1F95497100200B30 /* SceneCollectionView.swift in Sources */,
 				F852D2811FA2D43B008168A3 /* NewSceneCollectionViewCell.swift in Sources */,
+				F8F307CD1FC3418700054D37 /* UpgradeFixtureCell.swift in Sources */,
 				494605AB1F88364C00B18145 /* Zone.swift in Sources */,
 				F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */,
 				A37CF7931FB6467200697D70 /* SettingsMenu.swift in Sources */,
@@ -478,13 +507,16 @@
 				F8B7C88A1FB6BB8A00F072D9 /* ProgressStore.swift in Sources */,
 				F8FF745D1F870DD20057AF21 /* MasterViewTouchEvents.swift in Sources */,
 				4C24BA101FB3C1FF00EE91B9 /* Notifications.swift in Sources */,
+				F8F307C71FC3416400054D37 /* ShopCollectionView.swift in Sources */,
 				F8B7C8881FB69F8100F072D9 /* StoreItem.swift in Sources */,
 				49B715271F9D04FD00132AD7 /* Shape.swift in Sources */,
+				F8F307D11FC3419E00054D37 /* PurchaseFixtureCell.swift in Sources */,
 				F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */,
 				F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */,
 				F8B7C8861FB6867700F072D9 /* CurrentShapes.swift in Sources */,
 				F8FF74511F86ED2D0057AF21 /* MasterView.swift in Sources */,
 				F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */,
+				F8F307C91FC3417300054D37 /* ShopCollectionViewCell.swift in Sources */,
 				4C3CBA351FAA515F0022FFC2 /* PassiveIncomeGenerator.swift in Sources */,
 				49B715291F9D05EA00132AD7 /* Fixture.swift in Sources */,
 				4C4898AC1FBBECC500D6C420 /* StartupPopup.swift in Sources */,

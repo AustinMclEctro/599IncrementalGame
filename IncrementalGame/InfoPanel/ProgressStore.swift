@@ -24,12 +24,15 @@ class ProgressStore: SKView {
             return _curA;
         }
     }
-    var storeNode: SKShapeNode;
+    var shapeNode: SKShapeNode;
+    var fixtureNode: SKShapeNode;
+    var isShape = true;
     var items: [[StoreItem]];
     let feedbackGenerator = UIImpactFeedbackGenerator();
     override init(frame: CGRect) {
         
-        storeNode = SKShapeNode(ellipseIn: CGRect(x: 0, y: frame.height/4, width: frame.width, height: frame.height));
+        shapeNode = SKShapeNode(ellipseIn: CGRect(x: 0, y: 0, width: frame.width, height: frame.height));
+        fixtureNode = SKShapeNode(ellipseIn: CGRect(x: 0, y: 0, width: frame.width, height: frame.height));
         // Adds all the items to the store data
         items = [
             [ // RING 1
@@ -49,17 +52,23 @@ class ProgressStore: SKView {
         
         super.init(frame: frame);
         
-        storeNode.fillColor = appColor.withAlphaComponent(0.3);
+        shapeNode.fillColor = appColor.withAlphaComponent(0.3);
+        fixtureNode.fillColor = appColor.withAlphaComponent(0.3);
         presentScene(SKScene(size: frame.size));
-        scene?.addChild(storeNode);
+        
         
         self.backgroundColor = .clear;
         scene?.backgroundColor = .clear
         
-        setupStore();
-        storeNode.xScale = 0.1
-        storeNode.yScale = 0.1
-        storeNode.position = CGPoint(x: (frame.width/2)-(storeNode.frame.width/2), y: (frame.height/2)-(storeNode.frame.height/2))
+        setupStoreShapes();
+        setupStoreFixtures()
+        shapeNode.xScale = 0.1
+        shapeNode.yScale = 0.1
+        
+        fixtureNode.xScale = 0.1
+        fixtureNode.yScale = 0.1
+        shapeNode.position = CGPoint(x: (frame.width/2)-(shapeNode.frame.width/2), y: (frame.height/2)-(shapeNode.frame.height/2))
+        fixtureNode.position = CGPoint(x: (frame.width/2)-(fixtureNode.frame.width/2), y: (frame.height/2)-(fixtureNode.frame.height/2))
         
         self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(drag)));
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
@@ -67,9 +76,10 @@ class ProgressStore: SKView {
         
     }
 
-    func setupStore() {
-        var counter = CGFloat.pi;
-        var incr = (3*CGFloat.pi/4)/CGFloat(items[0].count) // Base the spacing on the shapes not fixtures
+    func setupStoreShapes() {
+        var storeNode = shapeNode;
+        var counter = 7*CGFloat.pi/8;
+        var incr = -(3*CGFloat.pi/4)/CGFloat(items[0].count) // Base the spacing on the shapes not fixtures
         var halfWidth = frame.width/2;
         
         let imSize = CGSize(width: (frame.width/8.5), height: (frame.width/8.5))
@@ -80,7 +90,7 @@ class ProgressStore: SKView {
         for shape in items[0] {
             
             let x = cos(counter)*hypot
-            let y = sin(counter)*hypot+(frame.height/4) // Circle moved up 1/4 so have to move shapes up, too
+            let y = sin(counter)*hypot
             let pt = CGPoint(x: halfWidth+x, y: halfWidth+y);
             
             storeNode.addChild(shape);
@@ -93,20 +103,34 @@ class ProgressStore: SKView {
             counter += incr
             
         }
-        counter = CGFloat.pi/48;
-        for fixture in items[1] {
+        blackout();
+    }
+    func setupStoreFixtures() {
+        var storeNode = fixtureNode;
+        var counter = 7*CGFloat.pi/8;
+        var incr = -(3*CGFloat.pi/4)/CGFloat(items[0].count) // Base the spacing on the shapes not fixtures
+        var halfWidth = frame.width/2;
+        
+        let imSize = CGSize(width: (frame.width/8.5), height: (frame.width/8.5))
+        let hypot = halfWidth - (imSize.width/2)
+        for child in storeNode.children {
+            child.removeFromParent()
+        }
+        for shape in items[1] {
+            
             let x = cos(counter)*hypot
-            let y = sin(counter)*hypot+frame.height/4
+            let y = sin(counter)*hypot
             let pt = CGPoint(x: halfWidth+x, y: halfWidth+y);
             
-            storeNode.addChild(fixture);
-            fixture.physicsBody = nil;
-            fixture.color = .red
+            storeNode.addChild(shape);
+            shape.physicsBody = nil;
+            shape.color = .red
             
-            fixture.size = imSize
-            fixture.position = pt
+            shape.size = imSize
+            shape.position = pt
             
-            counter -= incr
+            counter += incr
+            
         }
         blackout();
         
@@ -116,26 +140,30 @@ class ProgressStore: SKView {
         fatalError("init(coder:) has not been implemented")
     }
     func animateIn() {
+        var storeNode = isShape ? shapeNode : fixtureNode;
+        shapeNode.removeFromParent();
+        fixtureNode.removeFromParent();
+        scene?.addChild(storeNode);
         blackout()
         updateStores()
         let move = SKAction.move(to: CGPoint(x: 0, y: 0), duration:0.2)
         let scale = SKAction.scale(by: 10, duration: 0.2)
         
-        self.storeNode.run(scale);
-        self.storeNode.run(move);
+        storeNode.run(scale);
+        storeNode.run(move);
         
     }
     func animateOut(callback: @escaping ()->Void) {
-        
+        var storeNode = isShape ? shapeNode : fixtureNode;
         let pos = storeNode.frame.width*(9/20) // half of a tenth of the width
         let move = SKAction.move(to: CGPoint(x: pos, y: pos), duration:0.45)
         
         let scale = SKAction.scale(by: 0.10, duration: 0.45)
-        self.storeNode.run(scale);
-        self.storeNode.run(move, completion: {
-            self.storeNode.xScale = 0.1
-            self.storeNode.yScale = 0.1
-            self.storeNode.position = CGPoint(x: (self.frame.width/2)-(self.storeNode.frame.width/2), y: (self.frame.height/2)-(self.storeNode.frame.height/2))
+        storeNode.run(scale);
+        storeNode.run(move, completion: {
+            storeNode.xScale = 0.1
+            storeNode.yScale = 0.1
+            storeNode.position = CGPoint(x: (self.frame.width/2)-(storeNode.frame.width/2), y: (self.frame.height/2)-(storeNode.frame.height/2))
             callback();
         })
         
@@ -143,12 +171,19 @@ class ProgressStore: SKView {
     func blackout() {
         // Makes all shapes black, then shows only the ones that can be added
         // Should be called only when needed (purchasing objects, changing zones)
-        for i in self.items {
-            for x in i {
-                x.color = UIColor.black;
-                x.colorBlendFactor = 1.0;
+        var items = isShape ? self.items[0] : self.items[1]
+        
+        for x in items {
+            x.color = UIColor.black;
+            x.colorBlendFactor = 1.0;
+            if let controller = superview as? MasterView {
+                x.canUpgrade(controller.playArea.getZone());
             }
+            
+            
         }
+            
+        
         nextLowestRing1 = 0;
         nextLowestRing2 = 0;
         updateStores()
@@ -156,11 +191,21 @@ class ProgressStore: SKView {
     }
     var nextLowestRing1 = 0;
     var nextLowestRing2 = 0;
+    func getPriceOf(_ storeItem: StoreItem) -> Int {
+        //
+        if (storeItem.unlocked) {
+            return storeItem.objectType.getPrice()
+        }
+        else {
+            return storeItem.objectType.getUnlockPrice()
+        }
+    }
     func updateStores() {
-        if let controller = superview?.superview as? MasterView {
-            if (nextLowestRing1 < items[0].count) {
+        if let controller = superview as? MasterView {
+            if (nextLowestRing1 < items[0].count) && isShape {
                 var storeItem1 = items[0][nextLowestRing1];
-                while (curA >= storeItem1.objectType.getPrice()) {
+                
+                while (curA >= getPriceOf(storeItem1)) {
                     applyFilter(item: storeItem1, controller: controller);
                     nextLowestRing1 += 1;
                     if (nextLowestRing1 >= items[0].count) { // second loop condition
@@ -169,9 +214,9 @@ class ProgressStore: SKView {
                     storeItem1 = items[0][nextLowestRing1];
                 }
             }
-            if (nextLowestRing2 < items[1].count) {
+            else if (nextLowestRing2 < items[1].count) && !isShape {
                 var storeItem2 = items[1][nextLowestRing2];
-                while (curA >= storeItem2.objectType.getPrice()) {
+                while (curA >= getPriceOf(storeItem2)) {
                     applyFilter(item: storeItem2, controller: controller);
                     nextLowestRing2 += 1;
                     if (nextLowestRing2 >= items[1].count) {
@@ -185,7 +230,17 @@ class ProgressStore: SKView {
     }
     func applyFilter(item: StoreItem, controller: MasterView) {
         // Makes store items black or normal depending on ability to add
-        if (item.objectType.getPrice() > curA || !(controller.playArea.getZone().canAdd(type: item.objectType))) {
+        if (!(controller.playArea.getZone().canAdd(type: item.objectType))) {
+            if item.objectType.getUnlockPrice() > curA {
+                item.color = UIColor.black;
+                item.colorBlendFactor = 1.0;
+            }
+            else {
+                item.color = UIColor.gray;
+                item.colorBlendFactor = 0.0;
+            }
+        }
+        else if (item.objectType.getPrice() > curA) {
             item.color = UIColor.black;
             item.colorBlendFactor = 1.0;
         }
@@ -205,10 +260,16 @@ class ProgressStore: SKView {
                 var ind = 0;
                 while ind < nodes.count {
                     if let node = nodes[ind] as? StoreItem {
-                        if let controller = self.superview?.superview as? MasterView {
-                            controller.purchaseObject(of: node.objectType, sender: nil)
+                        if let controller = self.superview as? MasterView {
                             feedbackGenerator.prepare();
                             feedbackGenerator.impactOccurred();
+                            if !controller.playArea.getZone().allowedObjects.contains(node.objectType) {
+                                controller.playArea.getZone().upgradeB(objectType: node.objectType);
+                                blackout()
+                                return;
+                            }
+                            controller.purchaseObject(of: node.objectType, sender: nil)
+                            
                             return;
                         }
                     }
@@ -216,12 +277,9 @@ class ProgressStore: SKView {
                 }
             }
         }
-        if let infoPanel = superview as? InfoPanel {
-            infoPanel.tap(sender: sender)
-        }
     }
     @objc func drag(sender: UIPanGestureRecognizer) {
-        
+        var storeNode = isShape ? shapeNode : fixtureNode;
         switch sender.state {
         case .began:
             var location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
@@ -233,7 +291,11 @@ class ProgressStore: SKView {
                 while !nodeFound {
                     if let node = nodes[ind] as? StoreItem {
                         nodeFound = true;
-                        if let controller = self.superview?.superview as? MasterView {
+                        if let controller = self.superview as? MasterView {
+                            if !controller.playArea.getZone().allowedObjects.contains(node.objectType) {
+                                // TODO: Add wiggle animation
+                                return;
+                            }
                             selectedNode = node;
                             self.selectedNode!.removeFromParent();
                             self.tempSelectedNode = selectedNode!.copy() as! StoreItem;
@@ -257,7 +319,8 @@ class ProgressStore: SKView {
             
             break;
         case .changed:
-            if let controller = superview?.superview as? MasterView {
+            
+            if let controller = superview as? MasterView {
                 let location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
                 if (tempSelectedNode != nil) {
                     tempSelectedNode?.position = location;
@@ -267,7 +330,7 @@ class ProgressStore: SKView {
         default: // ended, canceled etc.
             
             
-                if let controller = superview?.superview as? MasterView {
+                if let controller = superview as? MasterView {
                     var loc = sender.location(in: controller)
                     if (selectedNode != nil) && controller.playArea.frame.contains(loc) {
                         let location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
