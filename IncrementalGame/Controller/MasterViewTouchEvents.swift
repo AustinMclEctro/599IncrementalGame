@@ -14,7 +14,7 @@ extension MasterView {
     
     /// Adds a touch event for the shop button.
     func setupTouchEvents() {
-        setButton.addTarget(self, action: #selector(touchDownSet), for: .touchUpInside)
+        settingsButton.addTarget(self, action: #selector(onSettingsButtonPressed), for: .touchUpInside)
         scenePreviewButton.addTarget(self, action: #selector(tapDownPreview), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(onResetButtonPress), for: .touchUpInside)
         var pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinch));
@@ -22,6 +22,8 @@ extension MasterView {
         tapToClose.addTarget(self, action: #selector(tapToClosePress), for: .touchUpInside)
         //tapToClose.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapToClosePress)))
     }
+    
+    
     @objc func tapToClosePress(sender: UIButton) {
         if shopOpen {
             closeShop();
@@ -30,36 +32,32 @@ extension MasterView {
             transitionToClose();
         }
     }
-    @objc func touchDownSet(sender: UIButton) {
-        if (!setOpen) {
-            self.addSubview(set)
-            //self.addSubview(sender)
-            animateSettingsMenu()
-            
-        }
-        else {
-            animateSettingsMenu()
-        }
-        setOpen = !setOpen;
+    
+    
+    @objc func onSettingsButtonPressed(sender: UIButton) {
+        playArea.isPaused = true
+        self.addSubview(settingsMenu)
+        UIView.animate(withDuration: 0.5, animations: {
+            self.settingsMenu.alpha = 1.0
+        })
     }
     
-    func animateSettingsMenu() {
-        if (!setOpen){
-            UIView.animate(withDuration: 0.3, animations: {
-                self.set.frame = CGRect(x: self.frame.width/2-self.setWidth/2, y: self.frame.height/2 - self.setHeight/2 + 50, width: self.setWidth, height: self.setHeight)
-                
-            })
-            print("Opening menu")
-        } else {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.set.frame = CGRect(x: self.frame.width-60, y: 90 , width: 50, height: 50)
-            },completion: {
-                success in
-                self.set.removeFromSuperview()
-            })
-            print("Closing")
-        }
-    }
+    
+//    func animateSettingsMenu() {
+//        if (!set.isOpen){
+//            UIView.animate(withDuration: 0.3, animations: {
+//                self.settingsMenu.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
+//            })
+//        } else {
+//            UIView.animate(withDuration: 0.3, animations: {
+//                self.settingsMenu.frame = CGRect(x: self.frame.width-60, y: 90 , width: 50, height: 50)
+//            },completion: {
+//                success in
+//                self.settingsMenu.removeFromSuperview()
+//            })
+//            print("Closing")
+//        }
+//    }
     
     @objc func pinch(sender: UIPinchGestureRecognizer) {
         switch sender.state {
@@ -130,6 +128,8 @@ extension MasterView {
                 break;
         }
     }
+    
+    
     func transitionToOpen() {
         var fr = self.sceneCollection.zoomingTo(index: self.playArea.zoneNumber);
         UIView.animate(withDuration: 0.5, animations: {
@@ -148,6 +148,8 @@ extension MasterView {
         scenePreviewButton.removeFromSuperview();
         
     }
+    
+    
     func transitionToClose() {
         /*let positionAnimation = CABasicAnimation(keyPath: "scale")
         positionAnimation.fromValue = [playArea.frame.size.x, playArea.size.y];
@@ -186,7 +188,6 @@ extension MasterView {
     }
     
 
-    
     /// Callback method that is called when the user presses the Reset button.
     /// Restores the game back to the default game state.
     ///

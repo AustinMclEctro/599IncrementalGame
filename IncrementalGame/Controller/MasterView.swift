@@ -33,11 +33,8 @@ class MasterView: UIView {
     let gameState: GameState;
     let resetButton: UIButton;
     var feedbackGenerator: UIImpactFeedbackGenerator;
-    var set: SettingsMenu;
-    var setOpen = false
-    let setWidth: CGFloat = 300.0
-    let setHeight: CGFloat = 400.0
-    let setButton: UIButton;
+    var settingsMenu: SettingsMenu;
+    let settingsButton: UIButton;
     let startupPopup: StartupPopup
     let settingsHelper = SettingsBundleHelper()
     
@@ -79,14 +76,12 @@ class MasterView: UIView {
         progressStore = ProgressStore(frame: CGRect(x: 0, y: frame.height-(frame.width/2)-shop.frame.height, width: frame.width, height: frame.width))
         progressStore.curA = gameState.currencyA;
         //settings button configuration
-        setButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
-        setButton.setImage(UIImage(named:"Settings"), for: .normal)
+        settingsButton = UIButton(frame: CGRect(x: frame.width-60, y: 90, width: 50, height: 50))
+        settingsButton.setImage(UIImage(named:"Settings"), for: .normal)
         
-        set = SettingsMenu(frame: CGRect(x: frame.width-60, y: 90 , width: setWidth, height: setHeight))
-        set.layer.cornerRadius = 25.0
-        set.clipsToBounds = true
+        settingsMenu = SettingsMenu(frame: CGRect(x: 0, y: 0 , width: frame.width, height: frame.height))
         //below will set background color to white, but washes out the buttons
-        set.backgroundColor = UIColor.white.withAlphaComponent(0.2)
+        settingsMenu.backgroundColor = UIColor.black
         
         // Configure the reset button
         resetButton =  UIButton(frame: CGRect(x: 5, y: 25, width: frame.width/3, height: 20))
@@ -94,7 +89,7 @@ class MasterView: UIView {
         resetButton.setTitleColor(UIColor.white, for: .normal)
         
         // Create and configure the startup popup
-        startupPopup = StartupPopup(frame: CGRect(x: ((frame.width/2) - StartupPopup.Dimensions.width/2), y: ((frame.height/2) - StartupPopup.Dimensions.height/2), width: setWidth, height: setHeight))
+        startupPopup = StartupPopup(frame: CGRect(x: ((frame.width/2) - StartupPopup.Dimensions.width/2), y: ((frame.height/2) - StartupPopup.Dimensions.height/2), width: 300, height: 400))
         startupPopup.isHidden = true
         
         feedbackGenerator = UIImpactFeedbackGenerator();
@@ -109,7 +104,7 @@ class MasterView: UIView {
         //self.addSubview(shopButton);
         self.addSubview(scenePreviewButton);
         self.addSubview(resetButton);
-        self.addSubview(setButton)
+        self.addSubview(settingsButton)
         self.addSubview(shop);
         
         // Subscribe to applicationWillResignActive notification
@@ -118,11 +113,22 @@ class MasterView: UIView {
         notificationCenter.addObserver(self, selector: #selector(onReceiveCurrencyUpdate(_:)), name: NSNotification.Name(rawValue: Notification.Name.currencyChanged), object: nil)
         notificationCenter.addObserver(self, selector: #selector(onReceivePassiveIncomeRate(_:)), name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRate), object: nil)
         notificationCenter.addObserver(self, selector: #selector(onReceivedBackgroundIncome(_:)), name: NSNotification.Name(rawValue: Notification.Name.backgroundIncomeEarned), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onResume), name: NSNotification.Name(rawValue: Notification.Name.resume), object: nil)
         
         setupTouchEvents()
-        
     }
 
+    
+    /// Callback method that is called when the user presses resume in the settings menu
+    @objc func onResume() {
+        playArea.isPaused = false
+        UIView.animate(withDuration: 0.5, animations: {
+            self.settingsMenu.alpha = 0
+        }) { _ in
+            self.settingsMenu.removeFromSuperview()
+        }
+    }
+    
     /// Callback method that is called when the PassiveIncomeManager sends the background income earned after startup.
     ///
     /// - Parameter notification: Contains an int with the amount of background income earned. The key is "amount".

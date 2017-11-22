@@ -16,4 +16,5 @@ extension Notification.Name {
     static let backgroundIncomeEarned = "backgroundIncomeEarned"
     static let soundPreferenceChanged = "soundPreferenceChanged"
     static let vibrationPreferenceChanged = "hapticFeedbackPreferenceChanged"
+    static let resume = "resume"
 }
