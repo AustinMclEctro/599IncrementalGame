@@ -13,9 +13,8 @@ class SettingsMenu: UIView {
    
     let width: CGFloat = 200.0
     let height: CGFloat = 50.0
-    let outerMargin: CGFloat = 100.0
     let objectMargins: CGFloat = 25.0
-    
+
     let collidrLogo: UIImageView;
     let newGameButton: UIButton;
     let resumeButton: UIButton;
@@ -48,7 +47,10 @@ class SettingsMenu: UIView {
     
     
     override init(frame: CGRect) {
+        
+        let outerMargin = (frame.height - ((objectMargins + height) * 6))/2.5
         let logoWidth = (183/77)*height
+        
         collidrLogo = UIImageView(frame: CGRect(x: (frame.width/2)-(logoWidth/2), y: outerMargin + (height + objectMargins) * 0, width: logoWidth, height: height))
         collidrLogo.image = UIImage(named: "colidr")
         newGameButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y:  outerMargin + (height + objectMargins) * 1, width: width, height: height))
