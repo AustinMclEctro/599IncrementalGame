@@ -86,6 +86,13 @@ extension PlayArea {
                 }
             }
         }
+        else {
+            if let controller = superview as? MasterView {
+                if (controller.shopOpen) {
+                    controller.closeShop();
+                }
+            }
+        }
     }
     
     @objc func handleEdgePan(recognizer: UIScreenEdgePanGestureRecognizer) {
@@ -161,7 +168,10 @@ extension PlayArea {
                             self.selectZone(index: index);
                             // remove the image after the real one is down
                             self.tempImageZone?.removeFromSuperview();
-                    
+                            if let controller = self.superview as? MasterView {
+                            
+                                controller.shop.currentShapes = controller.playArea.getGameObjects();
+                            }
                         })
                 }
                 else { // Didnt drag far enough

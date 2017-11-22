@@ -89,15 +89,13 @@ class ProgressBar: UIView {
     let upgradeTwo: UILabel;
     let upgradeThree: UILabel;
     let upgradesStack: UIStackView;
-    var shopButton: UIImageView
+    //var shopButton: UIImageView
     var upgradeLabel: UILabel;
     override init(frame: CGRect) {
         upgradeLabel = UILabel(frame: CGRect(x: 0, y: (frame.height/2)-50, width: frame.width, height: 50))
         upgradeLabel.textAlignment = .center
-        upgradeLabel.text = "Drag shape to upgrade"
+        upgradeLabel.text = "Tap for passive income"
         upgradeLabel.textColor = .gray
-        shopButton = UIImageView(frame: CGRect(x: (frame.width/2)-25, y: (frame.height/2)+30, width: 50, height: 50))
-        shopButton.image = UIImage(named: "ShopButton");
         var thirdHeight = (frame.height-(circleStroke*2))/3;
         upgradeOne = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width-(circleStroke*3), height: 10))
         upgradeTwo = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width-(circleStroke*3), height: 10))
@@ -141,8 +139,7 @@ class ProgressBar: UIView {
         valLabel.textAlignment = .center;
         
         super.init(frame: frame);
-        self.addSubview(upgradeLabel)
-        self.addSubview(shopButton)
+        self.addSubview(upgradeLabel) 
         layer.addSublayer(backCircleLayer)
         layer.addSublayer(circleLayer);
         self.addSubview(valLabel);

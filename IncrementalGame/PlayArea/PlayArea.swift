@@ -47,8 +47,18 @@ class PlayArea: SKView {
         let data: [String: Zone] = ["zone": zone]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
     }
-    
-    
+    // Returns list of game objects within current zone.
+    // TODO: Should implement as a cache instead?
+    // - Return: list of game objects within current zone
+    func getGameObjects() -> [GameObject] {
+        var obs: [GameObject] = []
+        for i in getZone().children {
+            if let ob = i as? GameObject {
+                obs.append(ob);
+            }
+        }
+        return obs;
+    }
     /// Selects and presents the specified zone.
     ///
     /// - Parameter index: The index number of the zone in the zones array.

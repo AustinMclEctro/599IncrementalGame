@@ -39,7 +39,30 @@ enum ObjectType: String, Codable {
         return UIImage(named: String(describing: self))
     }
     
-    
+    func getUnlockPrice() -> Int {
+        switch self {
+        case .Triangle:
+            return 1000
+        case .Square:
+            return 2000
+        case .Pentagon:
+            return 3000
+        case .Hexagon:
+            return 4000
+        case .Circle:
+            return 5001
+        case .Star:
+            return 6000
+        case .Bumper:
+            return 10000
+        case .Graviton:
+            return 20000
+        case .Vortex:
+            return 30000
+        default:
+            return 0
+        }
+    }
     /// Retrieves the price for the ObjectType.
     ///
     /// - Returns: The price for the ObjectType.

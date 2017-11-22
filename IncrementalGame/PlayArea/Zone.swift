@@ -91,7 +91,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     func canUpgradeB() -> Bool {
         return upgradeBLevel < 7
     }
-    
+    func upgradeB(objectType: ObjectType) {
+        addAllowedObject(type: objectType)
+    }
     func upgradeB() {
         upgradeBLevel += 1
         switch upgradeBLevel {
