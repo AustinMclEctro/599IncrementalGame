@@ -36,28 +36,13 @@ extension MasterView {
     
     @objc func onSettingsButtonPressed(sender: UIButton) {
         playArea.isPaused = true
+        playArea.pIGManager.pauseInactiveIncomeGenerator()
         self.addSubview(settingsMenu)
         UIView.animate(withDuration: 0.5, animations: {
             self.settingsMenu.alpha = 1.0
         })
     }
-    
-    
-//    func animateSettingsMenu() {
-//        if (!set.isOpen){
-//            UIView.animate(withDuration: 0.3, animations: {
-//                self.settingsMenu.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
-//            })
-//        } else {
-//            UIView.animate(withDuration: 0.3, animations: {
-//                self.settingsMenu.frame = CGRect(x: self.frame.width-60, y: 90 , width: 50, height: 50)
-//            },completion: {
-//                success in
-//                self.settingsMenu.removeFromSuperview()
-//            })
-//            print("Closing")
-//        }
-//    }
+
     
     @objc func pinch(sender: UIPinchGestureRecognizer) {
         switch sender.state {

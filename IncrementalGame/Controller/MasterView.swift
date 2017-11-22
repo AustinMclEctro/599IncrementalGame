@@ -122,6 +122,7 @@ class MasterView: UIView {
     /// Callback method that is called when the user presses resume in the settings menu
     @objc func onResume() {
         playArea.isPaused = false
+        playArea.pIGManager.startInactiveIncomeGenerator()
         UIView.animate(withDuration: 0.5, animations: {
             self.settingsMenu.alpha = 0
         }) { _ in

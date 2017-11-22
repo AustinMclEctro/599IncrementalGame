@@ -16,6 +16,7 @@ class PassiveIncomeManager {
     var updateInterval = 3
     
     var gameState: GameState
+    var isCollectingInactiveInc = false
     var timer = Timer()
     
     // MARK: Initializers
@@ -47,9 +48,21 @@ class PassiveIncomeManager {
     /// (when the game is being played but the zone is not being presented)
     /// for a set of provided zones. Updates the points in the info panel.
     func startInactiveIncomeGenerator() {
-        timer = Timer.scheduledTimer(timeInterval: TimeInterval(updateInterval), target: self, selector: #selector(collectInactiveIncome), userInfo: nil, repeats: true)
+        if (!isCollectingInactiveInc) {
+            timer = Timer.scheduledTimer(timeInterval: TimeInterval(updateInterval), target: self, selector: #selector(collectInactiveIncome), userInfo: nil, repeats: true)
+            isCollectingInactiveInc = true
+        }
     }
     
+    
+    /// Pauses the inactive income generators for all the zones by stopping
+    /// the timer.
+    func pauseInactiveIncomeGenerator() {
+        if (isCollectingInactiveInc) {
+            timer.invalidate()
+            isCollectingInactiveInc = false
+        }
+    }
     
     /// Collects the inactive income
     /// (when the game is being played but the zone is not being presented)
