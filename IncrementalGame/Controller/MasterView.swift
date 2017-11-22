@@ -71,6 +71,7 @@ class MasterView: UIView {
         scenePreviewButton.setImage(UIImage(named: "PreviewButton"), for: .normal)
         
         shop = ShopCollectionView(frame: CGRect(x: 0, y:playAreaFrame.maxY, width: frame.width, height: frame.height-playAreaFrame.maxY))
+        
         tapToClose = UIButton(frame: shop.frame);
         tapToClose.setTitle("Tap To Close", for: .normal)
         tapToClose.setTitleColor(.white, for: .normal)
@@ -101,6 +102,12 @@ class MasterView: UIView {
         feedbackGenerator.prepare();
         
         super.init(frame: frame)
+        
+        shop.shouldUpgrade = {
+            shape, path in
+            self.upgradeShape(obj: shape, path: path);
+        }
+        
         self.backgroundColor = UIColor.black;
         self.addSubview(infoPanel);
         self.addSubview(sceneCollection);
@@ -186,13 +193,25 @@ class MasterView: UIView {
     func upgradeShape(obj: GameObject, path: Int) {
         if let shape = obj as? Shape {
             switch path {
-            case 1:
+            case 1: // A
+                if (shape.upgradePriceA() > currencyA) {
+                    break;
+                }
+                updateCurrencyA(by: -shape.upgradePriceA())
                 shape.upgradeA();
                 break;
-            case 2:
+            case 2: // B
+                if (shape.upgradePriceB() > currencyA) {
+                    break;
+                }
+                updateCurrencyA(by: -shape.upgradePriceB())
                 shape.upgradeB();
                 break;
-            case 3:
+            case 3: // C
+                if (shape.upgradePriceC() > currencyA) {
+                    break;
+                }
+                updateCurrencyA(by: -shape.upgradePriceC())
                 shape.upgradeC();
                 break;
             default:
@@ -296,7 +315,9 @@ class MasterView: UIView {
                 playArea.addFixture(of: of, at: location);
             }
         }
-        shop.currentShapes = playArea.getGameObjects();
+        
+        self.shop.currentShapes = self.playArea.getGameObjects();
+        
         closeShop();
         
     }

@@ -29,6 +29,9 @@ class UpgradeShapeCell: ShopCollectionViewCell {
     
     var _shape: Shape?;
     private var _curA: Int = 0;
+    var shouldUpgrade: (Shape, Int) -> Void =  {
+        _, _ in
+    }
     var curA: Int {
         set(val) {
             _curA = val;
@@ -169,28 +172,31 @@ class UpgradeShapeCell: ShopCollectionViewCell {
         }
     }
     @objc func upgrade1(sender: UIButton) {
-        if (shape == nil) {
+        if (shape == nil || !acceptsTouches) {
             return;
         }
         if (shape!.canUpgradeA() && _shape!.upgradePriceA() <= _curA) {
-            shape?.upgradeA();
+            //shape?.upgradeA();
+            shouldUpgrade(_shape!, 1);
         }
         
     }
     @objc func upgrade2(sender: UIButton) {
-        if (shape == nil) {
+        if (shape == nil || !acceptsTouches) {
             return;
         }
         if (shape!.canUpgradeB() && _shape!.upgradePriceB() <= _curA) {
-            shape?.upgradeB();
+            //shape?.upgradeB();
+            shouldUpgrade(_shape!, 2);
         }
     }
     @objc func upgrade3(sender: UIButton) {
-        if (shape == nil) {
+        if (shape == nil || !acceptsTouches) {
             return;
         }
         if (shape!.canUpgradeC() && _shape!.upgradePriceC() <= _curA) {
-            shape?.upgradeC();
+            //shape?.upgradeC();
+            shouldUpgrade(_shape!, 3);
         }
     }
     
