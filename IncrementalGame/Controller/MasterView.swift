@@ -114,12 +114,27 @@ class MasterView: UIView {
         notificationCenter.addObserver(self, selector: #selector(onReceivePassiveIncomeRate(_:)), name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRate), object: nil)
         notificationCenter.addObserver(self, selector: #selector(onReceivedBackgroundIncome(_:)), name: NSNotification.Name(rawValue: Notification.Name.backgroundIncomeEarned), object: nil)
         notificationCenter.addObserver(self, selector: #selector(onResume), name: NSNotification.Name(rawValue: Notification.Name.resume), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onStartupPopupClosed), name: NSNotification.Name(rawValue: Notification.Name.startupPopupClosed), object: nil)
         
         setupTouchEvents()
     }
 
     
-    /// Callback method that is called when the user presses resume in the settings menu
+    /// Callback method that is called when the user closes the startup popup. Resumes the
+    /// PlayArea effects and starts the inactive income generator.
+    @objc func onStartupPopupClosed() {
+        playArea.isPaused = false
+        playArea.pIGManager.startInactiveIncomeGenerator()
+        UIView.animate(withDuration: 0.5, animations: {
+            self.startupPopup.alpha = 0
+        }) { _ in
+            self.startupPopup.removeFromSuperview()
+        }
+    }
+    
+    
+    /// Callback method that is called when the user presses resume in the settings menu.
+    /// Resumes the game by starting the PlayArea and starting the inactive income generators.
     @objc func onResume() {
         playArea.isPaused = false
         playArea.pIGManager.startInactiveIncomeGenerator()
@@ -137,10 +152,13 @@ class MasterView: UIView {
         if let amount = notification.userInfo?["amount"] as? Int {
             self.addSubview(startupPopup)
             
+            playArea.pIGManager.pauseInactiveIncomeGenerator()
+            playArea.isPaused = true
+            
             updateCurrencyA(by: amount)
             startupPopup.displayPopup(incomeEarned: amount)
-            startupPopup.bringSubview(toFront: startupPopup)
             startupPopup.isHidden = false
+            startupPopup.bringSubview(toFront: startupPopup)
         }
     }
     

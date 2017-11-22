@@ -17,4 +17,5 @@ extension Notification.Name {
     static let soundPreferenceChanged = "soundPreferenceChanged"
     static let vibrationPreferenceChanged = "hapticFeedbackPreferenceChanged"
     static let resume = "resume"
+    static let startupPopupClosed = "startupPopupClosed"
 }

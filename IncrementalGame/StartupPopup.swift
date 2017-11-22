@@ -91,7 +91,7 @@ class StartupPopup : UIView {
     
     /// Callback method that is called when the ok button in the startup popup is pressed.
     @objc func onOkButtonPressed(_ sender: UIButton) {
-        self.removeFromSuperview()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.startupPopupClosed), object: nil, userInfo: nil)
     }
     
     func displayPopup(incomeEarned: Int) {

@@ -36,8 +36,6 @@ class PlayArea: SKView {
         
         // Passive Income generator
         pIGManager = PassiveIncomeManager(gameState: gameState)
-        pIGManager.startInactiveIncomeGenerator()
-
         
         super.init(frame: frame)
         setupTouchEvents()
