@@ -11,7 +11,8 @@ import SpriteKit
 import CoreMotion
 
 class Zone: SKScene, SKPhysicsContactDelegate {
-    
+    var lastGravX: Double = 0
+    var lastGravY: Double = 0
     var motionManager = CMMotionManager()
     var maxShapes = 3
     let minVel: CGFloat = 250
@@ -77,7 +78,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         } else {
             self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.background, inactiveRate: PassiveIncomeGenerator.Rates.inactive)
         }
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gravAcclimate), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(resetGravity), userInfo: nil, repeats: true)
     }
  
     
@@ -117,27 +118,15 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
-    @objc func gravAcclimate() {
-        
-         if let grav = motionManager.accelerometerData {
-            if gravityX < grav.acceleration.x {
-                gravityX = grav.acceleration.x
+    @objc func resetGravity() {
+        if let accelData = motionManager.accelerometerData {
+            if abs(accelData.acceleration.x - lastGravX) < 0.1 && abs(accelData.acceleration.y - lastGravY) < 0.1 {
+                gravityX = (gravityX + accelData.acceleration.x) / 2.0
+                gravityY = (gravityY + accelData.acceleration.y) / 2.0
             }
-            else {
-                gravityX = (gravityX - grav.acceleration.x)/5
-            }
-            if gravityY < grav.acceleration.y {
-                gravityY = grav.acceleration.y
-            }
-            else {
-                gravityY = (gravityY - grav.acceleration.y)
-            }
-         //physicsWorld.gravity = CGVector(dx: (grav.acceleration.x - gravityX) * 50, dy: (grav.acceleration.y - gravityY) * 50)
-         }
-        
-        print("Adjusting, current gravity: y:  \(physicsWorld.gravity.dy)  x: \(physicsWorld.gravity.dx)")
-        
+            lastGravX = accelData.acceleration.x
+            lastGravY = accelData.acceleration.y
+        }
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -147,12 +136,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func resetGravity() {
-        if let accelData = motionManager.accelerometerData {
-            gravityX = accelData.acceleration.x
-            gravityY = accelData.acceleration.y
-        }
-    }
     func hasSounds() -> Bool {
         return false;
     }
