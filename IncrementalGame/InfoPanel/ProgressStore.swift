@@ -234,19 +234,24 @@ class ProgressStore: SKView {
             if item.objectType.getUnlockPrice() > curA {
                 item.color = UIColor.black;
                 item.colorBlendFactor = 1.0;
+                item.priceLabel.fontColor = .white;
             }
             else {
                 item.color = UIColor.gray;
                 item.colorBlendFactor = 0.0;
+                item.priceLabel.fontColor = .black;
             }
         }
         else if (item.objectType.getPrice() > curA) {
             item.color = UIColor.black;
             item.colorBlendFactor = 1.0;
+            // Fixtures are black, shapes are white
+            item.priceLabel.fontColor = .white;
         }
         else {
             item.color = UIColor.gray;
             item.colorBlendFactor = 0.0;
+            item.priceLabel.fontColor = item.objectType.isFixture() ? .white : .black;
         }
     }
     var selectedNode: StoreItem?;
@@ -264,6 +269,7 @@ class ProgressStore: SKView {
                             feedbackGenerator.prepare();
                             feedbackGenerator.impactOccurred();
                             if !controller.playArea.getZone().allowedObjects.contains(node.objectType) {
+                                controller.updateCurrencyA(by: -node.objectType.getUnlockPrice());
                                 controller.playArea.getZone().upgradeB(objectType: node.objectType);
                                 blackout()
                                 return;

@@ -21,9 +21,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.background, inactiveRate: PassiveIncomeGenerator.Rates.inactive)
     var upgradeALevel = 0
     var upgradeBLevel = 0
-    var sparksAvail = 12
-    let maxSparks = 12
-    
+    var timer = Timer();
+    var lastGravX: Double = 0;
+    var lastGravY: Double = 0;
     var hapticXLightGenerator = UISelectionFeedbackGenerator()
     var hapticLightGenerator = UIImpactFeedbackGenerator(style: .light);
     var hapticMediumGenerator = UIImpactFeedbackGenerator(style: .medium);
@@ -33,7 +33,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
         super.init(size: size)
         //backgroundColor = SKColor.black
-        
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(resetGravity), userInfo: nil, repeats: true);
         motionManager.startAccelerometerUpdates()
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
@@ -125,10 +125,14 @@ class Zone: SKScene, SKPhysicsContactDelegate {
  
     }
     
-    func resetGravity() {
+    @objc func resetGravity() {
         if let accelData = motionManager.accelerometerData {
-            gravityX = accelData.acceleration.x
-            gravityY = accelData.acceleration.y
+            if abs(accelData.acceleration.x - lastGravX) < 0.1 && abs(accelData.acceleration.y - lastGravY) < 0.1 {
+                gravityX = (gravityX + accelData.acceleration.x) / 2.0
+                gravityY = (gravityY + accelData.acceleration.y) / 2.0
+            }
+            lastGravX = accelData.acceleration.x
+            lastGravY = accelData.acceleration.y
         }
     }
     func hasSounds() -> Bool {

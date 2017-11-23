@@ -11,7 +11,9 @@ import UIKit
 class ShopCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame);
+        self.backgroundColor = .black
     }
+    var acceptsTouches: Bool = false;
     override func isEqual(_ object: Any?) -> Bool {
         if let _ = self as? PurchaseShapeCell {
             if let _ = object as? PurchaseShapeCell {

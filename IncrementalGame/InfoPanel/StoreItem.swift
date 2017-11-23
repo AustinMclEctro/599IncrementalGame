@@ -15,6 +15,7 @@ class StoreItem: SKSpriteNode {
     var objectType: ObjectType
     var object: GameObject?
     var unlocked = false;
+    var priceLabel: SKLabelNode;
     convenience init(obj: GameObject) {
         self.init(objType: obj.objectType);
         object = obj;
@@ -25,9 +26,17 @@ class StoreItem: SKSpriteNode {
         let im = objectType.getImage() ?? UIImage()
         let texture = SKTexture(image: im)
         unlocked = false;
-        super.init(texture: texture, color: UIColor.clear, size: im.size)
         
+        priceLabel = SKLabelNode(text: "TEST")
+        priceLabel.color = .white
+        priceLabel.fontSize = 20
+        priceLabel.horizontalAlignmentMode = .center;
+        priceLabel.verticalAlignmentMode = .center;
+        priceLabel.fontName = "AvenirNext-Bold"
+        super.init(texture: texture, color: UIColor.clear, size: im.size)
+        priceLabel.position = CGPoint(x: position.x, y: position.y-10);
         self.isUserInteractionEnabled = true
+        self.addChild(priceLabel);
     }
     func canUpgrade(_ zone: Zone) {
         
@@ -39,11 +48,13 @@ class StoreItem: SKSpriteNode {
             unlocked = false;
             let lock = UIImage(named: "Lock") ?? UIImage();
             self.texture = SKTexture(image: lock);
+            priceLabel.text = objectType.getUnlockPrice().toCurrency();
         }
         else {
             unlocked = true;
             let im = objectType.getImage() ?? UIImage()
             self.texture = SKTexture(image: im);
+            priceLabel.text = objectType.getPrice().toCurrency();
         }
     }
     override func copy() -> Any {

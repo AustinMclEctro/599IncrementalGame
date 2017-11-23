@@ -36,7 +36,7 @@ class PurchaseShapeCell: ShopCollectionViewCell {
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapPurchase)))
     }
     @objc func tapPurchase(sender: UITapGestureRecognizer) {
-        if (sender.state == .ended) {
+        if (sender.state == .ended && acceptsTouches) {
             toggleShop();
         }
     }
