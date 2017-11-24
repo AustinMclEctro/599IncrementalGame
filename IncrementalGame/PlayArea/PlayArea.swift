@@ -61,9 +61,6 @@ class PlayArea: SKView {
     ///
     /// - Parameter index: The index number of the zone in the zones array.
     func selectZone(index: Int) {
-        // Turn on inactive income generator before switch
-        zone.pIG.isInactiveGeneratorOn = true
-        
         // Get and display newly selected zone
         zoneNumber = index
         zone = gameState.zones[zoneNumber]
@@ -129,11 +126,6 @@ class PlayArea: SKView {
         for zone in gameState.zones {
             zone.resetGravity()
         }
-    }
-
-    override func presentScene(_ scene: SKScene?) {
-        super.presentScene(scene)
-        zone.pIG.isInactiveGeneratorOn = false
     }
     
     required init?(coder aDecoder: NSCoder) {
