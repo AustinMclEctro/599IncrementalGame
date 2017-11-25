@@ -14,7 +14,7 @@ class Fixture: GameObject {
     
     struct PigRates {
         static let newFixture = 50
-        static let upgrade = [0, 10, 20, 30, 40, 50] // [Lvl0, Lvl1, Lvl2, Lvl3, Lvl4, Lvl5]
+        static let upgrade = [0, 10, 20, 30, 40, 50] // [Lvl0, Lvl1, Lvl2, etc...] Adjust passive rates here
     }
     
     //var withSize: CGSize  // REFACTOR: This might not need to be stored
@@ -62,7 +62,7 @@ class Fixture: GameObject {
     }
     
     func upgrade() {
-        guard upgradeLevel < 5 else {return}
+        guard canUpgrade() else {return}
         upgradeLevel += 1
         inZone.pIG.feed(portion: PigRates.upgrade[upgradeLevel])
         if let force = self.children[0] as? SKFieldNode {

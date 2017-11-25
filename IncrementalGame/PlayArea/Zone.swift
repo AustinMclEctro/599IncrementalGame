@@ -15,7 +15,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     struct PigRates {
         static let newZone = 50
         static let upgradeA = [0, 10, 20, 30] // [Lvl0, Lvl1, Lvl2, Lvl3, Lvl4, Lvl5]
-        static let upgradeB = [0, 10, 20, 30, 40, 50, 60, 70]
+        static let upgradeB = [0, 10, 20, 30, 40, 50, 60, 70] // LOOK: Adjust passive rates here
     }
     
     var motionManager = CMMotionManager()
@@ -89,7 +89,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     func upgradeA() {
-        guard upgradeALevel < 3 else {return}
+        guard canUpgradeA() else {return}
         upgradeALevel += 1
         pIG.feed(portion: PigRates.upgradeA[upgradeALevel])
         maxShapes += 3
@@ -186,28 +186,30 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         hapticFor(contact: contact);
         if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
-            var hit: Shape? = nil
-            var maxPoints: Int = 0
+            //var hit: Shape? = nil
+            //var maxPoints: Int = 0
             if let playArea = view as? PlayArea {
                 if let one = contact.bodyA.node as? Shape {
-                    maxPoints = one.getPoints()
-                    hit = one
-                    playArea.gained(amount: maxPoints)
+                    //maxPoints = one.getPoints()
+                    //hit = one
+                    playArea.gained(amount: one.getPoints())
                     //soundFor(one)
                     one.getType().playCollisionSound(one)
+                    one.animateCollision()
                 }
                 
                 if let two = contact.bodyB.node as? Shape {
-                    let points = two.getPoints()
-                    playArea.gained(amount: points)
-                    if points > maxPoints {
-                        hit = two
-                    }
+                    //let points = two.getPoints()
+                    playArea.gained(amount: two.getPoints())
+                    //if points > maxPoints {
+                        //hit = two
+                    //}
                     //soundFor(two)
                     two.getType().playCollisionSound(two)
+                    two.animateCollision()
                 }
             
-                hit?.animateCollision()
+                //hit?.animateCollision()
             }
         }
     }
