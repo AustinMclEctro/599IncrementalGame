@@ -14,7 +14,7 @@ import SpriteKit
 class Shape: GameObject {
     
     
-    var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+    //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
     //var withSize: CGSize // REFACTOR: Might need to remove
     var inZone: Zone
     var pointMultiplier = 1
@@ -30,10 +30,10 @@ class Shape: GameObject {
         
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = true
-        self.physicsBody?.restitution = 0.75
+        self.physicsBody?.restitution = 0.25
         self.physicsBody?.angularDamping = 0.5
         self.physicsBody?.friction = 0.5
-        self.physicsBody?.linearDamping = 0.5
+        self.physicsBody?.linearDamping = 0.75
         self.physicsBody?.mass = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
         let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.width-(dimension/2)+5))
@@ -43,13 +43,13 @@ class Shape: GameObject {
         let conY = SKConstraint.positionY(rangeY)
         let conD = SKConstraint.distance(rangeD, to: CGPoint(x: inZone.size.width * 0.5, y: inZone.size.width * 0.5), in: inZone)
         self.constraints = [conX,conY,conD]
-        emitter?.particleTexture = SKTexture(image: self.getType().getImage()!)
-        emitter?.numParticlesToEmit = 10
-        emitter?.particleLifetime = 0.25
-        emitter?.position = CGPoint(x:self.size.width/2 , y:self.size.height/2)
-        emitter?.particleSize = CGSize(width: 40, height: 40)
-        emitter?.targetNode = inZone
-        self.addChild(emitter!)
+        //emitter?.particleTexture = SKTexture(image: self.getType().getImage()!)
+        //emitter?.numParticlesToEmit = 10
+        //emitter?.particleLifetime = 0.25
+        //emitter?.position = CGPoint(x:self.size.width/2 , y:self.size.height/2)
+        //emitter?.particleSize = CGSize(width: 40, height: 40)
+        //emitter?.targetNode = inZone
+        //self.addChild(emitter!)
     }
     
     /// Animates the collision after being passed an emitter node by setting the proper duration,
@@ -58,9 +58,14 @@ class Shape: GameObject {
     /// - Parameter collisionEmitter: The SKEmitterNode that contains the settings for the animation.
     func animateCollision() {
         // Set up a sequence animation which deletes its node after completion.
-        let duration = Double((emitter?.particleLifetime)!*CGFloat((emitter?.numParticlesToEmit)!))
-        emitter?.resetSimulation()
-        emitter?.advanceSimulationTime(duration)
+        //let duration = Double((emitter?.particleLifetime)!*CGFloat((emitter?.numParticlesToEmit)!))
+        //emitter?.resetSimulation()
+        //emitter?.advanceSimulationTime(duration)
+        removeAction(forKey: "pulse")
+        let pulseIn = SKAction.scale(to: CGSize(width: dimension*0.75, height: dimension*0.75), duration: 0.075)
+        let pulseOut = SKAction.scale(to: CGSize(width: dimension, height: dimension), duration: 0.075)
+        let pulse = SKAction.sequence([pulseIn,pulseOut])
+        run(pulse, withKey: "pulse")
     }
     func upgradePriceA() -> Int {
         return 1000000000;
@@ -72,11 +77,11 @@ class Shape: GameObject {
         return objectType.getPrice();
     }
     func canUpgradeA() -> Bool {
-        return upgradeALevel < 10
+        return upgradeALevel < 9
     }
     
     func upgradeA() {
-        guard upgradeALevel < 10 else {return}
+        guard canUpgradeA() else {return}
         upgradeALevel += 1
         pointMultiplier += 1
     }
@@ -86,9 +91,9 @@ class Shape: GameObject {
     }
     
     func upgradeB() {
-        guard upgradeBLevel < 5 else {return}
+        guard canUpgradeB() else {return}
         upgradeBLevel += 1
-        self.physicsBody?.restitution *= 1.25
+        self.physicsBody?.restitution += 0.15
     }
     
     func canUpgradeC() -> Bool {
@@ -96,9 +101,9 @@ class Shape: GameObject {
     }
     
     func upgradeC() {
-        guard upgradeCLevel < 5 else {return}
+        guard canUpgradeC() else {return}
         upgradeCLevel += 1
-        self.physicsBody?.linearDamping *= 0.8
+        self.physicsBody?.linearDamping -= 0.15
     }
     
     

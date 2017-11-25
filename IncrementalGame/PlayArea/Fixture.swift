@@ -57,7 +57,7 @@ class Fixture: GameObject {
     }
     
     func upgrade() {
-        guard upgradeLevel < 5 else {return}
+        guard canUpgrade() else {return}
         upgradeLevel += 1
         if let force = self.children[0] as? SKFieldNode {
             force.strength *= 1.25
