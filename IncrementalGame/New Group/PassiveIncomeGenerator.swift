@@ -15,9 +15,9 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     // MARK: Constants
     
     struct Rates {
-        static let `default` = 50
-        static let inactive = 50
-        static let background = 50
+        static let defaultGeneral = 50
+        static let defaultInactive = 50
+        static let defaultBackground = 50
     }
     
     // MARK: Properties
@@ -120,6 +120,10 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
         self.isInactiveGeneratorOn = false
     }
     
+    func feed(portion: Int) {
+        _inactiveRate += portion
+        // QUESTION: Do we want to increase the background rate as well?
+    }
     
     // MARK: NSCoding
     

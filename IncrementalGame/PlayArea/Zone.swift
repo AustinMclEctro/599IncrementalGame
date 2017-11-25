@@ -12,13 +12,19 @@ import CoreMotion
 
 class Zone: SKScene, SKPhysicsContactDelegate {
     
+    struct PigRates {
+        static let newZone = 50
+        static let upgradeA = [0, 10, 20, 30] // [Lvl0, Lvl1, Lvl2, Lvl3, Lvl4, Lvl5]
+        static let upgradeB = [0, 10, 20, 30, 40, 50, 60, 70]
+    }
+    
     var motionManager = CMMotionManager()
     var maxShapes = 3
     let minVel: CGFloat = 250
     var allowedObjects: Set<ObjectType> = []
     var gravityX: Double = 0
     var gravityY: Double = 0
-    var pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.background, inactiveRate: PassiveIncomeGenerator.Rates.inactive)
+    var pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: PassiveIncomeGenerator.Rates.defaultInactive)
     var upgradeALevel = 0
     var upgradeBLevel = 0
     var timer = Timer();
@@ -73,7 +79,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         if pIG != nil {
             self.pIG = pIG!
         } else {
-            self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.background, inactiveRate: PassiveIncomeGenerator.Rates.inactive)
+            self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: PigRates.newZone)
         }
     }
     
@@ -85,6 +91,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     func upgradeA() {
         guard upgradeALevel < 3 else {return}
         upgradeALevel += 1
+        pIG.feed(portion: PigRates.upgradeA[upgradeALevel])
         maxShapes += 3
     }
     
@@ -96,6 +103,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     func upgradeB() {
         upgradeBLevel += 1
+        pIG.feed(portion: PigRates.upgradeB[upgradeBLevel])
         switch upgradeBLevel {
         case 1:
             addAllowedObject(type: .Square)
