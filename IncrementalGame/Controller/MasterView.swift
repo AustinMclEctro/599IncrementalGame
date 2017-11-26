@@ -323,21 +323,21 @@ class MasterView: UIView {
             let vel = sender!.velocity(in: playArea); // UIView velocity (need to flip y)
             let velocity =  CGVector(dx: vel.x, dy: -vel.y);// Flopped y
             if !of.isFixture() {
-                let shape = playArea.addShape(of: of, at: location);
+                let shape = playArea.zone.addShape(of: of, at: location);
                 shape?.physicsBody?.velocity = velocity;
             }
             else {
-                playArea.addFixture(of: of, at: location);
+                playArea.zone.addFixture(of: of, at: location);
             }
         }
         else {
             // Placed at ambiguous point
             let location =  CGPoint(x: 0, y: 0);
             if !of.isFixture() {
-                playArea.addShape(of: of, at: location);
+                playArea.zone.addShape(of: of, at: location);
             }
             else {
-                playArea.addFixture(of: of, at: location);
+                playArea.zone.addFixture(of: of, at: location);
             }
         }
         

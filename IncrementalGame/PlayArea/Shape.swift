@@ -13,17 +13,17 @@ import SpriteKit
 /// Shape objects, such as the triangle and square, used for gameplay. 
 class Shape: GameObject {
     
-    struct PigRates {
+    /*struct PigRates {
         static let newShape = 50
         static let upgradeA = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90] // [Lvl 0, Lvl 1, Lvl 2, etc...]
         static let upgradeB = [0, 10, 20, 30, 40, 50]  // LOOK: Adjust variable passive rates here
         static let upgradeC = [0, 10, 20, 30, 40, 50]
-    }
+    }*/
     
     //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
     //var withSize: CGSize // REFACTOR: Might need to remove
     var inZone: Zone
-    var pointMultiplier = 1
+    var pointValue = 0
     var upgradeALevel = 0
     var upgradeBLevel = 0
     var upgradeCLevel = 0
@@ -34,12 +34,13 @@ class Shape: GameObject {
         super.init(type: type, at: at, inZone: inZone)
         //super.setUp(at: at, withSize: withSize)
         
+        self.pointValue = objectType.getPoints(upgradeALevel)
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = true
-        self.physicsBody?.restitution = 0.25
+        self.physicsBody?.restitution = 0.2
         self.physicsBody?.angularDamping = 0.5
         self.physicsBody?.friction = 0.5
-        self.physicsBody?.linearDamping = 0.75
+        self.physicsBody?.linearDamping = 0.8
         self.physicsBody?.mass = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
         let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.width-(dimension/2)+5))
@@ -68,19 +69,22 @@ class Shape: GameObject {
         //emitter?.resetSimulation()
         //emitter?.advanceSimulationTime(duration)
         removeAction(forKey: "pulse")
-        let pulseIn = SKAction.scale(to: CGSize(width: dimension*0.75, height: dimension*0.75), duration: 0.075)
-        let pulseOut = SKAction.scale(to: CGSize(width: dimension, height: dimension), duration: 0.075)
+        let pulseIn = SKAction.scale(to: CGSize(width: dimension*0.75, height: dimension*0.75), duration: 0.03)
+        let pulseOut = SKAction.scale(to: CGSize(width: dimension, height: dimension), duration: 0.03)
         let pulse = SKAction.sequence([pulseIn,pulseOut])
         run(pulse, withKey: "pulse")
     }
     func upgradePriceA() -> Int {
-        return 1000000000;
+        guard canUpgradeA() else {return -1}
+        return objectType.getUpgradePriceA(upgradeALevel)
     }
     func upgradePriceB() -> Int {
-        return objectType.getPrice();
+        guard canUpgradeB() else {return -1}
+        return objectType.getUpgradePriceB(upgradeBLevel)
     }
     func upgradePriceC() -> Int {
-        return objectType.getPrice();
+        guard canUpgradeC() else {return -1}
+        return objectType.getUpgradePriceC(upgradeCLevel)
     }
     func canUpgradeA() -> Bool {
         return upgradeALevel < 9
@@ -89,8 +93,8 @@ class Shape: GameObject {
     func upgradeA() {
         guard canUpgradeA() else {return}
         upgradeALevel += 1
-        inZone.pIG.feed(portion: PigRates.upgradeA[upgradeALevel])
-        pointMultiplier += 1
+        inZone.pIG.feed(portion: objectType.getPigRateA(upgradeALevel))
+        pointValue = objectType.getPoints(upgradeALevel)
     }
     
     func canUpgradeB() -> Bool {
@@ -100,7 +104,7 @@ class Shape: GameObject {
     func upgradeB() {
         guard canUpgradeB() else {return}
         upgradeBLevel += 1
-        inZone.pIG.feed(portion: PigRates.upgradeB[upgradeBLevel])
+        inZone.pIG.feed(portion: objectType.getPigRateB(upgradeBLevel))
         self.physicsBody?.restitution += 0.15
     }
     
@@ -111,14 +115,14 @@ class Shape: GameObject {
     func upgradeC() {
         guard canUpgradeC() else {return}
         upgradeCLevel += 1
-        inZone.pIG.feed(portion: PigRates.upgradeC[upgradeCLevel])
+        inZone.pIG.feed(portion: objectType.getPigRateC(upgradeCLevel))
         self.physicsBody?.linearDamping -= 0.15
     }
     
     
     
     func getPoints() -> Int {
-        return self.objectType.getPoints() * pointMultiplier
+        return pointValue
     }
     
     // MARK: NSCoding

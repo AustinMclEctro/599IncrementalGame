@@ -122,7 +122,8 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     
     func feed(portion: Int) {
         _inactiveRate += portion
-        // QUESTION: Do we want to increase the background rate as well?
+        // QUESTION: Do we want to increase the background rate as well? Yes, for now.  Maybe go to just one rate eventually?
+        _backgroundRate += portion
     }
     
     // MARK: NSCoding

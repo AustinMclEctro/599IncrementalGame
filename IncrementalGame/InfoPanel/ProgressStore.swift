@@ -270,7 +270,7 @@ class ProgressStore: SKView {
                             feedbackGenerator.impactOccurred();
                             if !controller.playArea.getZone().allowedObjects.contains(node.objectType) {
                                 controller.updateCurrencyA(by: -node.objectType.getUnlockPrice());
-                                controller.playArea.getZone().upgradeB(objectType: node.objectType);
+                                controller.playArea.getZone().addAllowedObject(type: node.objectType);
                                 blackout()
                                 return;
                             }

@@ -12,19 +12,21 @@ import CoreMotion
 
 class Zone: SKScene, SKPhysicsContactDelegate {
     
-    struct PigRates {
+    /*struct PigRates {
         static let newZone = 50
         static let upgradeA = [0, 10, 20, 30] // [Lvl0, Lvl1, Lvl2, Lvl3, Lvl4, Lvl5]
         static let upgradeB = [0, 10, 20, 30, 40, 50, 60, 70] // LOOK: Adjust passive rates here
-    }
+    }*/
     
     var motionManager = CMMotionManager()
-    var maxShapes = 3
-    let minVel: CGFloat = 250
+    var shapeCapacity = 3
+    let maxCapacity = 12
+    var minVel: CGFloat = 200
     var allowedObjects: Set<ObjectType> = []
     var gravityX: Double = 0
     var gravityY: Double = 0
     var pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: PassiveIncomeGenerator.Rates.defaultInactive)
+    let basePigRate = 5
     var upgradeALevel = 0
     var upgradeBLevel = 0
     var timer = Timer();
@@ -34,6 +36,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var hapticLightGenerator = UIImpactFeedbackGenerator(style: .light);
     var hapticMediumGenerator = UIImpactFeedbackGenerator(style: .medium);
     var hapticHeavyGenerator = UIImpactFeedbackGenerator(style: .heavy);
+    
+    //var seconds: Double = 0 // for testing collision rates only, not for production
+    //var hits: Double = 0 // for testing collision rates only, not for production
     
     init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
         
@@ -79,12 +84,12 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         if pIG != nil {
             self.pIG = pIG!
         } else {
-            self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: PigRates.newZone)
+            self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: basePigRate)
         }
     }
     
     
-    func canUpgradeA() -> Bool {
+    /*func canUpgradeA() -> Bool {
         return upgradeALevel < 3
     }
     
@@ -122,8 +127,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         default:
             return
         }
-    }
+    }*/
     
+    func getPassiveRate() -> Int {
+        return pIG.inactiveRate
+    }
     
     override func update(_ currentTime: TimeInterval) {
         
@@ -135,13 +143,15 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     @objc func resetGravity() {
         if let accelData = motionManager.accelerometerData {
-            if abs(accelData.acceleration.x - lastGravX) < 0.1 && abs(accelData.acceleration.y - lastGravY) < 0.1 {
+            if abs(accelData.acceleration.x - lastGravX) < 0.05 && abs(accelData.acceleration.y - lastGravY) < 0.05 {
                 gravityX = (gravityX + accelData.acceleration.x) / 2.0
                 gravityY = (gravityY + accelData.acceleration.y) / 2.0
             }
             lastGravX = accelData.acceleration.x
             lastGravY = accelData.acceleration.y
         }
+        //seconds += 1 // for testing collision rates only, not for production
+        //print(hits/seconds) // for testing collision rates only, not for production
     }
     func hasSounds() -> Bool {
         return false;
@@ -193,6 +203,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                     //maxPoints = one.getPoints()
                     //hit = one
                     playArea.gained(amount: one.getPoints())
+                    //hits += 1 // for testing collision rates only, not for production
                     //soundFor(one)
                     one.getType().playCollisionSound(one)
                     one.animateCollision()
@@ -201,6 +212,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                 if let two = contact.bodyB.node as? Shape {
                     //let points = two.getPoints()
                     playArea.gained(amount: two.getPoints())
+                    //hits += 1 // for testing collision rates only, not for production
                     //if points > maxPoints {
                         //hit = two
                     //}
@@ -232,9 +244,39 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                 shapeCount += 1
             }
         }
-        return shapeCount < maxShapes
+        return shapeCount < shapeCapacity
     }
     
+    func addShape(of: ObjectType, at: CGPoint) -> Shape? {
+        guard canAdd(type: of) else {return nil}
+        let shape = Shape(type: of, at: at, inZone: self);
+        addChild(shape);
+        minVel *= 1.5
+        pIG.feed(portion: shape.objectType.getPigRateNew());
+        let data: [String: Zone] = ["zone": self]
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
+        return shape;
+    }
+    
+    func addFixture(of: ObjectType, at: CGPoint) -> Fixture? {
+        guard canAdd(type: of) else {return nil}
+        let fix = Fixture(type: of, at: at, inZone: self);
+        addChild(fix);
+        pIG.feed(portion: fix.objectType.getPigRateNew());
+        removeAllowedObject(type: of)
+        let data: [String: Zone] = ["zone": self]
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
+        return fix
+    }
+    
+    func canIncreaseCapacity() -> Bool {
+        return shapeCapacity < maxCapacity
+    }
+    
+    func increaseShapeCapacity() {
+        guard canIncreaseCapacity() else {return}
+        shapeCapacity += 1
+    }
     
     /// Adds an ObjectType to the allowedObjects array.
     ///

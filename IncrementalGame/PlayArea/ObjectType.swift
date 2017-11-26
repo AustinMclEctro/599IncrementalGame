@@ -24,6 +24,95 @@ enum ObjectType: String, Codable {
     case Graviton
     case Vortex
     
+    struct points {
+        static let triangle = [3,4,5,6,7,8,9,10,11,12]
+        static let square = [4,5,6,7,8,9,10,11,12,13]
+        static let pentagon = [5,6,7,8,9,10,11,12,13,14]
+        static let hexagon = [6,7,8,9,10,11,12,13,14,15]
+        static let circle = [7,8,9,10,11,12,13,14,15,16]
+        static let star = [8,9,10,11,12,13,14,15,16,17]
+    }
+    struct upgradePriceA {
+        static let triangle = [3,4,5,6,7,8,9,10,11]
+        static let square = [4,5,6,7,8,9,10,11,12]
+        static let pentagon = [5,6,7,8,9,10,11,12,13]
+        static let hexagon = [6,7,8,9,10,11,12,13,14]
+        static let circle = [7,8,9,10,11,12,13,14,15]
+        static let star = [8,9,10,11,12,13,14,15,16]
+    }
+    struct upgradePriceB {
+        static let triangle = [3,4,5,6,7]
+        static let square = [4,5,6,7,8]
+        static let pentagon = [5,6,7,8,9]
+        static let hexagon = [6,7,8,9,10]
+        static let circle = [7,8,9,10,11]
+        static let star = [8,9,10,11,12]
+    }
+    struct upgradePriceC {
+        static let triangle = [3,4,5,6,7]
+        static let square = [4,5,6,7,8]
+        static let pentagon = [5,6,7,8,9]
+        static let hexagon = [6,7,8,9,10]
+        static let circle = [7,8,9,10,11]
+        static let star = [8,9,10,11,12]
+    }
+    struct upgradePriceFix {
+        static let bumper = [3,4,5,6,7]
+        static let graviton = [4,5,6,7,8]
+        static let vortex = [5,6,7,8,9]
+    }
+    struct pigRateNew {
+        static let triangle = 1
+        static let square = 2
+        static let pentagon = 3
+        static let hexagon = 4
+        static let circle = 5
+        static let star = 6
+        static let bumper = 7
+        static let graviton = 8
+        static let vortex = 9
+    }
+    struct price {
+        static let triangle = 100
+        static let square = 200
+        static let pentagon = 300
+        static let hexagon = 400
+        static let circle = 500
+        static let star = 600
+        static let bumper = 700
+        static let graviton = 800
+        static let vortex = 900
+    }
+    struct pigRateA {
+        static let triangle = [3,4,5,6,7,8,9,10,11]
+        static let square = [4,5,6,7,8,9,10,11,12]
+        static let pentagon = [5,6,7,8,9,10,11,12,13]
+        static let hexagon = [6,7,8,9,10,11,12,13,14]
+        static let circle = [7,8,9,10,11,12,13,14,15]
+        static let star = [8,9,10,11,12,13,14,15,16]
+    }
+    struct pigRateB {
+        static let triangle = [3,4,5,6,7]
+        static let square = [4,5,6,7,8]
+        static let pentagon = [5,6,7,8,9]
+        static let hexagon = [6,7,8,9,10]
+        static let circle = [7,8,9,10,11]
+        static let star = [8,9,10,11,12]
+    }
+    struct pigRateC {
+        static let triangle = [3,4,5,6,7]
+        static let square = [4,5,6,7,8]
+        static let pentagon = [5,6,7,8,9]
+        static let hexagon = [6,7,8,9,10]
+        static let circle = [7,8,9,10,11]
+        static let star = [8,9,10,11,12]
+    }
+    struct pigRateFix {
+        static let bumper = [3,4,5,6,7]
+        static let graviton = [4,5,6,7,8]
+        static let vortex = [5,6,7,8,9]
+    }
+    
     /// Retrieves the type for the ObjectType (fixture or shape).
     ///
     /// - Returns: true if fixture.
@@ -39,7 +128,7 @@ enum ObjectType: String, Codable {
         return UIImage(named: String(describing: self))
     }
     
-    func getUnlockPrice() -> Int {
+    func getUnlockPrice() -> Int { // don't need under new mechanics?
         switch self {
         case .Triangle:
             return 1000
@@ -69,23 +158,48 @@ enum ObjectType: String, Codable {
     func getPrice() -> Int {
         switch self {
         case .Triangle:
-            return 100
+            return price.triangle
         case .Square:
-            return 200
+            return price.square
         case .Pentagon:
-            return 300
+            return price.pentagon
         case .Hexagon:
-            return 400
+            return price.hexagon
         case .Circle:
-            return 500
+            return price.circle
         case .Star:
-            return 600
+            return price.star
         case .Bumper:
-            return 1000
+            return price.bumper
         case .Graviton:
-            return 2000
+            return price.graviton
         case .Vortex:
-            return 3000
+            return price.vortex
+        default:
+            return 0
+        }
+    }
+    
+    func getPigRateNew() -> Int {
+        switch self {
+        case .Triangle:
+            return pigRateNew.triangle
+        case .Square:
+            return pigRateNew.square
+        case .Pentagon:
+            return pigRateNew.pentagon
+        case .Hexagon:
+            return pigRateNew.hexagon
+        case .Circle:
+            return pigRateNew.circle
+        case .Star:
+            return pigRateNew.star
+        case .Bumper:
+            return pigRateNew.bumper
+        case .Graviton:
+            return pigRateNew.graviton
+        case .Vortex:
+            return pigRateNew.vortex
         default:
             return 0
         }
@@ -95,20 +209,160 @@ enum ObjectType: String, Codable {
     /// Gets the point value for the ObjectType.
     ///
     /// - Returns: The points earned on each collision for the ObjectType.
-    func getPoints() -> Int {
+    func getPoints(_ level: Int) -> Int {
         switch self {
         case .Triangle:
-            return 3
+            return points.triangle[level]
         case .Square:
-            return 4
+            return points.square[level]
         case .Pentagon:
-            return 5
+            return points.pentagon[level]
         case .Hexagon:
-            return 6
+            return points.hexagon[level]
         case .Circle:
-            return 7
+            return points.circle[level]
         case .Star:
-            return 8
+            return points.star[level]
+        default:
+            return 0
+        }
+    }
+    
+    func getUpgradePriceA(_ level: Int) -> Int {
+        switch self {
+        case .Triangle:
+            return upgradePriceA.triangle[level]
+        case .Square:
+            return upgradePriceA.square[level]
+        case .Pentagon:
+            return upgradePriceA.pentagon[level]
+        case .Hexagon:
+            return upgradePriceA.hexagon[level]
+        case .Circle:
+            return upgradePriceA.circle[level]
+        case .Star:
+            return upgradePriceA.star[level]
+        default:
+            return 0
+        }
+    }
+    
+    func getUpgradePriceB(_ level: Int) -> Int {
+        switch self {
+        case .Triangle:
+            return upgradePriceB.triangle[level]
+        case .Square:
+            return upgradePriceB.square[level]
+        case .Pentagon:
+            return upgradePriceB.pentagon[level]
+        case .Hexagon:
+            return upgradePriceB.hexagon[level]
+        case .Circle:
+            return upgradePriceB.circle[level]
+        case .Star:
+            return upgradePriceB.star[level]
+        default:
+            return 0
+        }
+    }
+    
+    func getUpgradePriceC(_ level: Int) -> Int {
+        switch self {
+        case .Triangle:
+            return upgradePriceC.triangle[level]
+        case .Square:
+            return upgradePriceC.square[level]
+        case .Pentagon:
+            return upgradePriceC.pentagon[level]
+        case .Hexagon:
+            return upgradePriceC.hexagon[level]
+        case .Circle:
+            return upgradePriceC.circle[level]
+        case .Star:
+            return upgradePriceC.star[level]
+        default:
+            return 0
+        }
+    }
+    
+    func getUpgradePriceFix(_ level: Int) -> Int {
+        switch self {
+        case .Bumper:
+            return upgradePriceFix.bumper[level]
+        case .Graviton:
+            return upgradePriceFix.graviton[level]
+        case .Vortex:
+            return upgradePriceFix.vortex[level]
+        default:
+            return 0
+        }
+    }
+    
+    func getPigRateA(_ level: Int) -> Int {
+        switch self {
+        case .Triangle:
+            return pigRateA.triangle[level]
+        case .Square:
+            return pigRateA.square[level]
+        case .Pentagon:
+            return pigRateA.pentagon[level]
+        case .Hexagon:
+            return pigRateA.hexagon[level]
+        case .Circle:
+            return pigRateA.circle[level]
+        case .Star:
+            return pigRateA.star[level]
+        default:
+            return 0
+        }
+    }
+    
+    func getPigRateB(_ level: Int) -> Int {
+        switch self {
+        case .Triangle:
+            return pigRateB.triangle[level]
+        case .Square:
+            return pigRateB.square[level]
+        case .Pentagon:
+            return pigRateB.pentagon[level]
+        case .Hexagon:
+            return pigRateB.hexagon[level]
+        case .Circle:
+            return pigRateB.circle[level]
+        case .Star:
+            return pigRateB.star[level]
+        default:
+            return 0
+        }
+    }
+    
+    func getPigRateC(_ level: Int) -> Int {
+        switch self {
+        case .Triangle:
+            return pigRateC.triangle[level]
+        case .Square:
+            return pigRateC.square[level]
+        case .Pentagon:
+            return pigRateC.pentagon[level]
+        case .Hexagon:
+            return pigRateC.hexagon[level]
+        case .Circle:
+            return pigRateC.circle[level]
+        case .Star:
+            return pigRateC.star[level]
+        default:
+            return 0
+        }
+    }
+    
+    func getPigRateFix(_ level: Int) -> Int {
+        switch self {
+        case .Bumper:
+            return pigRateFix.bumper[level]
+        case .Graviton:
+            return pigRateFix.graviton[level]
+        case .Vortex:
+            return pigRateFix.vortex[level]
         default:
             return 0
         }

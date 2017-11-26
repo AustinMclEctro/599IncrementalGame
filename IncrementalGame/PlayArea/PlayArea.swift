@@ -44,7 +44,22 @@ class PlayArea: SKView {
         presentScene(zone)
         let data: [String: Zone] = ["zone": zone]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
+        //testSetUp() // for testing collision rates only, not for production
     }
+    
+    /*func testSetUp() { // for testing collision rates only, not for production
+        zone.addAllowedObject(type: .Hexagon)
+        for _ in 1...12 {
+            let shape = zone.addShape(of: .Hexagon, at: CGPoint(x:0,y:0))
+            for _ in 1...5 {
+                shape?.upgradeB()
+            }
+            for _ in 1...5 {
+                shape?.upgradeC()
+            }
+        }
+    }*/
+    
     // Returns list of game objects within current zone.
     // TODO: Should implement as a cache instead?
     // - Return: list of game objects within current zone
@@ -74,6 +89,14 @@ class PlayArea: SKView {
         return zone
     }
     
+    func newZonePrice() -> Int {
+        if gameState.zones.count < 17 {
+            return Int(pow(2,Double(gameState.zones.count))) * 10000
+        } else {
+            return Int.max/2
+        }
+    }
+    
     
     /// Adds the specified shape to the level.
     ///
@@ -81,19 +104,17 @@ class PlayArea: SKView {
     ///   - of: The specific type of shape.
     ///   - at: The position where the fixture will be placed on the game screen.
     /// - Returns: <#return value description#>
-    func addShape(of: ObjectType, at: CGPoint) -> Shape? { // REFACTOR: Could this be put in Zone?
+    /*func addShape(of: ObjectType, at: CGPoint) -> Shape? { // REFACTOR: Could this be put in Zone?
         if zone.canAdd(type: of) {
             let shape = Shape(type: of, at: at, inZone: zone);
             zone.addChild(shape);
             zone.pIG.feed(portion: Shape.PigRates.newShape);
-            //the below is so fucked up, do not touch targetNode
-            //shape.emitter?.targetNode = zone
             let data: [String: Zone] = ["zone": zone]
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
             return shape;
         }
         return nil;
-    }
+    }*/
     
     
     /// Adds the specified fixture to the level.
@@ -101,7 +122,7 @@ class PlayArea: SKView {
     /// - Parameters:
     ///   - of: The specific type of fixture.
     ///   - at: The position where the fixture will be placed on the game screen.
-    func addFixture(of: ObjectType, at: CGPoint) { // REFACTOR: Could this be put in Zone?
+    /*func addFixture(of: ObjectType, at: CGPoint) { // REFACTOR: Could this be put in Zone?
         if zone.canAdd(type: of) {
             let fix = Fixture(type: of, at: at, inZone: zone);
             zone.addChild(fix);
@@ -110,7 +131,7 @@ class PlayArea: SKView {
             let data: [String: Zone] = ["zone": zone]
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
         }
-    }
+    }*/
     
     
     /// Increases value of currencyA from gameplay.
@@ -124,11 +145,11 @@ class PlayArea: SKView {
     }
     
     
-    func resetGravity() {
+    /*func resetGravity() {
         for zone in gameState.zones {
             zone.resetGravity()
         }
-    }
+    }*/
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
