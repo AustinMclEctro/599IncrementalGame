@@ -12,16 +12,10 @@ import CoreMotion
 
 class Zone: SKScene, SKPhysicsContactDelegate {
     
-    /*struct PigRates {
-        static let newZone = 50
-        static let upgradeA = [0, 10, 20, 30] // [Lvl0, Lvl1, Lvl2, Lvl3, Lvl4, Lvl5]
-        static let upgradeB = [0, 10, 20, 30, 40, 50, 60, 70] // LOOK: Adjust passive rates here
-    }*/
-    
     var motionManager = CMMotionManager()
     var shapeCapacity = 3
     let maxCapacity = 12
-    var minVel: CGFloat = 200
+    let minHit: CGFloat = 750
     var allowedObjects: Set<ObjectType> = []
     var gravityX: Double = 0
     var gravityY: Double = 0
@@ -153,9 +147,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         //seconds += 1 // for testing collision rates only, not for production
         //print(hits/seconds) // for testing collision rates only, not for production
     }
+    
     func hasSounds() -> Bool {
         return false;
     }
+    
     func hapticFor(contact: SKPhysicsContact) {
         let hasHaptics = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Vibration);
         if hasHaptics {
@@ -194,34 +190,22 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
+        //print(contact.collisionImpulse) // testing only
+        guard contact.collisionImpulse > minHit else {return}
         hapticFor(contact: contact);
-        if contact.bodyA.velocity.magnitudeSquared() > minVel || contact.bodyB.velocity.magnitudeSquared() > minVel {
-            //var hit: Shape? = nil
-            //var maxPoints: Int = 0
-            if let playArea = view as? PlayArea {
-                if let one = contact.bodyA.node as? Shape {
-                    //maxPoints = one.getPoints()
-                    //hit = one
-                    playArea.gained(amount: one.getPoints())
-                    //hits += 1 // for testing collision rates only, not for production
-                    //soundFor(one)
-                    one.getType().playCollisionSound(one)
-                    one.animateCollision()
-                }
-                
-                if let two = contact.bodyB.node as? Shape {
-                    //let points = two.getPoints()
-                    playArea.gained(amount: two.getPoints())
-                    //hits += 1 // for testing collision rates only, not for production
-                    //if points > maxPoints {
-                        //hit = two
-                    //}
-                    //soundFor(two)
-                    two.getType().playCollisionSound(two)
-                    two.animateCollision()
-                }
+        if let playArea = view as? PlayArea {
+            if let one = contact.bodyA.node as? Shape {
+                playArea.gained(amount: one.getPoints())
+                //hits += 1 // for testing collision rates only, not for production
+                one.getType().playCollisionSound(one)
+                one.animateCollision()
+            }
             
-                //hit?.animateCollision()
+            if let two = contact.bodyB.node as? Shape {
+                playArea.gained(amount: two.getPoints())
+                //hits += 1 // for testing collision rates only, not for production
+                two.getType().playCollisionSound(two)
+                two.animateCollision()
             }
         }
     }
@@ -251,7 +235,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         guard canAdd(type: of) else {return nil}
         let shape = Shape(type: of, at: at, inZone: self);
         addChild(shape);
-        minVel *= 1.5
         pIG.feed(portion: shape.objectType.getPigRateNew());
         let data: [String: Zone] = ["zone": self]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)

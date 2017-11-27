@@ -84,33 +84,33 @@ enum ObjectType: String, Codable {
         static let vortex = 900
     }
     struct pigRateA {
-        static let triangle = [3,4,5,6,7,8,9,10,11]
-        static let square = [4,5,6,7,8,9,10,11,12]
-        static let pentagon = [5,6,7,8,9,10,11,12,13]
-        static let hexagon = [6,7,8,9,10,11,12,13,14]
-        static let circle = [7,8,9,10,11,12,13,14,15]
-        static let star = [8,9,10,11,12,13,14,15,16]
+        static let triangle = [3,4,5,6,7,8,9,10,11,12]
+        static let square = [4,5,6,7,8,9,10,11,12,13]
+        static let pentagon = [5,6,7,8,9,10,11,12,13,14]
+        static let hexagon = [6,7,8,9,10,11,12,13,14,15]
+        static let circle = [7,8,9,10,11,12,13,14,15,16]
+        static let star = [8,9,10,11,12,13,14,15,16,17]
     }
     struct pigRateB {
-        static let triangle = [3,4,5,6,7]
-        static let square = [4,5,6,7,8]
-        static let pentagon = [5,6,7,8,9]
-        static let hexagon = [6,7,8,9,10]
-        static let circle = [7,8,9,10,11]
-        static let star = [8,9,10,11,12]
+        static let triangle = [3,4,5,6,7,8]
+        static let square = [4,5,6,7,8,9]
+        static let pentagon = [5,6,7,8,9,10]
+        static let hexagon = [6,7,8,9,10,11]
+        static let circle = [7,8,9,10,11,12]
+        static let star = [8,9,10,11,12,13]
     }
     struct pigRateC {
-        static let triangle = [3,4,5,6,7]
-        static let square = [4,5,6,7,8]
-        static let pentagon = [5,6,7,8,9]
-        static let hexagon = [6,7,8,9,10]
-        static let circle = [7,8,9,10,11]
-        static let star = [8,9,10,11,12]
+        static let triangle = [3,4,5,6,7,8]
+        static let square = [4,5,6,7,8,9]
+        static let pentagon = [5,6,7,8,9,10]
+        static let hexagon = [6,7,8,9,10,11]
+        static let circle = [7,8,9,10,11,12]
+        static let star = [8,9,10,11,12,13]
     }
     struct pigRateFix {
-        static let bumper = [3,4,5,6,7]
-        static let graviton = [4,5,6,7,8]
-        static let vortex = [5,6,7,8,9]
+        static let bumper = [3,4,5,6,7,8]
+        static let graviton = [4,5,6,7,8,9]
+        static let vortex = [5,6,7,8,9,10]
     }
     
     /// Retrieves the type for the ObjectType (fixture or shape).
