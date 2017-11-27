@@ -118,7 +118,7 @@ extension MasterView {
     func transitionToOpen() {
         var fr = self.sceneCollection.zoomingTo(index: self.playArea.zoneNumber);
         UIView.animate(withDuration: 0.5, animations: {
-            self.playArea.frame = CGRect(x: self.playAreaFrame.minX+fr.minX, y: self.playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height)
+            self.playArea.frame = CGRect(x: self.playAreaFrame.minX+fr.minX, y: self.playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height - 20) // - 20 for passive rate label
         }) { (success) in
             if (success) {
                 self.playArea.removeFromSuperview();
