@@ -261,6 +261,10 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         shapeCapacity += 1
     }
     
+    func increaseCapacityPrice() -> Int {
+        return 100
+    }
+    
     /// Adds an ObjectType to the allowedObjects array.
     ///
     /// - Parameter type: The ObjectType (triange, bumper, etc.)
