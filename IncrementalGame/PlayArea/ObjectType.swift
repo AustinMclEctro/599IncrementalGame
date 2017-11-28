@@ -27,75 +27,75 @@ enum ObjectType: String, Codable {
     static let types = [Triangle,Square,Pentagon,Hexagon,Octagon,Circle,Bumper,Graviton,Vortex]
     
     struct triangle {
-        static let points = [3,4,5,6,7,8,9,10,11,12]
-        static let price = 100
-        static let pigRateNew = 1
-        static let upgradePriceA = [3,4,5,6,7,8,9,10,11]
-        static let pigRateA = [3,4,5,6,7,8,9,10,11]
-        static let upgradePriceB = [3,4,5,6,7]
-        static let pigRateB = [3,4,5,6,7]
-        static let upgradePriceC = [3,4,5,6,7]
-        static let pigRateC = [3,4,5,6,7]
+        static let points = [20,21,22,23,24,25,26,27,28,29]
+        static let price = 9000
+        static let pigRateNew = 2
+        static let upgradePriceA = [450,535,640,760,905,1075,1285,1530,1820]
+        static let pigRateA = [0,0,0,0,0,0,0,0,1]
+        static let upgradePriceB = [3600,4865,6585,8905,12045]
+        static let pigRateB = [0,1,1,1,1]
+        static let upgradePriceC = [900,1220,1645,2225,3010]
+        static let pigRateC = [0,0,0,0,1]
     }
     
     struct square {
-        static let points = [3,4,5,6,7,8,9,10,11,12]
-        static let price = 100
-        static let pigRateNew = 1
-        static let upgradePriceA = [3,4,5,6,7,8,9,10,11]
-        static let pigRateA = [3,4,5,6,7,8,9,10,11]
-        static let upgradePriceB = [3,4,5,6,7]
-        static let pigRateB = [3,4,5,6,7]
-        static let upgradePriceC = [3,4,5,6,7]
-        static let pigRateC = [3,4,5,6,7]
+        static let points = [30,31,33,34,36,37,39,40,42,44]
+        static let price = 18000
+        static let pigRateNew = 3
+        static let upgradePriceA = [900,1070,1275,1520,1810,2155,2570,3060,3640]
+        static let pigRateA = [0,0,0,0,0,1,0,0,1]
+        static let upgradePriceB = [7200,9735,13170,17810,24085]
+        static let pigRateB = [1,1,1,1,2]
+        static let upgradePriceC = [1800,2435,3290,4455,6020]
+        static let pigRateC = [0,0,1,0,1]
     }
     
     struct pentagon {
-        static let points = [3,4,5,6,7,8,9,10,11,12]
-        static let price = 100
-        static let pigRateNew = 1
-        static let upgradePriceA = [3,4,5,6,7,8,9,10,11]
-        static let pigRateA = [3,4,5,6,7,8,9,10,11]
-        static let upgradePriceB = [3,4,5,6,7]
-        static let pigRateB = [3,4,5,6,7]
-        static let upgradePriceC = [3,4,5,6,7]
-        static let pigRateC = [3,4,5,6,7]
+        static let points = [50,52,55,57,60,62,65,67,70,73]
+        static let price = 37500
+        static let pigRateNew = 5
+        static let upgradePriceA = [1875,2235,2660,3165,3770,4490,5350,6370,7585]
+        static let pigRateA = [0,0,0,1,0,0,0,1,1]
+        static let upgradePriceB = [15000,20285,27435,37100,50180]
+        static let pigRateB = [2,2,2,2,2]
+        static let upgradePriceC = [3750,5070,6860,9275,12545]
+        static let pigRateC = [0,1,0,1,1]
     }
     
     struct hexagon {
-        static let points = [3,4,5,6,7,8,9,10,11,12]
-        static let price = 100
-        static let pigRateNew = 1
-        static let upgradePriceA = [3,4,5,6,7,8,9,10,11]
-        static let pigRateA = [3,4,5,6,7,8,9,10,11]
-        static let upgradePriceB = [3,4,5,6,7]
-        static let pigRateB = [3,4,5,6,7]
-        static let upgradePriceC = [3,4,5,6,7]
-        static let pigRateC = [3,4,5,6,7]
+        static let points = [80,84,88,92,96,100,104,108,112,116]
+        static let price = 72000
+        static let pigRateNew = 8
+        static let upgradePriceA = [3600,4285,5105,6080,7240,8625,10270,12230,14565]
+        static let pigRateA = [0,0,1,0,1,0,1,0,1]
+        static let upgradePriceB = [28800,38950,52675,71235,96340]
+        static let pigRateB = [3,3,3,3,4]
+        static let upgradePriceC = [7200,9735,13170,17810,24085]
+        static let pigRateC = [0,1,1,1,1]
     }
     
     struct octagon {
-        static let points = [3,4,5,6,7,8,9,10,11,12]
-        static let price = 100
-        static let pigRateNew = 1
-        static let upgradePriceA = [3,4,5,6,7,8,9,10,11]
-        static let pigRateA = [3,4,5,6,7,8,9,10,11]
-        static let upgradePriceB = [3,4,5,6,7]
-        static let pigRateB = [3,4,5,6,7]
-        static let upgradePriceC = [3,4,5,6,7]
-        static let pigRateC = [3,4,5,6,7]
+        static let points = [150,157,165,172,180,187,195,202,210,218]
+        static let price = 180000
+        static let pigRateNew = 15
+        static let upgradePriceA = [9000,10720,12765,15200,18105,21560,25675,30575,36410]
+        static let pigRateA = [0,1,1,0,1,1,1,1,1]
+        static let upgradePriceB = [72000,97375,131685,178090,240850]
+        static let pigRateB = [6,6,6,6,6]
+        static let upgradePriceC = [18000,24345,32920,44525,60210]
+        static let pigRateC = [1,2,1,2,2]
     }
     
     struct circle {
-        static let points = [3,4,5,6,7,8,9,10,11,12]
-        static let price = 100
-        static let pigRateNew = 1
-        static let upgradePriceA = [3,4,5,6,7,8,9,10,11]
-        static let pigRateA = [3,4,5,6,7,8,9,10,11]
-        static let upgradePriceB = [3,4,5,6,7]
-        static let pigRateB = [3,4,5,6,7]
-        static let upgradePriceC = [3,4,5,6,7]
-        static let pigRateC = [3,4,5,6,7]
+        static let points = [300,315,330,345,360,375,390,405,420,435]
+        static let price = 675000
+        static let pigRateNew = 30
+        static let upgradePriceA = [33750,40195,47865,57000,67885,80840,96275,114650,136540]
+        static let pigRateA = [1,2,1,2,1,2,1,2,2]
+        static let upgradePriceB = [270000,365145,493820,667845,903190]
+        static let pigRateB = [12,12,12,12,12]
+        static let upgradePriceC = [67500,91285,123455,166960,225800]
+        static let pigRateC = [3,3,3,3,3]
     }
     
     struct bumper {
