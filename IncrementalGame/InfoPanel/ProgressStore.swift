@@ -33,22 +33,41 @@ class ProgressStore: SKView {
         
         shapeNode = SKShapeNode(ellipseIn: CGRect(x: 0, y: 0, width: frame.width, height: frame.height));
         fixtureNode = SKShapeNode(ellipseIn: CGRect(x: 0, y: 0, width: frame.width, height: frame.height));
+        
+        // Add all Shapes and Fixtures in enum
+        var items1: [StoreItem] = []
+        var items2: [StoreItem] = []
+        
+        for type in ObjectType.types {
+            if type.isFixture() {
+                items2.append(StoreItem(objType: type))
+            } else {
+                items1.append(StoreItem(objType: type))
+            }
+        }
+        
+        items = [items1,items2]
+        
+        
+        
         // Adds all the items to the store data
-        items = [
+        /*items = [
             [ // RING 1
                 StoreItem(objType: .Triangle),
                 StoreItem(objType: .Square),
                 StoreItem(objType: .Pentagon),
                 StoreItem(objType: .Hexagon),
+                StoreItem(objType: .Octagon),
                 StoreItem(objType: .Circle),
-                StoreItem(objType: .Star),
             ],
             [ // RING 2
                 StoreItem(objType: .Bumper),
                 StoreItem(objType: .Graviton),
                 StoreItem(objType: .Vortex),
             ]
-        ]
+        ]*/
+        
+        
         
         super.init(frame: frame);
         

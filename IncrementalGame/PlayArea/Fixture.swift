@@ -12,11 +12,6 @@ import SpriteKit
 /// Fixtures, such as the bumper, used in gameplay. 
 class Fixture: GameObject {
     
-    /*struct PigRates {
-        static let newFixture = 50
-        static let upgrade = [0, 10, 20, 30, 40, 50] // [Lvl0, Lvl1, Lvl2, etc...] Adjust passive rates here
-    }*/
-    
     //var withSize: CGSize  // REFACTOR: This might not need to be stored
     var inZone: Zone
     var upgradeLevel = 0
@@ -68,8 +63,8 @@ class Fixture: GameObject {
     
     func upgrade() {
         guard canUpgrade() else {return}
-        upgradeLevel += 1
         inZone.pIG.feed(portion: objectType.getPigRateFix(upgradeLevel))
+        upgradeLevel += 1
         if let force = self.children[0] as? SKFieldNode {
             force.strength *= 1.25
         } else {

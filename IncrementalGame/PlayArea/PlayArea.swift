@@ -39,7 +39,7 @@ class PlayArea: SKView {
         
         super.init(frame: frame)
         setupTouchEvents()
-        //self.showsPhysics = true
+        //self.showsPhysics // testing only
         
         presentScene(zone)
         let data: [String: Zone] = ["zone": zone]
@@ -49,6 +49,9 @@ class PlayArea: SKView {
     
     /*func testSetUp() { // for testing collision rates only, not for production
         zone.addAllowedObject(type: .Hexagon)
+        while zone.canIncreaseCapacity() {
+            zone.increaseShapeCapacity()
+        }
         for _ in 1...12 {
             let shape = zone.addShape(of: .Hexagon, at: CGPoint(x:0,y:0))
             for _ in 1...5 {
