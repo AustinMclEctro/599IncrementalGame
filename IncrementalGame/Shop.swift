@@ -40,6 +40,16 @@ class Shop: SKView {
         // We want a clear background so that shapes are visible behind
         scene?.backgroundColor = .clear;
         
+        // Add all Shapes and Fixtures in enum
+        for type in ObjectType.types {
+            if type.isFixture() {
+                addStoreItem(ring: 2, gameObject: GameObject(type: type))
+            } else {
+                addStoreItem(ring: 1, gameObject: GameObject(type: type))
+            }
+        }
+        
+        /*
         // All of the shapes created and added
         let triangle = GameObject(type: .Triangle);
         let square = GameObject(type: .Square);
@@ -63,6 +73,9 @@ class Shop: SKView {
         addStoreItem(ring: 2, gameObject: vortex)
         let gravitron = GameObject(type: .Graviton);
         addStoreItem(ring: 2, gameObject: gravitron)
+        */
+        
+        
         self.scene?.backgroundColor = .clear;
         self.backgroundColor = .clear;
         blackout();

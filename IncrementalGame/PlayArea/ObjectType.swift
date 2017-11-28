@@ -24,6 +24,8 @@ enum ObjectType: String, Codable {
     case Graviton
     case Vortex
     
+    static let types = [Triangle,Square,Pentagon,Hexagon,Octagon,Circle,Bumper,Graviton,Vortex]
+    
     struct triangle {
         static let points = [3,4,5,6,7,8,9,10,11,12]
         static let price = 100
