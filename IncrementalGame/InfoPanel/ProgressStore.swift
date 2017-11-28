@@ -40,8 +40,8 @@ class ProgressStore: SKView {
                 StoreItem(objType: .Square),
                 StoreItem(objType: .Pentagon),
                 StoreItem(objType: .Hexagon),
+                StoreItem(objType: .Octagon),
                 StoreItem(objType: .Circle),
-                StoreItem(objType: .Star),
             ],
             [ // RING 2
                 StoreItem(objType: .Bumper),

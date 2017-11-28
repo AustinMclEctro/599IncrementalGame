@@ -54,10 +54,10 @@ class PlayArea: SKView {
         }
         for _ in 1...12 {
             let shape = zone.addShape(of: .Hexagon, at: CGPoint(x:0,y:0))
-            for _ in 1...3 {
+            for _ in 1...5 {
                 shape?.upgradeB()
             }
-            for _ in 1...2 {
+            for _ in 1...5 {
                 shape?.upgradeC()
             }
         }

@@ -13,13 +13,6 @@ import SpriteKit
 /// Shape objects, such as the triangle and square, used for gameplay. 
 class Shape: GameObject {
     
-    /*struct PigRates {
-        static let newShape = 50
-        static let upgradeA = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90] // [Lvl 0, Lvl 1, Lvl 2, etc...]
-        static let upgradeB = [0, 10, 20, 30, 40, 50]  // LOOK: Adjust variable passive rates here
-        static let upgradeC = [0, 10, 20, 30, 40, 50]
-    }*/
-    
     //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
     //var withSize: CGSize // REFACTOR: Might need to remove
     var inZone: Zone
@@ -92,8 +85,8 @@ class Shape: GameObject {
     
     func upgradeA() {
         guard canUpgradeA() else {return}
-        upgradeALevel += 1
         inZone.pIG.feed(portion: objectType.getPigRateA(upgradeALevel))
+        upgradeALevel += 1
         pointValue = objectType.getPoints(upgradeALevel)
     }
     
@@ -103,8 +96,8 @@ class Shape: GameObject {
     
     func upgradeB() {
         guard canUpgradeB() else {return}
-        upgradeBLevel += 1
         inZone.pIG.feed(portion: objectType.getPigRateB(upgradeBLevel))
+        upgradeBLevel += 1
         self.physicsBody?.restitution += 0.15
     }
     
@@ -114,8 +107,8 @@ class Shape: GameObject {
     
     func upgradeC() {
         guard canUpgradeC() else {return}
-        upgradeCLevel += 1
         inZone.pIG.feed(portion: objectType.getPigRateC(upgradeCLevel))
+        upgradeCLevel += 1
         self.physicsBody?.linearDamping -= 0.15
     }
     

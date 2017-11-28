@@ -45,15 +45,15 @@ class Shop: SKView {
         let square = GameObject(type: .Square);
         let pentagon = GameObject(type: .Pentagon);
         let hexagon = GameObject(type: .Hexagon);
+        let octagon = GameObject(type: .Octagon);
         let circle = GameObject(type: .Circle);
-        let star = GameObject(type: .Star);
         
         addStoreItem(ring: 1, gameObject: triangle);
         addStoreItem(ring: 1, gameObject: square);
         addStoreItem(ring: 1, gameObject: pentagon);
         addStoreItem(ring: 1, gameObject: hexagon);
+        addStoreItem(ring: 1, gameObject: octagon);
         addStoreItem(ring: 1, gameObject: circle);
-        addStoreItem(ring: 1, gameObject: star);
         
         // Create structures
         
