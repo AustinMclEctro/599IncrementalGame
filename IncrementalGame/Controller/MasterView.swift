@@ -54,7 +54,7 @@ class MasterView: UIView {
             gameState = savedGameState
         } else {
             var player = Player(id: 1)
-            gameState = GameState(5000, [], player)
+            gameState = GameState(80, [], player)
         }
         
         // Configure and create the subviews
@@ -178,6 +178,9 @@ class MasterView: UIView {
     @objc func onReceiveCurrencyUpdate(_ notification: NSNotification) {
         if let amount = notification.userInfo?["amount"] as? Int {
             updateCurrencyA(by: amount)
+            
+            //Update the progress bar
+            playArea.getZone().updateProgress(money: gameState.currencyA)
         }
     }
     
