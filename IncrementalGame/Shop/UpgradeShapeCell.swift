@@ -178,6 +178,8 @@ class UpgradeShapeCell: ShopCollectionViewCell {
         if (shape!.canUpgradeA() && _shape!.upgradePriceA() <= _curA) {
             //shape?.upgradeA();
             shouldUpgrade(_shape!, 1);
+        
+            upPrice1.text = shape?.upgradePriceA().toCurrency()
         }
         
     }
@@ -188,6 +190,7 @@ class UpgradeShapeCell: ShopCollectionViewCell {
         if (shape!.canUpgradeB() && _shape!.upgradePriceB() <= _curA) {
             //shape?.upgradeB();
             shouldUpgrade(_shape!, 2);
+            upPrice2.text = shape?.upgradePriceB().toCurrency()
         }
     }
     @objc func upgrade3(sender: UIButton) {
@@ -197,6 +200,7 @@ class UpgradeShapeCell: ShopCollectionViewCell {
         if (shape!.canUpgradeC() && _shape!.upgradePriceC() <= _curA) {
             //shape?.upgradeC();
             shouldUpgrade(_shape!, 3);
+            upPrice3.text = shape?.upgradePriceC().toCurrency()
         }
     }
     
