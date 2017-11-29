@@ -54,7 +54,7 @@ class MasterView: UIView {
             gameState = savedGameState
         } else {
             var player = Player(id: 1)
-            gameState = GameState(80, [], player)
+            gameState = GameState(9000, [], player)
         }
         
         // Configure and create the subviews
@@ -270,6 +270,7 @@ class MasterView: UIView {
             openFixtureShop()
         }
     }
+    
     func openShapeShop() {
         progressStore.isShape = true;
         if (shopOpen) {
@@ -290,7 +291,19 @@ class MasterView: UIView {
         
         
     }
+    // @Luke - this is what you call to animate a shape. To see the animation (couldnt figure it out need your expertise) look at ProgressStore "@Luke"
+    func shapeAchieved(objectType: ObjectType) {
+        // TODO - check if shape achieved already
+        if !playArea.getZone().allowedObjects.contains(objectType) {
+            openShapeShop();
+            playArea.getZone().addAllowedObject(type: objectType);
+            progressStore.shapeAchieved(objectType: objectType)
+            
+            return;
+        }
+    }
     func openFixtureShop() {
+        
         progressStore.isShape = false;
         if (shopOpen) {
             tapToClose.removeFromSuperview();
@@ -301,7 +314,7 @@ class MasterView: UIView {
         else {
             progressStore.updateStores();
             self.addSubview(progressStore);
-            self.addSubview(shop);
+            //self.addSubview(shop);
             progressStore.animateIn()
             self.addSubview(tapToClose);
             
@@ -365,14 +378,17 @@ class MasterView: UIView {
     
     
     func createZone() {
-        let zone = Zone(size: playAreaFrame.size, children: [], pIG: nil, allowedObjects: nil)
-        gameState.zones.append(zone)
-        // TODO - change this with gameState newZonePrice
-        // gameState.currencyA -= Zone.newZonePrice;
-        sceneCollection.reloadData();
-        playArea.selectZone(index: gameState.zones.count-1);
-        transitionToClose()
-        shop.currentShapes = playArea.getGameObjects();
+        if currencyA >= playArea.newZonePrice() {
+            updateCurrencyA(by: -playArea.newZonePrice());
+            let zone = Zone(size: playAreaFrame.size, children: [], pIG: nil, allowedObjects: nil)
+            gameState.zones.append(zone)
+            // TODO - change this with gameState newZonePrice
+            // gameState.currencyA -= Zone.newZonePrice;
+            sceneCollection.reloadData();
+            playArea.selectZone(index: gameState.zones.count-1);
+            transitionToClose()
+            shop.currentShapes = playArea.getGameObjects();
+        }
         
     }
     
