@@ -31,12 +31,24 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var hapticMediumGenerator = UIImpactFeedbackGenerator(style: .medium);
     var hapticHeavyGenerator = UIImpactFeedbackGenerator(style: .heavy);
     
+    var liquid: SKSpriteNode
+    var lastCurrency = 100
+
+    
     //var seconds: Double = 0 // for testing collision rates only, not for production
     //var hits: Double = 0 // for testing collision rates only, not for production
     
     init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
+        liquid = SKSpriteNode(color: .blue, size: CGSize(width: size.width, height: size.height))
         
         super.init(size: size)
+        //Add progress "Liquid"
+        liquid.position = CGPoint(x: size.width/2, y: -size.height)
+        liquid.anchorPoint = CGPoint(x: 0.5, y: 0)
+        //liquid.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 10, height: 10), center: CGPoint(x: 0, y: liquid.size.height/2));
+        //liquid.physicsBody?.pinned = true;
+        //liquid.physicsBody?.angularDamping = 1.0
+        
         //backgroundColor = SKColor.black
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(resetGravity), userInfo: nil, repeats: true);
         motionManager.startAccelerometerUpdates()
@@ -57,10 +69,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         outline.fillColor = .clear
         outline.strokeColor = .white
         outline.glowWidth = 1.5
-        let background = SKSpriteNode(imageNamed: "DefaultSquares")
-        background.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
-        background.scale(to: frame.size);
-        self.addChild(background)
+        self.addChild(liquid)
         self.addChild(outline)
         
         addAllowedObject(type: .Triangle)
@@ -82,6 +91,34 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func updateProgress(money: Int) {
+        if money > lastCurrency {
+            lastCurrency = lastCurrency * 10
+            let moveTop = SKAction.moveTo(y: 0, duration: 0.5)
+            let emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+            emitter?.particleTexture = SKTexture(imageNamed: "Octagon")
+            emitter?.numParticlesToEmit = 30
+            emitter?.particleLifetime = 0.5
+            emitter?.position = CGPoint(x: size.width/2, y: size.height-10)
+            emitter?.particleSize = CGSize(width:80, height: 80)
+            let addEmitter = SKAction.run({
+                self.addChild(emitter!)
+            })
+            let wait = SKAction.wait(forDuration: 1)
+            let remove = SKAction.run({
+                self.removeFromParent()
+            })
+            
+            let moveBot = SKAction.moveTo(y: -size.height + size.height*0.1, duration: 0.5)
+            let celebrate = SKAction.sequence([moveTop,addEmitter,wait,remove, moveBot])
+            liquid.run(celebrate)
+            
+        } else {
+            let percent = CGFloat(money)/CGFloat(lastCurrency)
+            let moveAction = SKAction.moveTo(y: -size.height + percent*size.height, duration: 0.5)
+            liquid.run(moveAction)
+        }
+    }
     
     /*func canUpgradeA() -> Bool {
         return upgradeALevel < 3

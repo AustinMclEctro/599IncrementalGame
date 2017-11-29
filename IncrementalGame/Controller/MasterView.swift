@@ -178,6 +178,9 @@ class MasterView: UIView {
     @objc func onReceiveCurrencyUpdate(_ notification: NSNotification) {
         if let amount = notification.userInfo?["amount"] as? Int {
             updateCurrencyA(by: amount)
+            
+            //Update the progress bar
+            playArea.getZone().updateProgress(money: gameState.currencyA)
         }
     }
     

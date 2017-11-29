@@ -28,7 +28,7 @@ enum ObjectType: String, Codable {
     
     struct triangle {
         static let points = [20,21,22,23,24,25,26,27,28,29]
-        static let price = 9000
+        static let price = 2
         static let pigRateNew = 2
         static let upgradePriceA = [450,535,640,760,905,1075,1285,1530,1820]
         static let pigRateA = [0,0,0,0,0,0,0,0,1]
