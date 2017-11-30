@@ -21,6 +21,8 @@ class Shape: GameObject {
     var upgradeALevel = 0
     var upgradeBLevel = 0
     var upgradeCLevel = 0
+    var pointsLabel = SKLabelNode(fontNamed: "PingFangSC-Light")    // for upgradeA
+    var border: SKShapeNode?                                        // for upgradeB
     
     override init(type: ObjectType, at: CGPoint, inZone: Zone) {
         self.inZone = inZone
@@ -46,10 +48,29 @@ class Shape: GameObject {
         emitter?.particleTexture = SKTexture(image: self.getType().getImage()!)
         emitter?.numParticlesToEmit = 10
         emitter?.particleLifetime = 0.25
-        emitter?.position = CGPoint(x:self.size.width/2 , y:self.size.height/2)
+        //emitter?.position = CGPoint(x:self. , y:self.size.height/2)
         emitter?.particleSize = CGSize(width: 40, height: 40)
         emitter?.targetNode = inZone
         self.addChild(emitter!)
+        
+        self.drawPointsLabel()
+        self.color = SKColor.black      // set so it can be blended into (to make darker) for upgradeC
+        self.colorBlendFactor = 0
+    }
+    
+    func getPoints() -> Int {
+        return self.objectType.getPoints() * pointMultiplier
+    }
+    
+    // Draws the shape's points value.
+    func drawPointsLabel()
+    {
+        pointsLabel.text = String(self.getPoints())
+        pointsLabel.fontSize = 75
+        pointsLabel.fontColor = UIColor.white
+        pointsLabel.horizontalAlignmentMode = .center
+        pointsLabel.verticalAlignmentMode = .top
+        addChild(pointsLabel)
     }
     
     /// Animates the collision after being passed an emitter node by setting the proper duration,
@@ -62,6 +83,9 @@ class Shape: GameObject {
         emitter?.resetSimulation()
         emitter?.advanceSimulationTime(duration)
     }
+    
+    // MARK: Upgrade Methods
+    
     func upgradePriceA() -> Int {
         return 1000000000;
     }
@@ -75,36 +99,112 @@ class Shape: GameObject {
         return upgradeALevel < 10
     }
     
-    func upgradeA() {
-        guard upgradeALevel < 10 else {return}
-        upgradeALevel += 1
-        pointMultiplier += 1
-    }
-    
     func canUpgradeB() -> Bool {
         return upgradeBLevel < 5
-    }
-    
-    func upgradeB() {
-        guard upgradeBLevel < 5 else {return}
-        upgradeBLevel += 1
-        self.physicsBody?.restitution *= 1.25
     }
     
     func canUpgradeC() -> Bool {
         return upgradeCLevel < 5
     }
     
+    // Do upgradeA
+    func upgradeA() {
+        guard upgradeALevel < 10 else {return}
+        upgradeALevel += 1
+        pointMultiplier += 1
+        self.drawPointsLabel()
+    }
+    
+    // Do upgradeB
+    func upgradeB() {
+        guard upgradeBLevel < 5 else {return}
+        upgradeBLevel += 1
+        self.physicsBody?.restitution *= 1.25
+        drawUpgradeB()
+    }
+    
+    // Do upgradeC
     func upgradeC() {
         guard upgradeCLevel < 5 else {return}
         upgradeCLevel += 1
         self.physicsBody?.linearDamping *= 0.8
+        drawUpgradeC()
     }
     
+    // Draw in shape border for bounce upgrade.
+    func drawUpgradeB()
+    {
+        if(border == nil) { setupShapeBorder() }
+        border?.glowWidth += CGFloat(self.upgradeBLevel * 3)
+    }
     
+    // Darkens color of shape for reduced friction upgrade.
+    func drawUpgradeC()
+    {
+        self.colorBlendFactor += 0.1
+    }
     
-    func getPoints() -> Int {
-        return self.objectType.getPoints() * pointMultiplier
+    // Draws an SKShapeNode border around the given shape.
+    // Relevant for upgradeB.
+    func setupShapeBorder()
+    {
+        var points: [CGPoint]
+        switch self.getType() {
+        case .Triangle:
+            points = [
+                CGPoint(x: 0, y: self.size.height * 2),                           // top
+                CGPoint(x: -self.size.width * 2.4, y: -self.size.height * 2),     // bottom-left
+                CGPoint(x: self.size.width * 2.4, y: -self.size.height * 2),      // bottom-right
+                CGPoint(x: 0, y: self.size.height * 2)                            // back to top
+            ]
+            border = SKShapeNode(points: &points, count: points.count)
+            
+        case .Square:
+            points = [
+                CGPoint(x: -self.size.width * 2.4, y: self.size.height * 2.4),      // top-left
+                CGPoint(x: -self.size.width * 2.4, y: -self.size.height * 2.4),     // bottom-left
+                CGPoint(x: self.size.width * 2.4, y: -self.size.height * 2.4),      // bottom-right
+                CGPoint(x: self.size.width * 2.4, y: self.size.height * 2.4),       // top-right
+                CGPoint(x: -self.size.width * 2.4, y: self.size.height * 2.4)       // back to top-left
+            ]
+            border = SKShapeNode(points: &points, count: points.count)
+            
+        case .Pentagon:
+            points = [
+                CGPoint(x: 0, y: self.size.height * 2.2),                             // top
+                CGPoint(x: -self.size.width * 2.2, y: self.size.height * 0.5),                           // left
+                CGPoint(x: -self.size.width * 1.4, y: -self.size.height * 2.2),     // bottom-left
+                CGPoint(x: self.size.width * 1.4, y: -self.size.height * 2.2),      // bottom-right
+                CGPoint(x: self.size.width * 2.2, y: self.size.height * 0.5),                            // right
+                CGPoint(x: 0, y: self.size.height * 2.2)                              // back to top
+            ]
+            border = SKShapeNode(points: &points, count: points.count)
+            
+        case .Hexagon:
+            points = [
+                CGPoint(x: -self.size.width * 1.2, y: self.size.height * 2),    // top-left
+                CGPoint(x: -self.size.width * 2.2, y: 0),                          // left
+                CGPoint(x: -self.size.width * 1.2, y: -self.size.height * 2),   // bottom-left
+                CGPoint(x: self.size.width * 1.2, y: -self.size.height * 2),    // bottom-right
+                CGPoint(x: self.size.width * 2.2, y: 0),                          // right
+                CGPoint(x: self.size.width * 1.2, y: self.size.height * 2),    // top-right
+                CGPoint(x: -self.size.width * 1.2, y: self.size.height * 2),    // back to top-left
+            ]
+            border = SKShapeNode(points: &points, count: points.count)
+            
+            //case .Octagon:
+            //shape = drawOctagon()
+            
+        case .Circle:
+            border = SKShapeNode(circleOfRadius: self.size.width * 2.5)
+            
+        default:
+            return
+        }
+        border?.lineWidth = 7
+        border?.lineCap = CGLineCap.round
+        border?.lineJoin = CGLineJoin.round
+        addChild(border!)
     }
     
     // MARK: NSCoding
@@ -118,7 +218,7 @@ class Shape: GameObject {
     }
     
     override func encode(with aCoder: NSCoder) {
-        super.encode(with: aCoder)        
+        super.encode(with: aCoder)
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(objectType, forKey: PropertyKey.objectType)
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
         aCoder.encode(self.inZone, forKey: PropertyKey.zone)
