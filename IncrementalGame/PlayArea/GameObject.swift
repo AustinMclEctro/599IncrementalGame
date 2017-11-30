@@ -25,7 +25,7 @@ class GameObject: SKSpriteNode {
         let im = type.getImage() ?? UIImage()
         let texture = SKTexture(image: im)
         dimension = 1
-        
+
         super.init(texture: texture, color: UIColor.clear, size: im.size)
         
         self.isUserInteractionEnabled = true
@@ -65,7 +65,6 @@ class GameObject: SKSpriteNode {
         dimension = 1
         
         super.init(texture: texture, color: UIColor.clear, size: im.size)
-
     }
     
     /*
@@ -113,10 +112,10 @@ class GameObject: SKSpriteNode {
         return objectType
     }
     
-    
     // MARK: NSCoding
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }
