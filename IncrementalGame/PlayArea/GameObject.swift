@@ -108,7 +108,6 @@ class GameObject: SKSpriteNode {
             self.addChild(emitter!)
         }
     }*/
-    
     func getType() -> ObjectType {
         return objectType
     }

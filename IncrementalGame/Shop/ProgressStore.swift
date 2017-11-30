@@ -29,28 +29,53 @@ class ProgressStore: SKView {
     var isShape = true;
     var items: [[StoreItem]];
     let feedbackGenerator = UIImpactFeedbackGenerator();
+    
+    var upgradeZoneAButton: SKLabelNode;
+    
     override init(frame: CGRect) {
         
         shapeNode = SKShapeNode(ellipseIn: CGRect(x: 0, y: 0, width: frame.width, height: frame.height));
         fixtureNode = SKShapeNode(ellipseIn: CGRect(x: 0, y: 0, width: frame.width, height: frame.height));
+        
+        // Add all Shapes and Fixtures in enum
+        var items1: [StoreItem] = []
+        var items2: [StoreItem] = []
+        
+        for type in ObjectType.types {
+            if type.isFixture() {
+                items2.append(StoreItem(objType: type))
+            } else {
+                items1.append(StoreItem(objType: type))
+            }
+        }
+        
+        items = [items1,items2]
+        
+        
+        
         // Adds all the items to the store data
-        items = [
+        /*items = [
             [ // RING 1
                 StoreItem(objType: .Triangle),
                 StoreItem(objType: .Square),
                 StoreItem(objType: .Pentagon),
                 StoreItem(objType: .Hexagon),
+                StoreItem(objType: .Octagon),
                 StoreItem(objType: .Circle),
-                StoreItem(objType: .Star),
             ],
             [ // RING 2
                 StoreItem(objType: .Bumper),
                 StoreItem(objType: .Graviton),
                 StoreItem(objType: .Vortex),
             ]
-        ]
+        ]*/
+        
+        upgradeZoneAButton = SKLabelNode(text: "Add allowed shape");
         
         super.init(frame: frame);
+        
+        
+        
         
         shapeNode.fillColor = appColor.withAlphaComponent(0.3);
         fixtureNode.fillColor = appColor.withAlphaComponent(0.3);
@@ -103,6 +128,9 @@ class ProgressStore: SKView {
             counter += incr
             
         }
+        upgradeZoneAButton.position = CGPoint(x: halfWidth, y: halfWidth+10);
+        shapeNode.addChild(upgradeZoneAButton);
+        upgradeZoneAButton.fontColor = .white;
         blackout();
     }
     func setupStoreFixtures() {
@@ -132,9 +160,11 @@ class ProgressStore: SKView {
             counter += incr
             
         }
+        
         blackout();
         
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -172,16 +202,16 @@ class ProgressStore: SKView {
         // Makes all shapes black, then shows only the ones that can be added
         // Should be called only when needed (purchasing objects, changing zones)
         var items = isShape ? self.items[0] : self.items[1]
-        
-        for x in items {
-            x.color = UIColor.black;
-            x.colorBlendFactor = 1.0;
-            if let controller = superview as? MasterView {
+        if let controller = superview as? MasterView {
+            for x in items {
+                if controller.playArea.getZone().canAdd(type: x.objectType) {
+                    x.color = UIColor.black;
+                    x.colorBlendFactor = 1.0;
+                }
                 x.canUpgrade(controller.playArea.getZone());
             }
-            
-            
         }
+        
             
         
         nextLowestRing1 = 0;
@@ -201,7 +231,9 @@ class ProgressStore: SKView {
         }
     }
     func updateStores() {
+    
         if let controller = superview as? MasterView {
+            
             if (nextLowestRing1 < items[0].count) && isShape {
                 var storeItem1 = items[0][nextLowestRing1];
                 
@@ -231,16 +263,16 @@ class ProgressStore: SKView {
     func applyFilter(item: StoreItem, controller: MasterView) {
         // Makes store items black or normal depending on ability to add
         if (!(controller.playArea.getZone().canAdd(type: item.objectType))) {
-            if item.objectType.getUnlockPrice() > curA {
+            /*if item.objectType.getUnlockPrice() > curA {
                 item.color = UIColor.black;
                 item.colorBlendFactor = 1.0;
                 item.priceLabel.fontColor = .white;
             }
-            else {
+            else {*/
                 item.color = UIColor.gray;
                 item.colorBlendFactor = 0.0;
                 item.priceLabel.fontColor = .black;
-            }
+            //}
         }
         else if (item.objectType.getPrice() > curA) {
             item.color = UIColor.black;
@@ -256,6 +288,31 @@ class ProgressStore: SKView {
     }
     var selectedNode: StoreItem?;
     var tempSelectedNode: StoreItem?;
+    // @Luke - I tried to add an emitter and it didnt show up. Not really sure how it works
+    func shapeAchieved(objectType: ObjectType) {
+        for shape in items[0] {
+            if shape.objectType == objectType {
+                // TODO: Do some animation
+                var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+                emitter?.particleTexture = SKTexture(image: shape.objectType.getImage()!)
+                emitter?.numParticlesToEmit = 10
+                emitter?.particleLifetime = 0.25
+                emitter?.position = CGPoint(x:shape.size.width/2 , y:shape.size.height/2)
+                emitter?.particleSize = CGSize(width: 40, height: 40)
+                emitter?.targetNode = self.shapeNode
+                
+                var im = shape.objectType.getImage();
+                emitter?.particleTexture = SKTexture(image: im ?? UIImage())
+                if (emitter != nil) {
+                    shape.addChild(emitter!)
+                    let duration = Double((emitter?.particleLifetime)!*CGFloat((emitter?.numParticlesToEmit)!))
+                    emitter?.resetSimulation()
+                    emitter?.advanceSimulationTime(duration)
+                }
+            }
+        }
+        blackout()
+    }
     @objc func tap(sender: UITapGestureRecognizer) {
         
         if (sender.state == .ended) {
@@ -268,12 +325,7 @@ class ProgressStore: SKView {
                         if let controller = self.superview as? MasterView {
                             feedbackGenerator.prepare();
                             feedbackGenerator.impactOccurred();
-                            if !controller.playArea.getZone().allowedObjects.contains(node.objectType) {
-                                controller.updateCurrencyA(by: -node.objectType.getUnlockPrice());
-                                controller.playArea.getZone().upgradeB(objectType: node.objectType);
-                                blackout()
-                                return;
-                            }
+                            
                             controller.purchaseObject(of: node.objectType, sender: nil)
                             
                             return;

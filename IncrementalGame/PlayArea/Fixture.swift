@@ -52,12 +52,18 @@ class Fixture: GameObject {
         self.constraints = [conX,conY]
     }
     
+    func upgradePrice() -> Int {
+        guard canUpgrade() else {return -1}
+        return objectType.getUpgradePriceFix(upgradeLevel)
+    }
+    
     func canUpgrade() -> Bool {
         return upgradeLevel < 5
     }
     
     func upgrade() {
-        guard upgradeLevel < 5 else {return}
+        guard canUpgrade() else {return}
+        inZone.pIG.feed(portion: objectType.getPigRateFix(upgradeLevel))
         upgradeLevel += 1
         if let force = self.children[0] as? SKFieldNode {
             force.strength *= 1.25

@@ -44,14 +44,14 @@ extension SceneCollectionView: UICollectionViewDragDelegate, UICollectionViewDro
                 // Upgrade
                 var loc = session.location(in: up);
                 var zone = zones[self.dragLoc!];
-                if (loc.y < up.frame.midY && zone.canUpgradeA()) {
+                /*if (loc.y < up.frame.midY && zone.canUpgradeA()) {
                     // TODO: Check currency
                     zone.upgradeA();
                 }
                 else if (loc.y >= up.frame.midY && zone.canUpgradeB()) {
                     // TODO: Check currency
                     zone.upgradeB();
-                }
+                }*/
             }
         }
     }

@@ -9,10 +9,10 @@
 import Foundation
 extension Int {
     func toCurrency() -> String {
-        let symbols = ["µJ","mJ","J","kJ","MJ","GJ","TJ"]
+        let symbols = ["","K","M","B","T","q","Q"]
         
         var val = Double(self)
-        var suffix: Double
+        var suffix: Int
         
         switch self {
         case 0...999:
@@ -37,7 +37,7 @@ extension Int {
             suffix = 6
         }
         
-        let display = String(format: "%.4g ", val) + symbols[Int(suffix)]
+        let display = String(format: "%.4g ", val) + symbols[suffix]
         
         return display
     }

@@ -48,7 +48,7 @@ class StoreItem: SKSpriteNode {
             unlocked = false;
             let lock = UIImage(named: "Lock") ?? UIImage();
             self.texture = SKTexture(image: lock);
-            priceLabel.text = objectType.getUnlockPrice().toCurrency();
+            priceLabel.text = "";//objectType.getUnlockPrice().toCurrency();
         }
         else {
             unlocked = true;

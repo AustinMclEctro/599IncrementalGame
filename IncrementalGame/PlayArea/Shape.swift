@@ -13,11 +13,10 @@ import SpriteKit
 /// Shape objects, such as the triangle and square, used for gameplay. 
 class Shape: GameObject {
     
-    
-    var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+    //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
     //var withSize: CGSize // REFACTOR: Might need to remove
     var inZone: Zone
-    var pointMultiplier = 1
+    var pointValue = 0
     var upgradeALevel = 0
     var upgradeBLevel = 0
     var upgradeCLevel = 0
@@ -30,12 +29,13 @@ class Shape: GameObject {
         super.init(type: type, at: at, inZone: inZone)
         //super.setUp(at: at, withSize: withSize)
         
+        self.pointValue = objectType.getPoints(upgradeALevel)
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = true
-        self.physicsBody?.restitution = 0.75
+        self.physicsBody?.restitution = 0.2
         self.physicsBody?.angularDamping = 0.5
         self.physicsBody?.friction = 0.5
-        self.physicsBody?.linearDamping = 0.5
+        self.physicsBody?.linearDamping = 0.8
         self.physicsBody?.mass = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
         let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.width-(dimension/2)+5))
@@ -45,13 +45,14 @@ class Shape: GameObject {
         let conY = SKConstraint.positionY(rangeY)
         let conD = SKConstraint.distance(rangeD, to: CGPoint(x: inZone.size.width * 0.5, y: inZone.size.width * 0.5), in: inZone)
         self.constraints = [conX,conY,conD]
-        emitter?.particleTexture = SKTexture(image: self.getType().getImage()!)
-        emitter?.numParticlesToEmit = 10
-        emitter?.particleLifetime = 0.25
+
+        //emitter?.particleTexture = SKTexture(image: self.getType().getImage()!)
+        //emitter?.numParticlesToEmit = 10
+        //emitter?.particleLifetime = 0.25
         //emitter?.position = CGPoint(x:self. , y:self.size.height/2)
-        emitter?.particleSize = CGSize(width: 40, height: 40)
-        emitter?.targetNode = inZone
-        self.addChild(emitter!)
+        //emitter?.particleSize = CGSize(width: 40, height: 40)
+        //emitter?.targetNode = inZone
+        //self.addChild(emitter!)
         
         self.drawPointsLabel()
         self.color = SKColor.black      // set so it can be blended into (to make darker) for upgradeC
@@ -59,7 +60,7 @@ class Shape: GameObject {
     }
     
     func getPoints() -> Int {
-        return self.objectType.getPoints() * pointMultiplier
+        return pointValue
     }
     
     // Draws the shape's points value.
@@ -79,24 +80,32 @@ class Shape: GameObject {
     /// - Parameter collisionEmitter: The SKEmitterNode that contains the settings for the animation.
     func animateCollision() {
         // Set up a sequence animation which deletes its node after completion.
-        let duration = Double((emitter?.particleLifetime)!*CGFloat((emitter?.numParticlesToEmit)!))
-        emitter?.resetSimulation()
-        emitter?.advanceSimulationTime(duration)
+        //let duration = Double((emitter?.particleLifetime)!*CGFloat((emitter?.numParticlesToEmit)!))
+        //emitter?.resetSimulation()
+        //emitter?.advanceSimulationTime(duration)
+        removeAction(forKey: "pulse")
+        let pulseIn = SKAction.scale(to: CGSize(width: dimension*0.75, height: dimension*0.75), duration: 0.03)
+        let pulseOut = SKAction.scale(to: CGSize(width: dimension, height: dimension), duration: 0.03)
+        let pulse = SKAction.sequence([pulseIn,pulseOut])
+        run(pulse, withKey: "pulse")
     }
     
     // MARK: Upgrade Methods
     
     func upgradePriceA() -> Int {
-        return 1000000000;
+        guard canUpgradeA() else {return -1}
+        return objectType.getUpgradePriceA(upgradeALevel)
     }
     func upgradePriceB() -> Int {
-        return objectType.getPrice();
+        guard canUpgradeB() else {return -1}
+        return objectType.getUpgradePriceB(upgradeBLevel)
     }
     func upgradePriceC() -> Int {
-        return objectType.getPrice();
+        guard canUpgradeC() else {return -1}
+        return objectType.getUpgradePriceC(upgradeCLevel)
     }
     func canUpgradeA() -> Bool {
-        return upgradeALevel < 10
+        return upgradeALevel < 9
     }
     
     func canUpgradeB() -> Bool {
@@ -109,25 +118,28 @@ class Shape: GameObject {
     
     // Do upgradeA
     func upgradeA() {
-        guard upgradeALevel < 10 else {return}
+        guard canUpgradeA() else {return}
+        inZone.pIG.feed(portion: objectType.getPigRateA(upgradeALevel))
         upgradeALevel += 1
-        pointMultiplier += 1
+        pointValue = objectType.getPoints(upgradeALevel)
         self.drawPointsLabel()
     }
     
     // Do upgradeB
     func upgradeB() {
-        guard upgradeBLevel < 5 else {return}
+        guard canUpgradeB() else {return}
+        inZone.pIG.feed(portion: objectType.getPigRateB(upgradeBLevel))
         upgradeBLevel += 1
-        self.physicsBody?.restitution *= 1.25
+        self.physicsBody?.restitution += 0.15
         drawUpgradeB()
     }
     
     // Do upgradeC
     func upgradeC() {
-        guard upgradeCLevel < 5 else {return}
+        guard canUpgradeC() else {return}
+        inZone.pIG.feed(portion: objectType.getPigRateC(upgradeCLevel))
         upgradeCLevel += 1
-        self.physicsBody?.linearDamping *= 0.8
+        self.physicsBody?.linearDamping -= 0.15
         drawUpgradeC()
     }
     
@@ -223,7 +235,6 @@ class Shape: GameObject {
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
         aCoder.encode(self.inZone, forKey: PropertyKey.zone)
     }
-    
     
     required convenience init?(coder aDecoder: NSCoder) {
         let objectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)

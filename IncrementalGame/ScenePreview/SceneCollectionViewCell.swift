@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class SceneCollectionViewCell: UICollectionViewCell {
+    
     var image: UIImage? {
         set(val) {
             imagePreview.image = val;
@@ -19,11 +20,23 @@ class SceneCollectionViewCell: UICollectionViewCell {
         }
     }
     var imagePreview: UIImageView;
+    var inactiveRateLabel: UILabel;
+    
     override init(frame: CGRect) {
-        imagePreview = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height));
+        
+        // Configure preview of zone
+        imagePreview = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height - 20)); // - 20 for passive rate label
+
+        // Configure passive rate label
+        inactiveRateLabel = UILabel(frame: CGRect(x: 0, y: frame.height - 15, width: frame.width, height: 15))
+        inactiveRateLabel.text = "Passive Rate"  // TODO: Get passive rate
+        inactiveRateLabel.textColor = UIColor.white
+        inactiveRateLabel.textAlignment = NSTextAlignment.center
+        inactiveRateLabel.isHidden = false
+        
         super.init(frame: frame);
+        self.addSubview(inactiveRateLabel)
         self.addSubview(imagePreview);
-        backgroundColor = .red;
     }
     
     required init?(coder aDecoder: NSCoder) {

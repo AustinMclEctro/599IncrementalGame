@@ -30,13 +30,17 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
             var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newZone", for: indexPath);
             if let new = cell as? NewSceneCollectionViewCell {
                 // TODO: add game state price
-                new.newScenePrice.text = "-0$"
+                if let controller = superview as? MasterView {
+                    
+                    new.newScenePrice.text = controller.playArea.newZonePrice().toCurrency();//"-0$"
+                }
+                
             }
             return cell;
         }
         else {
             
-            var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "previewZone", for: indexPath);
+            var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "previewZone", for: indexPath) as! SceneCollectionViewCell;
             //var cell = UICollectionViewCell(frame: CGRect(x: 0, y: 0, width: frame.width/3, height: frame.width/3*1.2))
             
             if let controller = superview as? MasterView {
@@ -50,19 +54,15 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
                     else {
                         // Show live view
                         cell.addSubview(playArea);
-                        playArea.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height)
+                        playArea.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height - 20) // - 20 for passive rate label
                     }
                 }
-                if let prev = cell as? SceneCollectionViewCell {
-                    prev.image = UIImage(cgImage: (im?.cgImage())!)
-                }
                 
-                
-                
-                
+                cell.image = UIImage(cgImage: (im?.cgImage())!)
+                cell.inactiveRateLabel.text = "\(zones[indexPath.row].getPassiveRate().toCurrency()) / second"
             }
-            
-            zoneCells.append(cell as! SceneCollectionViewCell);
+
+            zoneCells.append(cell);
             return cell;
         }
         
@@ -98,12 +98,14 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical;
         let startWidth = frame.width/4 > 100 ? 100 : frame.width/3;
-        flowLayout.itemSize = CGSize(width: startWidth,height: startWidth)
+        flowLayout.itemSize = CGSize(width: startWidth,height: startWidth + 20)
         flowLayout.minimumInteritemSpacing = startWidth/6;
         flowLayout.minimumLineSpacing = startWidth/6
         flowLayout.sectionInset = .init(top: 0, left: startWidth/3, bottom: 0, right: startWidth/3)
         feedbackGenerator = UIImpactFeedbackGenerator();
         feedbackGenerator.prepare();
+        
+        
         super.init(frame: frame, collectionViewLayout: flowLayout)
         
         dataSource = self
@@ -115,6 +117,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         self.dragInteractionEnabled = true;
         self.dragDelegate = self;
         self.dropDelegate = self;
+
     }
     
     override func didMoveToSuperview() {

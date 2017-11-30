@@ -10,8 +10,23 @@ import Foundation
 import UIKit
 
 class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
+    var tapToAddButton: UILabel;
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // Even with 1000 cells per minute would still take 21 days to hit either end if starting in middle
+        
+        if (_cs.count == 0) {
+            self.addSubview(tapToAddButton);
+            superview?.addSubview(shapesStore);
+            superview?.addSubview(fixturesStore);
+            fixturesStore.isEnabled = false;
+        }
+        else if (tapToAddButton.superview != nil) {
+            tapToAddButton.removeFromSuperview()
+        }
+        if (_cs.count == 0) {
+            return _cs.count;
+        }
+        fixturesStore.isEnabled = true;
         return 60970891;
     }
     private var _cs: [GameObject] = [];
@@ -66,8 +81,8 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // +One fixture, +one shape
         
-        let row = indexPath.row%(currentShapes.count+2)
-        if (row == 0) { // Purchase Shape
+        let row = indexPath.row%(currentShapes.count)
+        /*if (row == 0) { // Purchase Shape
             let cell = dequeueReusableCell(withReuseIdentifier: "purchaseShape", for: indexPath) as! PurchaseShapeCell;
             cell.toggleShop = purchaseShape;
             return cell;
@@ -76,29 +91,31 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
             let cell = dequeueReusableCell(withReuseIdentifier: "purchaseFixture", for: indexPath) as! PurchaseFixtureCell;
             cell.toggleShop = purchaseFixture;
             return cell;
-        }
-        else { // Get shape
-            if let shape = currentShapes[row-2] as? Shape {
+        }*/
+        //else { // Get shape
+            if let shape = currentShapes[row] as? Shape {
                 let cell = dequeueReusableCell(withReuseIdentifier: "upgradeShape", for: indexPath) as! UpgradeShapeCell;
                 cell.shape = shape;
                 cell.shouldUpgrade = shouldUpgrade;
                 return cell;
             }
-            else if let fixture = currentShapes[row-2] as? Fixture {
+            else if let fixture = currentShapes[row] as? Fixture {
                 let cell = dequeueReusableCell(withReuseIdentifier: "upgradeFixture", for: indexPath) as! UpgradeFixtureCell;
                 cell.fixture = fixture;
                 return cell;
             }
-        }
+        //}
         return UICollectionViewCell();
     }
     override func reloadData() {
         
         
         super.reloadData()
-        scrollToItem(at: IndexPath(row: 30485444, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
-        // Have to scroll at least one to get to propper size (plus shows dragability)
-        scrollToItem(at: IndexPath(row: 30485445, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
+        if (_cs.count >= 1) {
+            scrollToItem(at: IndexPath(row: 30485444, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
+            // Have to scroll at least one to get to propper size (plus shows dragability)
+            scrollToItem(at: IndexPath(row: 30485445, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
+        }
         
     }
     var oldCenterCell: UICollectionViewCell?;
@@ -169,6 +186,13 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
                 self.oldCenterCell = cell;
                 cell.acceptsTouches = true;
                 cell.alpha = 1;
+                /* TODO: @Austin - We can uncomment after focus implemented in GameObject :)
+                if let shape = cell as? UpgradeShapeCell {
+                    //shape.shape.focus();
+                }
+                else if let fixture = cell as? UpgradeFixtureCell {
+                    //fixture.fixture.focus();
+                }*/
             }
         }
         if (leftInd != nil) {
@@ -201,6 +225,8 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     }
     
     var selectionFeedback: UISelectionFeedbackGenerator;
+    var shapesStore: UIButton;
+    var fixturesStore: UIButton;
     init(frame: CGRect) {
         selectionFeedback = UISelectionFeedbackGenerator()
         selectionFeedback.prepare();
@@ -210,6 +236,14 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         layout.minimumLineSpacing = frame.height/4
         layout.minimumInteritemSpacing = frame.width/8
         
+        shapesStore = UIButton(frame: CGRect(x: frame.minX, y: frame.minY, width: frame.height, height: frame.height));
+        shapesStore.setImage(UIImage(named: "ShapesStore"), for: .normal)
+        fixturesStore = UIButton(frame: CGRect(x: frame.minX+frame.width-frame.height, y: frame.minY, width: frame.height, height: frame.height));
+        fixturesStore.setImage(UIImage(named: "FixturesStore"), for: .normal);
+        tapToAddButton = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        tapToAddButton.text = "<- Tap to add your first shape";
+        tapToAddButton.textColor = .white
+        tapToAddButton.textAlignment = .center;
         super.init(frame: frame, collectionViewLayout: layout)
         delegate = self;
         dataSource = self;
@@ -217,8 +251,22 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         register(UpgradeShapeCell.self, forCellWithReuseIdentifier: "upgradeShape");
         register(UpgradeFixtureCell.self, forCellWithReuseIdentifier: "upgradeFixture");
         register(PurchaseFixtureCell.self, forCellWithReuseIdentifier: "purchaseFixture");
-        
+        superview?.addSubview(fixturesStore);
+        superview?.addSubview(shapesStore);
+        shapesStore.addTarget(self, action: #selector(openShapeShop), for: .touchUpInside);
+        fixturesStore.addTarget(self, action: #selector(openFixtureShop), for: .touchUpInside);
     }
+    @objc func openShapeShop(sender: UIButton) {
+        if let controller = superview as? MasterView {
+            controller.openShapeShop()
+        }
+    }
+    @objc func openFixtureShop(sender: UIButton) {
+        if let controller = superview as? MasterView {
+            controller.openFixtureShop()
+        }
+    }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
