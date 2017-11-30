@@ -54,7 +54,14 @@ class Shape: GameObject {
         //emitter?.targetNode = inZone
         //self.addChild(emitter!)
         
-        self.drawPointsLabel()
+        // Setup points label
+        pointsLabel.text = String(pointValue)
+        pointsLabel.fontSize = 75
+        pointsLabel.fontColor = UIColor.white
+        pointsLabel.horizontalAlignmentMode = .center
+        pointsLabel.verticalAlignmentMode = .top
+        self.addChild(pointsLabel)
+        
         self.color = SKColor.black      // set so it can be blended into (to make darker) for upgradeC
         self.colorBlendFactor = 0
     }
@@ -63,15 +70,9 @@ class Shape: GameObject {
         return pointValue
     }
     
-    // Draws the shape's points value.
-    func drawPointsLabel()
+    func updatePointsLabel()
     {
-        pointsLabel.text = String(self.getPoints())
-        pointsLabel.fontSize = 75
-        pointsLabel.fontColor = UIColor.white
-        pointsLabel.horizontalAlignmentMode = .center
-        pointsLabel.verticalAlignmentMode = .top
-        addChild(pointsLabel)
+        pointsLabel.text = String(pointValue)
     }
     
     /// Animates the collision after being passed an emitter node by setting the proper duration,
@@ -122,7 +123,7 @@ class Shape: GameObject {
         inZone.pIG.feed(portion: objectType.getPigRateA(upgradeALevel))
         upgradeALevel += 1
         pointValue = objectType.getPoints(upgradeALevel)
-        self.drawPointsLabel()
+        updatePointsLabel()
     }
     
     // Do upgradeB
