@@ -295,20 +295,24 @@ class ProgressStore: SKView {
                 // TODO: Do some animation
                 var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
                 emitter?.particleTexture = SKTexture(image: shape.objectType.getImage()!)
-                emitter?.numParticlesToEmit = 10
-                emitter?.particleLifetime = 0.25
+                emitter?.numParticlesToEmit = 25
+                emitter?.particleLifetime = 1.0
                 emitter?.position = CGPoint(x:shape.size.width/2 , y:shape.size.height/2)
                 emitter?.particleSize = CGSize(width: 40, height: 40)
+                emitter?.emissionAngleRange = 10
                 emitter?.targetNode = self.shapeNode
                 
-                var im = shape.objectType.getImage();
-                emitter?.particleTexture = SKTexture(image: im ?? UIImage())
-                if (emitter != nil) {
+                let addEmitter = SKAction.run({
                     shape.addChild(emitter!)
-                    let duration = Double((emitter?.particleLifetime)!*CGFloat((emitter?.numParticlesToEmit)!))
-                    emitter?.resetSimulation()
-                    emitter?.advanceSimulationTime(duration)
-                }
+                })
+                let wait = SKAction.wait(forDuration: 1)
+                let remove = SKAction.run({
+                    emitter?.removeFromParent()
+                })
+                
+                let sequence = SKAction.sequence([addEmitter, wait, remove])
+                shape.run(sequence)
+                
             }
         }
         blackout()

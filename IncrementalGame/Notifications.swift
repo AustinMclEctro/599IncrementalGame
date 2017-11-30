@@ -18,4 +18,5 @@ extension Notification.Name {
     static let vibrationPreferenceChanged = "hapticFeedbackPreferenceChanged"
     static let resume = "resume"
     static let startupPopupClosed = "startupPopupClosed"
+    static let celebration = "celebration"
 }

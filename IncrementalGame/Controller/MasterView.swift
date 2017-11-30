@@ -114,6 +114,9 @@ class MasterView: UIView {
         self.addSubview(settingsButton)
         self.addSubview(shop);
         
+        //Update the progress bar for the first time
+        playArea.getZone().updateProgress(money: gameState.currencyA)
+        
         // Subscribe to applicationWillResignActive notification
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(saveGame), name: Notification.Name.UIApplicationWillResignActive, object: nil)
@@ -122,7 +125,7 @@ class MasterView: UIView {
         notificationCenter.addObserver(self, selector: #selector(onReceivedBackgroundIncome(_:)), name: NSNotification.Name(rawValue: Notification.Name.backgroundIncomeEarned), object: nil)
         notificationCenter.addObserver(self, selector: #selector(onResume), name: NSNotification.Name(rawValue: Notification.Name.resume), object: nil)
         notificationCenter.addObserver(self, selector: #selector(onStartupPopupClosed), name: NSNotification.Name(rawValue: Notification.Name.startupPopupClosed), object: nil)
-        
+        notificationCenter.addObserver(self, selector: #selector(celebration), name: NSNotification.Name(rawValue: Notification.Name.celebration), object: nil)
         setupTouchEvents()
     }
 
@@ -292,14 +295,16 @@ class MasterView: UIView {
         
     }
     // @Luke - this is what you call to animate a shape. To see the animation (couldnt figure it out need your expertise) look at ProgressStore "@Luke"
-    func shapeAchieved(objectType: ObjectType) {
+    @objc func celebration(_ notification: Notification) {
         // TODO - check if shape achieved already
-        if !playArea.getZone().allowedObjects.contains(objectType) {
-            openShapeShop();
-            playArea.getZone().addAllowedObject(type: objectType);
-            progressStore.shapeAchieved(objectType: objectType)
-            
-            return;
+        if let objectType = notification.userInfo?["Shape"] as? ObjectType {
+            if !playArea.getZone().allowedObjects.contains(objectType) {
+                openShapeShop();
+                playArea.getZone().addAllowedObject(type: objectType);
+                progressStore.shapeAchieved(objectType: objectType)
+                
+                return;
+            }
         }
     }
     func openFixtureShop() {

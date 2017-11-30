@@ -32,7 +32,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var hapticHeavyGenerator = UIImpactFeedbackGenerator(style: .heavy);
     
     var liquid: SKSpriteNode
-    var lastCurrency = 100
+    var lastCurrency = 10000
 
     
     //var seconds: Double = 0 // for testing collision rates only, not for production
@@ -91,6 +91,10 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func intializeProgress() {
+        
+    }
+    
     func updateProgress(money: Int) {
         if money > lastCurrency {
             lastCurrency = lastCurrency * 10
@@ -106,18 +110,32 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             })
             let wait = SKAction.wait(forDuration: 1)
             let remove = SKAction.run({
-                self.removeFromParent()
+                emitter?.removeFromParent()
             })
             
             let moveBot = SKAction.moveTo(y: -size.height + size.height*0.1, duration: 0.5)
             let celebrate = SKAction.sequence([moveTop,addEmitter,wait,remove, moveBot])
             liquid.run(celebrate)
             
+            //Post the notification that the area is upgraded
+            let data: [String: ObjectType] = ["Shape": getNextShape()!]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.celebration), object: nil, userInfo: data)
+            
+            
         } else {
             let percent = CGFloat(money)/CGFloat(lastCurrency)
             let moveAction = SKAction.moveTo(y: -size.height + percent*size.height, duration: 0.5)
             liquid.run(moveAction)
         }
+    }
+    
+    func getNextShape() -> ObjectType? {
+        for shape in ObjectType.types {
+            if !canAdd(type: shape){
+                return shape
+            }
+        }
+        return nil
     }
     
     /*func canUpgradeA() -> Bool {
