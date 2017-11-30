@@ -39,15 +39,6 @@ class SceneCollectionViewCell: UICollectionViewCell {
         self.addSubview(imagePreview);
     }
     
-    
-    /// Sets the rate for the inactive rate label in the cell
-    ///
-    /// - Parameter rate: The inactive income rate
-    func setInactiveRate(rate: Int) {
-        inactiveRateLabel.text = "\(rate)/second"
-    }
-    
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

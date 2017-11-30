@@ -59,6 +59,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
                 }
                 
                 cell.image = UIImage(cgImage: (im?.cgImage())!)
+                cell.inactiveRateLabel.text = "\(zones[indexPath.row].getPassiveRate().toCurrency()) / second"
             }
 
             zoneCells.append(cell);

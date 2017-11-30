@@ -95,7 +95,7 @@ class StartupPopup : UIView {
     }
     
     func displayPopup(incomeEarned: Int) {
-        self.backgroundIncomeLabel.text = "\(incomeEarned)"
+        self.backgroundIncomeLabel.text = "\(incomeEarned.toCurrency())"
     }
     
     // MARK: NSCoding
