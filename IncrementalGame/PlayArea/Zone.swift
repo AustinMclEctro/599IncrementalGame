@@ -32,7 +32,10 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var hapticHeavyGenerator = UIImpactFeedbackGenerator(style: .heavy);
     
     var liquid: SKSpriteNode
-    var lastCurrency = 10000
+    
+    var cumulative: Int = 0
+    //This needs to be set to the next multiple above the starting amount. 
+    var lastCurrency = 100
 
     
     //var seconds: Double = 0 // for testing collision rates only, not for production
@@ -90,13 +93,12 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: basePigRate)
         }
     }
-    
-    func intializeProgress() {
-        
+    func getCumulative() -> Int {
+        return cumulative
     }
-    
     func updateProgress(money: Int) {
-        if money > lastCurrency {
+        cumulative += money
+        if cumulative > lastCurrency {
             lastCurrency = lastCurrency * 10
             let moveTop = SKAction.moveTo(y: 0, duration: 0.5)
             let emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
@@ -123,7 +125,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             
             
         } else {
-            let percent = CGFloat(money)/CGFloat(lastCurrency)
+            let percent = CGFloat(cumulative)/CGFloat(lastCurrency)
             let moveAction = SKAction.moveTo(y: -size.height + percent*size.height, duration: 0.5)
             liquid.run(moveAction)
         }

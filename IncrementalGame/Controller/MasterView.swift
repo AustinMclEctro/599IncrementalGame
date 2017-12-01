@@ -115,7 +115,7 @@ class MasterView: UIView {
         self.addSubview(shop);
         
         //Update the progress bar for the first time
-        playArea.getZone().updateProgress(money: gameState.currencyA)
+        playArea.getZone().updateProgress(money: playArea.getZone().getCumulative())
         
         // Subscribe to applicationWillResignActive notification
         let notificationCenter = NotificationCenter.default
@@ -181,9 +181,6 @@ class MasterView: UIView {
     @objc func onReceiveCurrencyUpdate(_ notification: NSNotification) {
         if let amount = notification.userInfo?["amount"] as? Int {
             updateCurrencyA(by: amount)
-            
-            //Update the progress bar
-            playArea.getZone().updateProgress(money: gameState.currencyA)
         }
     }
     

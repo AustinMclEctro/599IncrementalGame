@@ -145,6 +145,8 @@ class PlayArea: SKView {
         if let controller = superview as? MasterView {
             controller.updateCurrencyA(by: amount);
         }
+        //update the zone cumulative currency amount
+        self.getZone().updateProgress(money: amount)
     }
     
     
