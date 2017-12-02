@@ -224,13 +224,15 @@ class MasterView: UIView {
      
      }*/
     func upgradeZone() {
-        // @Andrew - not sure if I did this right
-        // @Andrew - how do i get the price? (Also needs to be added in ProgressStore)
-        if (playArea.getZone().shapeCapacity < playArea.getZone().maxCapacity) {
-            
+        var zonePrice = playArea.getZone().increaseCapacityPrice()
+        if (playArea.getZone().canIncreaseCapacity() && zonePrice <= currencyA) {
+            playArea.getZone().increaseShapeCapacity()
+            updateCurrencyA(by: -zonePrice);
+            progressStore.curA = currencyA;
+            progressStore.blackout();
         }
-        playArea.getZone().shapeCapacity += 1;
-        progressStore.curA = currencyA;
+        
+        
     }
     func upgradeFixture(obj: Fixture) {
         if (obj.upgradePrice() > currencyA) {

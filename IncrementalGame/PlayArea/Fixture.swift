@@ -65,7 +65,6 @@ class Fixture: GameObject {
         guard canUpgrade() else {return}
         inZone.pIG.feed(portion: objectType.getPigRateFix(upgradeLevel))
         upgradeLevel += 1
-        // @Andrew - children empty - causes out of bounds
         if let force = self.children[0] as? SKFieldNode {
             force.strength *= 1.25
         } else {

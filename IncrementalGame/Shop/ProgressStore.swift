@@ -20,12 +20,11 @@ class ProgressStore: SKView {
             updateStores();
             if let controller = superview as? MasterView {
                 var zone = controller.playArea.getZone();
-                if (zone.maxCapacity == zone.shapeCapacity) {
+                if (!zone.canIncreaseCapacity()) {
                     upgradeZoneAButton.text = "Max Zone Capacity Reached"
                 }
                 else {
-                    // @Andrew -  need zone price here too!
-                    var zoneUpPrice = 0;
+                    let zoneUpPrice = zone.increaseCapacityPrice();
                     if (_curA < zoneUpPrice) {
                         upgradeZoneAButton.fontColor = .gray
                     }
