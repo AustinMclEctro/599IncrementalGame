@@ -18,6 +18,24 @@ class ProgressStore: SKView {
             }
             _curA = val;
             updateStores();
+            if let controller = superview as? MasterView {
+                var zone = controller.playArea.getZone();
+                if (zone.maxCapacity == zone.shapeCapacity) {
+                    upgradeZoneAButton.text = "Max Zone Capacity Reached"
+                }
+                else {
+                    // @Andrew -  need zone price here too!
+                    var zoneUpPrice = 0;
+                    if (_curA < zoneUpPrice) {
+                        upgradeZoneAButton.fontColor = .gray
+                    }
+                    else {
+                        upgradeZoneAButton.fontColor = .white
+                    }
+                    upgradeZoneAButton.text = "Upgrade Zone Capacity to "+String(describing: zone.shapeCapacity+1)+" for "+zoneUpPrice.toCurrency()
+                }
+            }
+            
 
         }
         get {
@@ -70,7 +88,10 @@ class ProgressStore: SKView {
             ]
         ]*/
         
-        upgradeZoneAButton = SKLabelNode(text: "Add allowed shape");
+        upgradeZoneAButton = SKLabelNode(text: "Upgrade Zone Capacity to ");
+        // @Austin - how can we make this more visible?
+        upgradeZoneAButton.fontSize = 15;
+        
         
         super.init(frame: frame);
         
@@ -206,6 +227,7 @@ class ProgressStore: SKView {
             for x in items {
                 if controller.playArea.getZone().canAdd(type: x.objectType) {
                     x.color = UIColor.black;
+                    x.priceLabel.fontColor = .white;
                     x.colorBlendFactor = 1.0;
                 }
                 x.canUpgrade(controller.playArea.getZone());
@@ -332,6 +354,13 @@ class ProgressStore: SKView {
                             
                             controller.purchaseObject(of: node.objectType, sender: nil)
                             
+                            return;
+                        }
+                    }
+                    else if let node = nodes[ind] as? SKLabelNode {
+                        // TODO: Implement upgrade capacity
+                        if let controller = self.superview as? MasterView {
+                            controller.upgradeZone();
                             return;
                         }
                     }

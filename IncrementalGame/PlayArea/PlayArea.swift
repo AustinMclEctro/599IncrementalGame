@@ -42,6 +42,7 @@ class PlayArea: SKView {
         self.layer.cornerRadius = 75.0
         self.layer.masksToBounds = true
         
+        
         setupTouchEvents()
         //self.showsPhysics // testing only
         

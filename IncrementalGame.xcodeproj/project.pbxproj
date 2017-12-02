@@ -270,9 +270,9 @@
 				F8F307C61FC3416400054D37 /* ShopCollectionView.swift */,
 				F8F307C81FC3417300054D37 /* ShopCollectionViewCell.swift */,
 				F8F307CE1FC3419100054D37 /* PurchaseShapeCell.swift */,
-				F8F307CC1FC3418700054D37 /* UpgradeFixtureCell.swift */,
 				F8F307D01FC3419E00054D37 /* PurchaseFixtureCell.swift */,
 				F8F307CA1FC3417C00054D37 /* UpgradeShapeCell.swift */,
+				F8F307CC1FC3418700054D37 /* UpgradeFixtureCell.swift */,
 				F8B7C8871FB69F8100F072D9 /* StoreItem.swift */,
 				F8B7C8891FB6BB8A00F072D9 /* ProgressStore.swift */,
 			);
@@ -696,10 +696,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GXVTL6Z46Q;
+				DEVELOPMENT_TEAM = VG7RQ2WKA6;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = luke.599incremental;
+				PRODUCT_BUNDLE_IDENTIFIER = bentest.599incremental;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -711,10 +711,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GXVTL6Z46Q;
+				DEVELOPMENT_TEAM = VG7RQ2WKA6;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = luke.599incremental;
+				PRODUCT_BUNDLE_IDENTIFIER = bentest.599incremental;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

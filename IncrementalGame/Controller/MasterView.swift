@@ -102,6 +102,7 @@ class MasterView: UIView {
             shape, path in
             self.upgradeShape(obj: shape, path: path);
         }
+        shop.upgradeFixture = upgradeFixture
         
         self.backgroundColor = UIColor.black;
         self.addSubview(infoPanel);
@@ -127,6 +128,7 @@ class MasterView: UIView {
         notificationCenter.addObserver(self, selector: #selector(onStartupPopupClosed), name: NSNotification.Name(rawValue: Notification.Name.startupPopupClosed), object: nil)
         notificationCenter.addObserver(self, selector: #selector(celebration), name: NSNotification.Name(rawValue: Notification.Name.celebration), object: nil)
         setupTouchEvents()
+        self.layer.masksToBounds = true;
     }
 
     
@@ -221,6 +223,23 @@ class MasterView: UIView {
      }
      
      }*/
+    func upgradeZone() {
+        // @Andrew - not sure if I did this right
+        // @Andrew - how do i get the price? (Also needs to be added in ProgressStore)
+        if (playArea.getZone().shapeCapacity < playArea.getZone().maxCapacity) {
+            
+        }
+        playArea.getZone().shapeCapacity += 1;
+        progressStore.curA = currencyA;
+    }
+    func upgradeFixture(obj: Fixture) {
+        if (obj.upgradePrice() > currencyA) {
+            return
+        }
+        updateCurrencyA(by: -obj.upgradePrice())
+        obj.upgrade();
+        shop.reloadDataShift()
+    }
     func upgradeShape(obj: GameObject, path: Int) {
         if let shape = obj as? Shape {
             switch path {
@@ -252,6 +271,7 @@ class MasterView: UIView {
         else if let fixture = obj as? Fixture {
             
         }
+        shop.reloadDataShift()
     }
     
     /// Updates the value for currencyA. Used for shop purchases.
@@ -275,6 +295,7 @@ class MasterView: UIView {
     }
     
     func openShapeShop() {
+        progressStore.curA = currencyA;
         progressStore.isShape = true;
         if (shopOpen) {
             tapToClose.removeFromSuperview()
