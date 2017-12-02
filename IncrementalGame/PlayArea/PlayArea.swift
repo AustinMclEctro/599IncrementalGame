@@ -38,8 +38,13 @@ class PlayArea: SKView {
         pIGManager = PassiveIncomeManager(gameState: gameState)
         
         super.init(frame: frame)
+        
+        self.layer.cornerRadius = 75.0
+        self.layer.masksToBounds = true
+        
         setupTouchEvents()
         //self.showsPhysics // testing only
+        
         
         presentScene(zone)
         let data: [String: Zone] = ["zone": zone]

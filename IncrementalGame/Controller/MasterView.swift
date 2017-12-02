@@ -181,6 +181,9 @@ class MasterView: UIView {
     @objc func onReceiveCurrencyUpdate(_ notification: NSNotification) {
         if let amount = notification.userInfo?["amount"] as? Int {
             updateCurrencyA(by: amount)
+            
+            //will upgrade the progress meter at regular intervals to avoid weird behaviour when switching zones and going idle
+            playArea.getZone().updateProgress(money: 0)
         }
     }
     
