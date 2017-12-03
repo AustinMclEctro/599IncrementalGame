@@ -43,7 +43,7 @@ class GameObject: SKSpriteNode {
         
         // Configure physics body settings relative to the shape
         switch objectType {
-        case .Circle, .Bumper, .Graviton, .Vortex:
+        case .Circle, .Bonus, .Graviton, .Vortex:
             self.physicsBody = SKPhysicsBody(circleOfRadius: dimension/2.0)
         case .Square:
             self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: dimension, height: dimension))
@@ -51,9 +51,6 @@ class GameObject: SKSpriteNode {
             self.physicsBody = SKPhysicsBody(texture: self.texture!, size: CGSize(width: dimension, height: dimension))
         }
         
-        self.physicsBody?.categoryBitMask = 1
-        self.physicsBody?.contactTestBitMask = 1
-        self.physicsBody?.collisionBitMask = 1
     }
 
     init(type: ObjectType) {
@@ -88,7 +85,7 @@ class GameObject: SKSpriteNode {
         
         // Configure physics body settings relative to the shape
         switch objectType {
-            case .Circle, .Bumper, .Graviton, .Vortex:
+            case .Circle, .Bonus, .Graviton, .Vortex:
                 self.physicsBody = SKPhysicsBody(circleOfRadius: dimension/2.0)
             case .Square:
                 self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: dimension, height: dimension))

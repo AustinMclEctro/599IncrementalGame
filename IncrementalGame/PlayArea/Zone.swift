@@ -64,7 +64,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         let boundPath = UIBezierPath(roundedRect: boundRect, cornerRadius: 75.0)
         let boundary = SKPhysicsBody(edgeLoopFrom: boundPath.cgPath)
         boundary.friction = 1
-        boundary.categoryBitMask = 1
+        boundary.categoryBitMask = 2
         boundary.contactTestBitMask = 1
         boundary.collisionBitMask = 1
         boundary.usesPreciseCollisionDetection = true
@@ -78,7 +78,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         self.addChild(outline)
         
         addAllowedObject(type: .Triangle)
-        addAllowedObject(type: .Bumper)
         
         // Load zone properties
         if !children.isEmpty {
@@ -249,7 +248,22 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        //print(contact.collisionImpulse) // testing only
+        // one contact body will always be a shape so forced downcasting ok
+        
+        // turn on bonus for shape entering bonus zone
+        if contact.bodyA.categoryBitMask == 8 {
+            let shape = contact.bodyB.node as! Shape
+            let fix = contact.bodyA.node as! Fixture
+            shape.bonusValue = Int((Float(fix.upgradeLevel+1)*Float(shape.pointValue)/10.0)+0.5)
+            return
+        }
+        if contact.bodyB.categoryBitMask == 8 {
+            let shape = contact.bodyA.node as! Shape
+            let fix = contact.bodyB.node as! Fixture
+            shape.bonusValue = Int((Float(fix.upgradeLevel+1)*Float(shape.pointValue)/10.0)+0.5)
+            return
+        }
+        
         guard contact.collisionImpulse > minHit else {return}
         hapticFor(contact: contact);
         if let playArea = view as? PlayArea {
@@ -269,10 +283,23 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func didEnd(_ contact: SKPhysicsContact) {
+        let categoryA = contact.bodyA.categoryBitMask
+        let categoryB = contact.bodyB.categoryBitMask
+        guard categoryA == 8 || categoryB == 8 else {return} // don't care unless shape leaving bonus zone
+        
+        // turn off bonus for shape leaving bonus zone
+        if categoryA == 8 {
+            (contact.bodyB.node as! Shape).bonusValue = 0
+        } else {
+            (contact.bodyA.node as! Shape).bonusValue = 0
+        }
+    }
+    
     /// Returns a Boolean indicating whether the ObjectType can be added. Only allowed objects
     /// below the maximum permitted amount of items under that ObjectType can be added.
     ///
-    /// - Parameter type: The ObjectType (triange, bumper, etc.)
+    /// - Parameter type: The ObjectType (triange, vortex, etc.)
     /// - Returns: True if the object can be added, otherwise false.
     func canAdd(type: ObjectType) -> Bool {
         guard allowedObjects.contains(type) else {return false}
@@ -321,12 +348,13 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     func increaseCapacityPrice() -> Int {
+        guard canIncreaseCapacity() else {return -1}
         return 100
     }
     
     /// Adds an ObjectType to the allowedObjects array.
     ///
-    /// - Parameter type: The ObjectType (triange, bumper, etc.)
+    /// - Parameter type: The ObjectType (triange, vortex, etc.)
     func addAllowedObject(type: ObjectType) {
         allowedObjects.insert(type)
     }
@@ -334,7 +362,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     /// Removes an ObjectType to the allowedObjects array.
     ///
-    /// - Parameter type: The ObjectType (triange, bumper, etc.)
+    /// - Parameter type: The ObjectType (triange, vortex, etc.)
     func removeAllowedObject(type: ObjectType) {
         allowedObjects.remove(type)
     }

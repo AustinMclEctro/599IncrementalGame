@@ -17,6 +17,7 @@ class Shape: GameObject {
     //var withSize: CGSize // REFACTOR: Might need to remove
     var inZone: Zone
     var pointValue = 0
+    var bonusValue = 0
     var upgradeALevel = 0
     var upgradeBLevel = 0
     var upgradeCLevel = 0
@@ -38,6 +39,9 @@ class Shape: GameObject {
         self.physicsBody?.linearDamping = 0.8
         self.physicsBody?.mass = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
+        self.physicsBody?.categoryBitMask = 1
+        self.physicsBody?.contactTestBitMask = 1|2|4|8
+        self.physicsBody?.collisionBitMask = 1|2|4
         let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.width-(dimension/2)+5))
         let rangeY = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.height-(dimension/2)+5))
         let rangeD = SKRange(upperLimit: inZone.size.width * 0.6) // Need to tweak value still!!!!
@@ -128,7 +132,7 @@ class Shape: GameObject {
         return sh;
     }
     func getPoints() -> Int {
-        return pointValue
+        return pointValue + bonusValue
     }
     
     func updatePointsLabel()

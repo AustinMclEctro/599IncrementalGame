@@ -9,7 +9,7 @@
 import Foundation
 import SpriteKit
 
-/// Fixtures, such as the bumper, used in gameplay. 
+/// Fixtures, such as the vortex, used in gameplay.
 class Fixture: GameObject {
     
     //var withSize: CGSize  // REFACTOR: This might not need to be stored
@@ -22,24 +22,38 @@ class Fixture: GameObject {
         super.init(type: type, at: at, inZone: inZone)
         //super.setUp(at: at, withSize: withSize)
         
+        self.physicsBody?.categoryBitMask = 4
+        self.physicsBody?.contactTestBitMask = 1
+        self.physicsBody?.collisionBitMask = 1
+        
         switch objectType {
+        case .Bonus:
+            self.physicsBody = SKPhysicsBody(circleOfRadius: dimension*2)
+            let sizing = (objectType.getImage()?.size.width)!
+            let bonusArea = SKShapeNode(circleOfRadius: sizing)
+            bonusArea.setScale(2)
+            bonusArea.fillColor = .green
+            bonusArea.alpha = 0.05
+            self.addChild(bonusArea)
+            self.physicsBody?.categoryBitMask = 8
+            self.physicsBody?.collisionBitMask = 0
         case .Graviton:
             let grav = SKFieldNode.radialGravityField()
             grav.categoryBitMask = 1
             grav.isEnabled = true
-            grav.strength = 20
+            grav.strength = 75
             grav.isExclusive = false
-            grav.falloff = 0.75
+            grav.falloff = 0.7
             self.addChild(grav)
         case .Vortex:
             let vort = SKFieldNode.vortexField()
             vort.categoryBitMask = 1
             vort.isEnabled = true
-            vort.strength = 5
+            vort.strength = 10
             vort.isExclusive = false
             self.addChild(vort)
         default:
-            self.physicsBody?.restitution = 1.25
+            return
         }
         
         self.physicsBody?.isDynamic = false
@@ -65,11 +79,19 @@ class Fixture: GameObject {
         guard canUpgrade() else {return}
         inZone.pIG.feed(portion: objectType.getPigRateFix(upgradeLevel))
         upgradeLevel += 1
-        if let force = self.children[0] as? SKFieldNode {
-            force.strength *= 1.25
-        } else {
-            self.physicsBody?.restitution *= 1.25
+        switch objectType {
+        case .Graviton, .Vortex:
+            if let force = self.children[0] as? SKFieldNode {
+                force.strength *= 1.25
+            }
+        case .Bonus:
+            if let bonusArea = self.children[0] as? SKShapeNode {
+                bonusArea.alpha += 0.05
+            }
+        default:
+            return
         }
+        
     }
     
     // MARK: NSCoding

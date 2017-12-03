@@ -81,7 +81,7 @@ class ProgressStore: SKView {
                 StoreItem(objType: .Circle),
             ],
             [ // RING 2
-                StoreItem(objType: .Bumper),
+                StoreItem(objType: .Bonus),
                 StoreItem(objType: .Graviton),
                 StoreItem(objType: .Vortex),
             ]

@@ -44,30 +44,15 @@ class PlayArea: SKView {
         
         
         setupTouchEvents()
-        //self.showsPhysics // testing only
+        //self.showsPhysics = true// testing only
         
         
         presentScene(zone)
         let data: [String: Zone] = ["zone": zone]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
-        //testSetUp() // for testing collision rates only, not for production
+
     }
     
-    /*func testSetUp() { // for testing collision rates only, not for production
-        zone.addAllowedObject(type: .Hexagon)
-        while zone.canIncreaseCapacity() {
-            zone.increaseShapeCapacity()
-        }
-        for _ in 1...12 {
-            let shape = zone.addShape(of: .Hexagon, at: CGPoint(x:0,y:0))
-            for _ in 1...5 {
-                shape?.upgradeB()
-            }
-            for _ in 1...5 {
-                shape?.upgradeC()
-            }
-        }
-    }*/
     
     // Returns list of game objects within current zone.
     // TODO: Should implement as a cache instead?
