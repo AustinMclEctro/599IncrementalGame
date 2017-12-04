@@ -11,6 +11,7 @@ import Foundation
 extension Notification.Name {
     static let currencyChanged = "pointsChanged"
     static let inactiveIncomeRate = "inactiveIncomeRate"
+    static let inactiveIncomeRateChanged = "inactiveIncomeRateChanged"
     static let willSaveGameState = "willSaveGameState"
     static let shapesChanged = "shapesChanged"
     static let backgroundIncomeEarned = "backgroundIncomeEarned"

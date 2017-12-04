@@ -46,6 +46,7 @@ class InfoPanel: UIView {
         inactiveRateLabel = UILabel(frame: CGRect(x: 0, y: height+70, width: frame.width, height: 20));
         inactiveRateLabel.textColor = .white;
         inactiveRateLabel.textAlignment = .center;
+        inactiveRateLabel.text = "Passive: -/second" 
         
         // Configure logo
         let logoWidth = (183/77)*height

@@ -124,6 +124,8 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
         _inactiveRate += portion
         // QUESTION: Do we want to increase the background rate as well? Yes, for now.  Maybe go to just one rate eventually?
         _backgroundRate += portion
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRateChanged), object: nil, userInfo: nil)
     }
     
     // MARK: NSCoding
