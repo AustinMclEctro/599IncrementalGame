@@ -137,11 +137,6 @@ class MasterView: UIView {
     @objc func onStartupPopupClosed() {
         playArea.isPaused = false
         playArea.pIGManager.startInactiveIncomeGenerator()
-        UIView.animate(withDuration: 0.5, animations: {
-            self.startupPopup.alpha = 0
-        }) { _ in
-            self.startupPopup.removeFromSuperview()
-        }
     }
     
     
