@@ -149,6 +149,7 @@ class ProgressStore: SKView {
             
         }
         upgradeZoneAButton.position = CGPoint(x: halfWidth, y: halfWidth+10);
+        upgradeZoneAButton.zPosition = 0;
         shapeNode.addChild(upgradeZoneAButton);
         upgradeZoneAButton.fontColor = .white;
         blackout();
@@ -176,7 +177,7 @@ class ProgressStore: SKView {
             
             shape.size = imSize
             shape.position = pt
-            
+            shape.zPosition = 10;
             counter += incr
             
         }
@@ -228,6 +229,15 @@ class ProgressStore: SKView {
                     x.color = UIColor.black;
                     x.priceLabel.fontColor = .white;
                     x.colorBlendFactor = 1.0;
+                }
+                else {
+                    x.colorBlendFactor = 0.0;
+                    if (x.objectType.isFixture()) {
+                        x.priceLabel.fontColor = .white;
+                    }
+                    else {
+                        x.priceLabel.fontColor = .black;
+                    }
                 }
                 x.canUpgrade(controller.playArea.getZone());
             }
