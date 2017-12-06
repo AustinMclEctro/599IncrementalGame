@@ -40,6 +40,7 @@ class PlayArea: SKView {
         super.init(frame: frame)
         
         self.layer.cornerRadius = 75.0
+        
         self.layer.masksToBounds = true
         
         

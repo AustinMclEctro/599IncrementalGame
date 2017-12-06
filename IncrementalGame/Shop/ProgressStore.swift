@@ -293,7 +293,8 @@ class ProgressStore: SKView {
     }
     func applyFilter(item: StoreItem, controller: MasterView) {
         // Makes store items black or normal depending on ability to add
-        if (!(controller.playArea.getZone().canAdd(type: item.objectType))) {
+        if !(controller.playArea.getZone().allowedObjects.contains(item.objectType)) {
+        //if (!(controller.playArea.getZone().canAdd(type: item.objectType))) {
             /*if item.objectType.getUnlockPrice() > curA {
                 item.color = UIColor.black;
                 item.colorBlendFactor = 1.0;
