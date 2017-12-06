@@ -26,6 +26,10 @@
 		A3E9A9CB1FCE3FCE002C46A6 /* LiquidVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E9A9C91FCE3FCD002C46A6 /* LiquidVIew.swift */; };
 		A3E9A9CC1FCE3FCE002C46A6 /* LiquidContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E9A9CA1FCE3FCD002C46A6 /* LiquidContainer.swift */; };
 		D50473341FD7BA73002C058B /* BGM1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473331FD7BA73002C058B /* BGM1.mp3 */; };
+		D50473391FD85D4E002C058B /* ShapeUpgrade.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473351FD85D4D002C058B /* ShapeUpgrade.mp3 */; };
+		D504733A1FD85D4E002C058B /* FixtureCreation.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473361FD85D4D002C058B /* FixtureCreation.mp3 */; };
+		D504733B1FD85D4E002C058B /* ShapeCreation.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473371FD85D4D002C058B /* ShapeCreation.mp3 */; };
+		D504733C1FD85D4E002C058B /* PowerMeterDing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473381FD85D4E002C058B /* PowerMeterDing.mp3 */; };
 		F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00D1F90485F0028A5A1 /* Shop.swift */; };
 		F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00F1F904B8D0028A5A1 /* GameState.swift */; };
 		F80E2A081FBCF6A5003E3A2E /* UIClick.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F80E2A001FBCF6A5003E3A2E /* UIClick.mp3 */; };
@@ -101,6 +105,10 @@
 		A3E9A9C91FCE3FCD002C46A6 /* LiquidVIew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiquidVIew.swift; sourceTree = "<group>"; };
 		A3E9A9CA1FCE3FCD002C46A6 /* LiquidContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiquidContainer.swift; sourceTree = "<group>"; };
 		D50473331FD7BA73002C058B /* BGM1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BGM1.mp3; sourceTree = "<group>"; };
+		D50473351FD85D4D002C058B /* ShapeUpgrade.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ShapeUpgrade.mp3; sourceTree = "<group>"; };
+		D50473361FD85D4D002C058B /* FixtureCreation.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = FixtureCreation.mp3; sourceTree = "<group>"; };
+		D50473371FD85D4D002C058B /* ShapeCreation.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ShapeCreation.mp3; sourceTree = "<group>"; };
+		D50473381FD85D4E002C058B /* PowerMeterDing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = PowerMeterDing.mp3; sourceTree = "<group>"; };
 		F804A00D1F90485F0028A5A1 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		F804A00F1F904B8D0028A5A1 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		F80E2A001FBCF6A5003E3A2E /* UIClick.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = UIClick.mp3; sourceTree = "<group>"; };
@@ -201,6 +209,10 @@
 		F80E29FF1FBCF6A5003E3A2E /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				D50473361FD85D4D002C058B /* FixtureCreation.mp3 */,
+				D50473381FD85D4E002C058B /* PowerMeterDing.mp3 */,
+				D50473371FD85D4D002C058B /* ShapeCreation.mp3 */,
+				D50473351FD85D4D002C058B /* ShapeUpgrade.mp3 */,
 				F80E2A001FBCF6A5003E3A2E /* UIClick.mp3 */,
 			);
 			path = UI;
@@ -466,18 +478,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				F80E2A0D1FBCF6A5003E3A2E /* SquareHit.mp3 in Resources */,
+				D504733C1FD85D4E002C058B /* PowerMeterDing.mp3 in Resources */,
 				F80E2A0A1FBCF6A5003E3A2E /* OctagonHit.mp3 in Resources */,
 				F8FF742D1F86ED1A0057AF21 /* LaunchScreen.storyboard in Resources */,
 				F80E2A081FBCF6A5003E3A2E /* UIClick.mp3 in Resources */,
 				A37572FD1F9286FB0006CC3B /* MyParticle.sks in Resources */,
+				D504733B1FD85D4E002C058B /* ShapeCreation.mp3 in Resources */,
 				4C4898B01FBBFB1D00D6C420 /* Settings.bundle in Resources */,
 				F80E2A0E1FBCF6A5003E3A2E /* CircleHit.mp3 in Resources */,
+				D50473391FD85D4E002C058B /* ShapeUpgrade.mp3 in Resources */,
 				F80E2A0B1FBCF6A5003E3A2E /* PentagonHit.mp3 in Resources */,
 				A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */,
 				D50473341FD7BA73002C058B /* BGM1.mp3 in Resources */,
 				F80E2A091FBCF6A5003E3A2E /* TriangleHit.mp3 in Resources */,
 				F8FF74251F86ED1A0057AF21 /* Main.storyboard in Resources */,
 				F80E2A0C1FBCF6A5003E3A2E /* HexagonHit.mp3 in Resources */,
+				D504733A1FD85D4E002C058B /* FixtureCreation.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -708,10 +724,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GXVTL6Z46Q;
+				DEVELOPMENT_TEAM = 75QFN3WHS9;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = luke.599incremental;
+				PRODUCT_BUNDLE_IDENTIFIER = austin.599incremental;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -723,10 +739,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GXVTL6Z46Q;
+				DEVELOPMENT_TEAM = 75QFN3WHS9;
 				INFOPLIST_FILE = IncrementalGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = luke.599incremental;
+				PRODUCT_BUNDLE_IDENTIFIER = austin.599incremental;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

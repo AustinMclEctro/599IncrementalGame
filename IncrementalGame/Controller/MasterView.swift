@@ -40,6 +40,7 @@ class MasterView: UIView {
     let startupPopup: StartupPopup
     let settingsHelper = SettingsBundleHelper()
     var bgmPlayer:AVAudioPlayer?
+    var dingSoundNode = SKNode()
 
     var currencyA: Int {
         set(val) {
@@ -271,14 +272,18 @@ class MasterView: UIView {
         
         
     }
+    
     func upgradeFixture(obj: Fixture) {
         if (obj.upgradePrice() > currencyA) {
             return
         }
         updateCurrencyA(by: -obj.upgradePrice())
         obj.upgrade();
+        let playUpgradeSound = SKAction.playSoundFileNamed("ShapeUpgrade", waitForCompletion: false)
+        obj.run(playUpgradeSound)
         shop.reloadDataShift()
     }
+    
     func upgradeShape(obj: GameObject, path: Int) {
         if let shape = obj as? Shape {
             switch path {
@@ -306,7 +311,10 @@ class MasterView: UIView {
             default:
                 break;
             }
+            let playUpgradeSound = SKAction.playSoundFileNamed("ShapeUpgrade", waitForCompletion: false)
+            obj.run(playUpgradeSound)
         }
+        
         else if let fixture = obj as? Fixture {
             
         }
@@ -366,7 +374,10 @@ class MasterView: UIView {
                 return;
             }
         }
+//        let playDingSound = SKAction.playSoundFileNamed("PowerMeterDing", waitForCompletion: false)
+//        dingSoundNode.run(playDingSound)
     }
+    
     func openFixtureShop() {
         
         progressStore.isShape = false;

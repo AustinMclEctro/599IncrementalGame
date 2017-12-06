@@ -324,6 +324,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         pIG.feed(portion: shape.objectType.getPigRateNew());
         let data: [String: Zone] = ["zone": self]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
+        let playAddShapeSound = SKAction.playSoundFileNamed("ShapeCreation", waitForCompletion: false)
+        shape.run(playAddShapeSound)
         return shape;
     }
     
@@ -335,6 +337,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         removeAllowedObject(type: of)
         let data: [String: Zone] = ["zone": self]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
+        let playAddFixtureSound = SKAction.playSoundFileNamed("FixtureCreation", waitForCompletion: false)
+        fix.run(playAddFixtureSound)
         return fix
     }
     

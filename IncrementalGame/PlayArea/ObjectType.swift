@@ -381,7 +381,7 @@ enum ObjectType: String, Codable {
         
         switch self {
         case .Triangle:
-            soundFile = "TriangleHit.mp3"
+            soundFile = "TriangleHit"
         case .Square:
             soundFile = "SquareHit"
         case .Pentagon:
