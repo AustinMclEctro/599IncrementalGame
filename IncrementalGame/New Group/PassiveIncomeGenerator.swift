@@ -23,16 +23,24 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     // MARK: Properties
     
     // Rates
-    private var _backgroundRate: Int
+    private var _backgroundRate: Int = 0
     var backgroundRate: Int {
         get {
             return self.isBackgroundGeneratorOn ? self._backgroundRate : 0
         }
+        set (rate) {
+            self._backgroundRate = rate
+        }
     }
-    private var _inactiveRate: Int
+    private var _inactiveRate: Int = 0
     var inactiveRate: Int {
         get {
             return self.isInactiveGeneratorOn ? self._inactiveRate : 0
+        }
+        set (rate) {
+            self._inactiveRate = rate
+            
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRateChanged), object: nil, userInfo: nil)
         }
     }
     
@@ -48,10 +56,10 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     // MARK: Initializers
     
     init(backgroundRate: Int, inactiveRate: Int, bGStartTime: Date = Date(), bGStopTime: Date = Date()) {
-        self._backgroundRate = backgroundRate
-        self._inactiveRate = inactiveRate
-        
         super.init()
+        
+        self.backgroundRate = backgroundRate
+        self.inactiveRate = inactiveRate
         
         // Subscribe to notifications
         NotificationCenter.default.addObserver(self, selector: #selector(startBackgroundGenerator), name: NSNotification.Name(rawValue: Notification.Name.willSaveGameState), object: nil)
@@ -121,11 +129,9 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     }
     
     func feed(portion: Int) {
-        _inactiveRate += portion
+        inactiveRate += portion
         // QUESTION: Do we want to increase the background rate as well? Yes, for now.  Maybe go to just one rate eventually?
-        _backgroundRate += portion
-        
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRateChanged), object: nil, userInfo: nil)
+        backgroundRate += portion
     }
     
     // MARK: NSCoding
