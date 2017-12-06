@@ -153,8 +153,8 @@ class Shape: GameObject {
         //emitter?.resetSimulation()
         //emitter?.advanceSimulationTime(duration)
         removeAction(forKey: "pulse")
-        let pulseIn = SKAction.scale(to: CGSize(width: dimension*0.75, height: dimension*0.75), duration: 0.03)
-        let pulseOut = SKAction.scale(to: CGSize(width: dimension, height: dimension), duration: 0.03)
+        let pulseIn = SKAction.scale(to: CGSize(width: dimension*0.5, height: dimension*0.5), duration: 0.05)
+        let pulseOut = SKAction.scale(to: CGSize(width: dimension, height: dimension), duration: 0.05)
         let pulse = SKAction.sequence([pulseIn,pulseOut])
         run(pulse, withKey: "pulse")
     }
