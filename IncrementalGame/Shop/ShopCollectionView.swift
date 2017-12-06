@@ -186,13 +186,13 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
                 self.oldCenterCell = cell;
                 cell.acceptsTouches = true;
                 cell.alpha = 1;
-                /* TODO: @Austin - We can uncomment after focus implemented in GameObject :)
+                
                 if let shape = cell as? UpgradeShapeCell {
-                    //shape.shape.focus();
+                    shape.shape?.focus();
                 }
                 else if let fixture = cell as? UpgradeFixtureCell {
-                    //fixture.fixture.focus();
-                }*/
+                    fixture.fixture?.focus();
+                }
             }
         }
         if (leftInd != nil) {
@@ -206,6 +206,13 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
                 cell.frame = CGRect(x: cell.frame.minX, y: (self.frame.height/2)-(height/2), width: self.frame.width/2, height: height)
                 cell.acceptsTouches = false;
                 cell.alpha = heightPerc;
+                
+                if let shape = cell as? UpgradeShapeCell {
+                    shape.shape?.unfocus();
+                }
+                else if let fixture = cell as? UpgradeFixtureCell {
+                    fixture.fixture?.unfocus();
+                }
             }
         }
         if (rightInd != nil) {
@@ -219,6 +226,13 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
                 cell.frame = CGRect(x: cell.frame.minX, y: (self.frame.height/2)-(height/2), width: self.frame.width/2, height: height)
                 cell.acceptsTouches = false;
                 cell.alpha = heightPerc;
+                
+                if let shape = cell as? UpgradeShapeCell {
+                    shape.shape?.unfocus();
+                }
+                else if let fixture = cell as? UpgradeFixtureCell {
+                    fixture.fixture?.unfocus();
+                }
             }
         }
         

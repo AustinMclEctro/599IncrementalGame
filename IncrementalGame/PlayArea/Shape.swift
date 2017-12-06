@@ -22,6 +22,7 @@ class Shape: GameObject {
     var upgradeCLevel = 0
     var pointsLabel = SKLabelNode(fontNamed: "PingFangSC-Light")    // for upgradeA
     var border: SKShapeNode?                                        // for upgradeB
+    let borderLineWidth: CGFloat = 8
     
     override init(type: ObjectType, at: CGPoint, inZone: Zone) {
         self.inZone = inZone
@@ -62,6 +63,8 @@ class Shape: GameObject {
         pointsLabel.verticalAlignmentMode = .top
         self.addChild(pointsLabel)
         
+        setupShapeBorder()
+        
         self.color = SKColor.black      // set so it can be blended into (to make darker) for upgradeC
         self.colorBlendFactor = 0
     }
@@ -89,6 +92,25 @@ class Shape: GameObject {
         let pulseOut = SKAction.scale(to: CGSize(width: dimension, height: dimension), duration: 0.03)
         let pulse = SKAction.sequence([pulseIn,pulseOut])
         run(pulse, withKey: "pulse")
+    }
+    
+    // Called from ShopCollectionView to show which shape has upgrade focus.
+    // TODO: Maybe make the focus a separate border around the shape, away from the main border?
+    func focus()
+    {
+        // Put in place a temp border if the shape has no upgradeB
+        if(border?.lineWidth == 0) { border?.lineWidth = borderLineWidth }
+
+        border?.strokeColor = UIColor.yellow
+    }
+    
+    // Undoes shape upgrade focus.
+    func unfocus()
+    {
+        if(self.upgradeBLevel == 0) { border?.lineWidth = 0 }
+        else { border?.lineWidth = borderLineWidth }
+        
+        border?.strokeColor = UIColor.white
     }
     
     // MARK: Upgrade Methods
@@ -147,8 +169,12 @@ class Shape: GameObject {
     // Draw in shape border for bounce upgrade.
     func drawUpgradeB()
     {
-        if(border == nil) { setupShapeBorder() }
-        border?.glowWidth += CGFloat(self.upgradeBLevel * 3)
+        if(self.upgradeBLevel == 1){
+            border?.lineWidth = 6
+        }
+        else{
+            border?.glowWidth += CGFloat(self.upgradeBLevel * 3)
+        }
     }
     
     // Darkens color of shape for reduced friction upgrade.
@@ -214,7 +240,7 @@ class Shape: GameObject {
         default:
             return
         }
-        border?.lineWidth = 7
+        border?.lineWidth = 0       // set this higher when one upgrade has been done
         border?.lineCap = CGLineCap.round
         border?.lineJoin = CGLineJoin.round
         addChild(border!)
