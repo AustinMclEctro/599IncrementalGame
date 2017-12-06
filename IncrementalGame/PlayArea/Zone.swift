@@ -15,7 +15,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var motionManager = CMMotionManager()
     var shapeCapacity = 3
     let maxCapacity = 12
-    let minHit: CGFloat = 500 // lowered for demo
+    let minHit: CGFloat = 200 // lowered for demo
     var allowedObjects: Set<ObjectType> = []
     var gravityX: Double = 0
     var gravityY: Double = 0

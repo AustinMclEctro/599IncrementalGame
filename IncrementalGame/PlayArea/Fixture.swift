@@ -43,7 +43,7 @@ class Fixture: GameObject {
             let grav = SKFieldNode.radialGravityField()
             grav.categoryBitMask = 1
             grav.isEnabled = true
-            grav.strength = 75
+            grav.strength = 35
             grav.isExclusive = false
             grav.falloff = 0.7
             self.addChild(grav)
