@@ -15,6 +15,8 @@ class Fixture: GameObject {
     //var withSize: CGSize  // REFACTOR: This might not need to be stored
     var inZone: Zone
     var upgradeLevel = 0
+    var border: SKShapeNode?
+    let borderLineWidth: CGFloat = 20
     
     override init(type: ObjectType, at: CGPoint, inZone: Zone) {
         self.inZone = inZone
@@ -64,6 +66,21 @@ class Fixture: GameObject {
         let conX = SKConstraint.positionX(rangeX)
         let conY = SKConstraint.positionY(rangeY)
         self.constraints = [conX,conY]
+        
+        //TODO: Probably implement a separate border for highlighting. Do this for shape, but for fixtures, this will be the only border.
+        // Setup border for highlighting upgrade focus (only used for such for Fixtures).
+        border = SKShapeNode(circleOfRadius: self.size.width * 20)
+        border?.lineWidth = borderLineWidth * 3
+        border?.strokeColor = UIColor.yellow
+        addChild(border!)
+    }
+    
+    func focus() {
+        border?.lineWidth = borderLineWidth
+    }
+    
+    func unfocus() {
+        border?.lineWidth = 0
     }
     
     func upgradePrice() -> Int {
