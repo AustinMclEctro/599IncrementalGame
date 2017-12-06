@@ -67,8 +67,8 @@ class Shop: SKView {
         
         // Create structures
         
-        let bumper = GameObject(type: .Bumper);
-        addStoreItem(ring: 2, gameObject: bumper)
+        let bonus = GameObject(type: .Bonus);
+        addStoreItem(ring: 2, gameObject: bonus)
         let vortex = GameObject(type: .Vortex);
         addStoreItem(ring: 2, gameObject: vortex)
         let gravitron = GameObject(type: .Graviton);

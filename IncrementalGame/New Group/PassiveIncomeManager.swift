@@ -25,12 +25,25 @@ class PassiveIncomeManager {
         self.gameState = gameState
         
         // Subscribe to notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(collectBackgroundIncome), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onPigStart), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sendInactiveIncomeRate), name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRateChanged), object: nil)
     }
     
+    
+    /// Callback method that is called when there has been an update in one of the
+    /// passive income rates
+    @objc func sendInactiveIncomeRate() {
+        let data: [String: Int] = ["rate": calculateInactiveIncomeRate()]
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRate), object: nil, userInfo: data)
+    }
+    
+    
     /// Calculates and collects the income earned by the given zones
-    /// while the game was in the background (game was not open).
-    @objc func collectBackgroundIncome() {
+    /// while the game was in the background (game was not open). Also sends
+    /// the inactive rate at startup.
+    @objc func onPigStart() {
+        sendInactiveIncomeRate()
+        
         var totalBackgroundIncome = 0
         for zone in gameState.zones {
             zone.pIG.stopBackgroundGenerator()
@@ -64,6 +77,7 @@ class PassiveIncomeManager {
         }
     }
     
+    
     /// Collects the inactive income
     /// (when the game is being played but the zone is not being presented)
     /// for a set of provided zones. Updates the points in the info panel.
@@ -78,11 +92,7 @@ class PassiveIncomeManager {
         
         let currencyChange: [String: Int] = ["amount": totalActiveIncome]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.currencyChanged), object: nil, userInfo: currencyChange)
-        
-        let inactiveIncomeRate: [String: Int] = ["rate": calculateInactiveIncomeRate()]
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRate), object: nil, userInfo: inactiveIncomeRate)
     }
-    
     
     
     /// Calculates the total rate at which a given set of zones generates

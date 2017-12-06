@@ -102,6 +102,7 @@ class MasterView: UIView {
             shape, path in
             self.upgradeShape(obj: shape, path: path);
         }
+        shop.upgradeFixture = upgradeFixture
         
         self.backgroundColor = UIColor.black;
         self.addSubview(infoPanel);
@@ -127,6 +128,7 @@ class MasterView: UIView {
         notificationCenter.addObserver(self, selector: #selector(onStartupPopupClosed), name: NSNotification.Name(rawValue: Notification.Name.startupPopupClosed), object: nil)
         notificationCenter.addObserver(self, selector: #selector(celebration), name: NSNotification.Name(rawValue: Notification.Name.celebration), object: nil)
         setupTouchEvents()
+        self.layer.masksToBounds = true;
     }
 
     
@@ -169,6 +171,9 @@ class MasterView: UIView {
             startupPopup.displayPopup(incomeEarned: amount)
             startupPopup.isHidden = false
             startupPopup.bringSubview(toFront: startupPopup)
+            UIView.animate(withDuration: 0.5, animations: {
+                self.startupPopup.alpha = 1
+            })
         }
     }
     
@@ -181,6 +186,9 @@ class MasterView: UIView {
     @objc func onReceiveCurrencyUpdate(_ notification: NSNotification) {
         if let amount = notification.userInfo?["amount"] as? Int {
             updateCurrencyA(by: amount)
+            
+            //will upgrade the progress meter at regular intervals to avoid weird behaviour when switching zones and going idle
+            playArea.getZone().updateProgress(money: 0)
         }
     }
     
@@ -218,6 +226,25 @@ class MasterView: UIView {
      }
      
      }*/
+    func upgradeZone() {
+        var zonePrice = playArea.getZone().increaseCapacityPrice()
+        if (playArea.getZone().canIncreaseCapacity() && zonePrice <= currencyA) {
+            playArea.getZone().increaseShapeCapacity()
+            updateCurrencyA(by: -zonePrice);
+            progressStore.curA = currencyA;
+            progressStore.blackout();
+        }
+        
+        
+    }
+    func upgradeFixture(obj: Fixture) {
+        if (obj.upgradePrice() > currencyA) {
+            return
+        }
+        updateCurrencyA(by: -obj.upgradePrice())
+        obj.upgrade();
+        shop.reloadDataShift()
+    }
     func upgradeShape(obj: GameObject, path: Int) {
         if let shape = obj as? Shape {
             switch path {
@@ -249,6 +276,7 @@ class MasterView: UIView {
         else if let fixture = obj as? Fixture {
             
         }
+        shop.reloadDataShift()
     }
     
     /// Updates the value for currencyA. Used for shop purchases.
@@ -272,6 +300,7 @@ class MasterView: UIView {
     }
     
     func openShapeShop() {
+        progressStore.curA = currencyA;
         progressStore.isShape = true;
         if (shopOpen) {
             tapToClose.removeFromSuperview()

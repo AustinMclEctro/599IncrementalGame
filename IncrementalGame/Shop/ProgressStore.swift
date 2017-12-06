@@ -18,6 +18,23 @@ class ProgressStore: SKView {
             }
             _curA = val;
             updateStores();
+            if let controller = superview as? MasterView {
+                var zone = controller.playArea.getZone();
+                if (!zone.canIncreaseCapacity()) {
+                    upgradeZoneAButton.text = "Max Zone Capacity Reached"
+                }
+                else {
+                    let zoneUpPrice = zone.increaseCapacityPrice();
+                    if (_curA < zoneUpPrice) {
+                        upgradeZoneAButton.fontColor = .gray
+                    }
+                    else {
+                        upgradeZoneAButton.fontColor = .white
+                    }
+                    upgradeZoneAButton.text = "Upgrade Zone Capacity to "+String(describing: zone.shapeCapacity+1)+" for "+zoneUpPrice.toCurrency()
+                }
+            }
+            
 
         }
         get {
@@ -64,13 +81,16 @@ class ProgressStore: SKView {
                 StoreItem(objType: .Circle),
             ],
             [ // RING 2
-                StoreItem(objType: .Bumper),
+                StoreItem(objType: .Bonus),
                 StoreItem(objType: .Graviton),
                 StoreItem(objType: .Vortex),
             ]
         ]*/
         
-        upgradeZoneAButton = SKLabelNode(text: "Add allowed shape");
+        upgradeZoneAButton = SKLabelNode(text: "Upgrade Zone Capacity to ");
+        // @Austin - how can we make this more visible?
+        upgradeZoneAButton.fontSize = 15;
+        
         
         super.init(frame: frame);
         
@@ -129,6 +149,7 @@ class ProgressStore: SKView {
             
         }
         upgradeZoneAButton.position = CGPoint(x: halfWidth, y: halfWidth+10);
+        upgradeZoneAButton.zPosition = 0;
         shapeNode.addChild(upgradeZoneAButton);
         upgradeZoneAButton.fontColor = .white;
         blackout();
@@ -156,7 +177,7 @@ class ProgressStore: SKView {
             
             shape.size = imSize
             shape.position = pt
-            
+            shape.zPosition = 10;
             counter += incr
             
         }
@@ -206,7 +227,17 @@ class ProgressStore: SKView {
             for x in items {
                 if controller.playArea.getZone().canAdd(type: x.objectType) {
                     x.color = UIColor.black;
+                    x.priceLabel.fontColor = .white;
                     x.colorBlendFactor = 1.0;
+                }
+                else {
+                    x.colorBlendFactor = 0.0;
+                    if (x.objectType.isFixture()) {
+                        x.priceLabel.fontColor = .white;
+                    }
+                    else {
+                        x.priceLabel.fontColor = .black;
+                    }
                 }
                 x.canUpgrade(controller.playArea.getZone());
             }
@@ -332,6 +363,13 @@ class ProgressStore: SKView {
                             
                             controller.purchaseObject(of: node.objectType, sender: nil)
                             
+                            return;
+                        }
+                    }
+                    else if let node = nodes[ind] as? SKLabelNode {
+                        // TODO: Implement upgrade capacity
+                        if let controller = self.superview as? MasterView {
+                            controller.upgradeZone();
                             return;
                         }
                     }

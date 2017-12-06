@@ -20,15 +20,15 @@ enum ObjectType: String, Codable {
     case Hexagon
     case Octagon
     case Circle
-    case Bumper
+    case Bonus
     case Graviton
     case Vortex
     
-    static let types = [Triangle,Square,Pentagon,Hexagon,Octagon,Circle,Bumper,Graviton,Vortex]
+    static let types = [Triangle,Square,Pentagon,Hexagon,Octagon,Circle,Bonus,Graviton,Vortex]
     
     struct triangle {
         static let points = [20,21,22,23,24,25,26,27,28,29]
-        static let price = 2
+        static let price = 9000
         static let pigRateNew = 2
         static let upgradePriceA = [450,535,640,760,905,1075,1285,1530,1820]
         static let pigRateA = [0,0,0,0,0,0,0,0,1]
@@ -98,23 +98,23 @@ enum ObjectType: String, Codable {
         static let pigRateC = [3,3,3,3,3]
     }
     
-    struct bumper {
-        static let price = 700
-        static let pigRateNew = 7
+    struct bonus {
+        static let price = 1
+        static let pigRateNew = 1
         static let upgradePriceFix = [3,4,5,6,7]
         static let pigRateFix = [3,4,5,6,7]
     }
     
     struct graviton {
-        static let price = 700
-        static let pigRateNew = 7
+        static let price = 1
+        static let pigRateNew = 1
         static let upgradePriceFix = [3,4,5,6,7]
         static let pigRateFix = [3,4,5,6,7]
     }
     
     struct vortex {
-        static let price = 700
-        static let pigRateNew = 7
+        static let price = 1
+        static let pigRateNew = 1
         static let upgradePriceFix = [3,4,5,6,7]
         static let pigRateFix = [3,4,5,6,7]
     }
@@ -124,7 +124,7 @@ enum ObjectType: String, Codable {
     ///
     /// - Returns: true if fixture.
     func isFixture() -> Bool {
-        let fixtures: [ObjectType] = [.Bumper, .Graviton, .Vortex]
+        let fixtures: [ObjectType] = [.Bonus, .Graviton, .Vortex]
         return fixtures.index(of: self) != nil;
     }
     
@@ -149,7 +149,7 @@ enum ObjectType: String, Codable {
             return 5001
         case .Circle:
             return 6000
-        case .Bumper:
+        case .Bonus:
             return 10000
         case .Graviton:
             return 20000
@@ -176,14 +176,14 @@ enum ObjectType: String, Codable {
             return octagon.price
         case .Circle:
             return circle.price
-        case .Bumper:
-            return bumper.price
+        case .Bonus:
+            return bonus.price
         case .Graviton:
             return graviton.price
         case .Vortex:
             return vortex.price
         default:
-            return 0
+            return -1
         }
     }
     
@@ -201,14 +201,14 @@ enum ObjectType: String, Codable {
             return octagon.pigRateNew
         case .Circle:
             return circle.pigRateNew
-        case .Bumper:
-            return bumper.pigRateNew
+        case .Bonus:
+            return bonus.pigRateNew
         case .Graviton:
             return graviton.pigRateNew
         case .Vortex:
             return vortex.pigRateNew
         default:
-            return 0
+            return -1
         }
     }
     
@@ -231,7 +231,7 @@ enum ObjectType: String, Codable {
         case .Circle:
             return circle.points[level]
         default:
-            return 0
+            return -1
         }
     }
     
@@ -250,7 +250,7 @@ enum ObjectType: String, Codable {
         case .Circle:
             return circle.upgradePriceA[level]
         default:
-            return 0
+            return -1
         }
     }
     
@@ -269,7 +269,7 @@ enum ObjectType: String, Codable {
         case .Circle:
             return circle.upgradePriceB[level]
         default:
-            return 0
+            return -1
         }
     }
     
@@ -288,20 +288,20 @@ enum ObjectType: String, Codable {
         case .Circle:
             return circle.upgradePriceC[level]
         default:
-            return 0
+            return -1
         }
     }
     
     func getUpgradePriceFix(_ level: Int) -> Int {
         switch self {
-        case .Bumper:
-            return bumper.upgradePriceFix[level]
+        case .Bonus:
+            return bonus.upgradePriceFix[level]
         case .Graviton:
             return graviton.upgradePriceFix[level]
         case .Vortex:
             return vortex.upgradePriceFix[level]
         default:
-            return 0
+            return -1
         }
     }
     
@@ -320,7 +320,7 @@ enum ObjectType: String, Codable {
         case .Circle:
             return circle.pigRateA[level]
         default:
-            return 0
+            return -1
         }
     }
     
@@ -339,7 +339,7 @@ enum ObjectType: String, Codable {
         case .Circle:
             return circle.pigRateB[level]
         default:
-            return 0
+            return -1
         }
     }
     
@@ -358,20 +358,20 @@ enum ObjectType: String, Codable {
         case .Circle:
             return circle.pigRateC[level]
         default:
-            return 0
+            return -1
         }
     }
     
     func getPigRateFix(_ level: Int) -> Int {
         switch self {
-        case .Bumper:
-            return bumper.pigRateFix[level]
+        case .Bonus:
+            return bonus.pigRateFix[level]
         case .Graviton:
             return graviton.pigRateFix[level]
         case .Vortex:
             return vortex.pigRateFix[level]
         default:
-            return 0
+            return -1
         }
     }
     
@@ -395,7 +395,7 @@ enum ObjectType: String, Codable {
         default:
             return
         }
-            
+        
         let sound = SKAction.playSoundFileNamed(soundFile, waitForCompletion: false)
         object.run(sound)
         

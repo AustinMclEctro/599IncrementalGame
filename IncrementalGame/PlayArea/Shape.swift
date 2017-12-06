@@ -17,6 +17,7 @@ class Shape: GameObject {
     //var withSize: CGSize // REFACTOR: Might need to remove
     var inZone: Zone
     var pointValue = 0
+    var bonusValue = 0
     var upgradeALevel = 0
     var upgradeBLevel = 0
     var upgradeCLevel = 0
@@ -39,6 +40,9 @@ class Shape: GameObject {
         self.physicsBody?.linearDamping = 0.8
         self.physicsBody?.mass = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
+        self.physicsBody?.categoryBitMask = 1
+        self.physicsBody?.contactTestBitMask = 1|2|4|8
+        self.physicsBody?.collisionBitMask = 1|2|4
         let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.width-(dimension/2)+5))
         let rangeY = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.height-(dimension/2)+5))
         let rangeD = SKRange(upperLimit: inZone.size.width * 0.6) // Need to tweak value still!!!!
@@ -68,9 +72,70 @@ class Shape: GameObject {
         self.color = SKColor.black      // set so it can be blended into (to make darker) for upgradeC
         self.colorBlendFactor = 0
     }
-    
+    func nextUpgradeANode() -> UIImage {
+        if (!self.canUpgradeA()) {
+            return self.objectType.getImage()!
+        }
+        let sh = softCopy()
+        sh.upgradeALevel += 1;
+        sh.pointValue = sh.objectType.getPoints(sh.upgradeALevel)
+        sh.updatePointsLabel()
+        sh.drawUpgradeB()
+        sh.drawUpgradeC()
+        var cg = scene?.view?.texture(from: sh)?.cgImage()
+        if (cg != nil) {
+            return UIImage(cgImage: cg!)
+        }
+        else{
+            return self.objectType.getImage()!
+        }
+    }
+    func nextUpgradeBNode() -> UIImage {
+        if (!self.canUpgradeB()) {
+            return self.objectType.getImage()!
+        }
+        let sh = softCopy()
+        
+        sh.upgradeBLevel += 1;
+        sh.pointValue = sh.objectType.getPoints(sh.upgradeALevel)
+        sh.updatePointsLabel()
+        sh.drawUpgradeB()
+        sh.drawUpgradeC()
+        var cg = scene?.view?.texture(from: sh)?.cgImage()
+        if (cg != nil) {
+            return UIImage(cgImage: cg!)
+        }
+        else{
+            return self.objectType.getImage()!
+        }
+    }
+    func nextUpgradeCNode() -> UIImage {
+        if (!self.canUpgradeC()) {
+            return self.objectType.getImage()!
+        }
+        let sh = softCopy()
+        sh.upgradeCLevel += 1;
+        sh.pointValue = sh.objectType.getPoints(sh.upgradeALevel)
+        sh.updatePointsLabel()
+        sh.drawUpgradeB()
+        sh.drawUpgradeC()
+        var cg = scene?.view?.texture(from: sh)?.cgImage()
+        if (cg != nil) {
+            return UIImage(cgImage: cg!)
+        }
+        else{
+            return self.objectType.getImage()!
+        }
+    }
+    func softCopy() -> Shape {
+        let sh = Shape(type: self.objectType, at: CGPoint(), inZone: self.inZone);
+        sh.upgradeALevel = self.upgradeALevel;
+        sh.upgradeBLevel = self.upgradeBLevel;
+        sh.upgradeCLevel = self.upgradeCLevel;
+        return sh;
+    }
     func getPoints() -> Int {
-        return pointValue
+        return pointValue + bonusValue
     }
     
     func updatePointsLabel()
@@ -180,7 +245,8 @@ class Shape: GameObject {
     // Darkens color of shape for reduced friction upgrade.
     func drawUpgradeC()
     {
-        self.colorBlendFactor += 0.1
+        // @Austin, changed this from += 0.1 to variable dependent on upgradeCLevel :)
+        self.colorBlendFactor = CGFloat(self.upgradeCLevel)*0.1
     }
     
     // Draws an SKShapeNode border around the given shape.

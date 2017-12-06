@@ -13,19 +13,80 @@ class UpgradeFixtureCell: ShopCollectionViewCell {
     func checkUpgraes() {
         
     }
-    var curA: Int = 0;
-    var fixture: Fixture? {
+    private var _curA: Int = 0;
+    
+    var curA: Int {
         set(val) {
+            _curA = val;
+            if (fixture == nil) {
+                return;
+            }
+            if (fixture!.upgradePrice() > _curA || !fixture!.canUpgrade()) {
+                self.addSubview(foreground)
+            }
+            else {
+                foreground.removeFromSuperview();
+            }
             
         }
         get {
-            return nil;
+            return _curA;
+        }
+    };
+    
+    var fixtureButton: UIButton;
+    var fixturePrice: UILabel;
+    var _fixture: Fixture?;
+    var foreground: UIView;
+    var fixture: Fixture? {
+        set(val) {
+            _fixture = val;
+            var a = val?.upgradePrice()
+            fixturePrice.text = val?.upgradePrice().toCurrency();
+            fixtureButton.setImage(val?.getType().getImage(), for: .normal)
+            self.addSubview(fixtureButton);
+            self.addSubview(fixturePrice);
+            
+        }
+        get {
+            return _fixture;
         }
     }
     override init(frame: CGRect) {
+        foreground = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        foreground.backgroundColor = UIColor.black.withAlphaComponent(0.3);
+        fixtureButton = UIButton(frame: CGRect(x: (frame.width/2)-25, y: (frame.height/2)-25, width: 50, height: 50))
+        fixturePrice = UILabel(frame: CGRect(x: 0, y: frame.height-30, width: frame.width, height: 30))
+        fixturePrice.textAlignment = .center;
+        fixturePrice.textColor = .white;
         super.init(frame: frame)
+        
+        self.layer.borderColor = appColor.cgColor;
+        self.layer.borderWidth = 2.0
+        self.layer.cornerRadius = 15;
+        self.autoresizesSubviews = true;
+        
+        fixtureButton.addTarget(self, action: #selector(upgradeFixt), for: .touchUpInside);
     }
-    
+    var upgradeFixture: (Fixture) -> Void = {
+        _ in
+    }
+    override var frame: CGRect {
+        set(val) {
+            super.frame = val;
+            
+            fixtureButton.frame = CGRect(x: (val.width/4), y: (val.height/2)-25, width: 50, height: 50)
+            fixturePrice.frame = CGRect(x: (val.width/4)+50, y: val.height-30, width: frame.width-(val.width/4)-50, height: 30)
+        }
+        get {
+            return super.frame;
+        }
+    }
+    @objc func upgradeFixt(sender: UIButton) {
+        if (_fixture != nil) {
+            upgradeFixture(_fixture!);
+        }
+    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

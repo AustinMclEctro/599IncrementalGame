@@ -29,11 +29,43 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         fixturesStore.isEnabled = true;
         return 60970891;
     }
+    var direction = 1;
+    func reloadDataShift() {
+        print("SHIFTING");
+        var mult = 1;
+        while visibleCells.count > mult*_cs.count {
+            mult += 1;
+        }
+        mult *= 2;
+        curInd += (mult*_cs.count*direction);
+        // curInd will change on scrollToItem, but scrollViewDidScroll is never called (not animated)
+        var curIndHold = curInd;
+        direction *= -1; // So that it moves in opposite directions each time
+        
+        scrollToItem(at: IndexPath(row: curIndHold, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200), execute: {
+            // TODO: if we change animated to false, change this back
+            //self.fixViews(leftInd: IndexPath(row: curIndHold-1, section: 0), centerInd: IndexPath(row: curIndHold, section: 0), rightInd: IndexPath(row: curIndHold+1, section: 0), xO: nil);
+        })
+    }
+
     private var _cs: [GameObject] = [];
     var currentShapes: [GameObject] {
         set(val) {
+            // For some reason, it would not group these properly one line
+            let condA = _cs.count < 1 && val.count >= 1
+            let condB = (val.count == 0)
             _cs = val;
-            reloadData();
+            if condA || condB  { // Reload data if 'state' of collection view changes
+                reloadData();
+                if (condA) {
+                    // Need to set here since animation hasnt necessarily finished
+                    curInd = 30485445
+                }
+            }
+            else {
+                reloadDataShift();
+            }
         }
         get {
             return _cs;
@@ -62,11 +94,9 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
             for i in visibleCells {
                 if let shape = i as? UpgradeShapeCell {
                     shape.curA = val;
-                    shape.checkUpgraes();
                 }
                 else if let fixture = i as? UpgradeFixtureCell {
                     fixture.curA = val;
-                    fixture.checkUpgraes();
                 }
                 
             }
@@ -77,6 +107,9 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     }
     var shouldUpgrade: (Shape, Int) -> Void = {
         _, _ in
+    }
+    var upgradeFixture: (Fixture) -> Void = {
+        _ in
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // +One fixture, +one shape
@@ -94,14 +127,18 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         }*/
         //else { // Get shape
             if let shape = currentShapes[row] as? Shape {
+                print("ALLOCATING"+Date().description);
                 let cell = dequeueReusableCell(withReuseIdentifier: "upgradeShape", for: indexPath) as! UpgradeShapeCell;
                 cell.shape = shape;
+                cell.curA = _curA;
                 cell.shouldUpgrade = shouldUpgrade;
                 return cell;
             }
             else if let fixture = currentShapes[row] as? Fixture {
                 let cell = dequeueReusableCell(withReuseIdentifier: "upgradeFixture", for: indexPath) as! UpgradeFixtureCell;
                 cell.fixture = fixture;
+                cell.curA = _curA;
+                cell.upgradeFixture = upgradeFixture;
                 return cell;
             }
         //}
@@ -155,13 +192,11 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
             
         }
     }
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //DispatchQueue.global(qos: .background).async {
-        let xOff = scrollView.contentOffset.x
-        
-        var ind = self.indexPathForItem(at: CGPoint(x: xOff+(self.frame.width/2), y: self.frame.height/2))
-        let leftInd = self.indexPathForItem(at: CGPoint(x: xOff, y: self.frame.height/2))
-        let rightInd = self.indexPathForItem(at: CGPoint(x: xOff+self.frame.width, y: self.frame.height/2))
+    var curInd = 0;
+    
+    func fixViews(leftInd: IndexPath?, centerInd: IndexPath?, rightInd: IndexPath?, xO: CGFloat?) {
+        var xOff = xO;
+        var ind = centerInd;
         if (ind?.row == leftInd?.row) {
             ind = nil;
         }
@@ -169,6 +204,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
             ind = nil;
         }
         if (ind != nil) {
+            curInd = ind!.row;
             self.centerIndex = ind;
             let cll = self.cellForItem(at: ind!);
             if let cell = cll as? ShopCollectionViewCell {
@@ -179,7 +215,8 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
                     self.selectionFeedback.prepare();
                     
                 }
-                let dif = cell.frame.midX-xOff;
+                
+                let dif = xOff != nil ? cell.frame.midX-xOff! : (self.frame.width/2);
                 let absDif = abs(dif-(self.frame.width/2))
                 let heightPerc = 1-(absDif/(self.frame.width/2));
                 cell.frame = CGRect(x: cell.frame.minX, y: (self.frame.height/2)-(self.frame.height*(heightPerc/2)), width: self.frame.width/2, height: heightPerc*self.frame.height)
@@ -193,12 +230,13 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
                 else if let fixture = cell as? UpgradeFixtureCell {
                     fixture.fixture?.focus();
                 }
+
             }
         }
         if (leftInd != nil) {
             let cll = self.cellForItem(at: leftInd!);
             if let cell = cll as? ShopCollectionViewCell {
-                let dif = cell.frame.maxX-xOff;
+                let dif = xOff != nil ? cell.frame.maxX-xOff! : 0;
                 let absDif = abs(dif-(self.frame.width/2))
                 let heightPerc = 1-(absDif/(self.frame.width/2));
                 let def = CGSize(width: self.frame.width/2, height: self.frame.height/2);
@@ -218,7 +256,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         if (rightInd != nil) {
             let cll = self.cellForItem(at: rightInd!);
             if let cell = cll as? ShopCollectionViewCell {
-                let dif = xOff+self.frame.width-cell.frame.minX;
+                let dif = xOff != nil ? xOff!+self.frame.width-cell.frame.minX : 0;
                 let absDif = abs(dif-(self.frame.width/2))
                 let heightPerc = 1-(absDif/(self.frame.width/2));
                 let def = CGSize(width: self.frame.width/2, height: self.frame.height/2);
@@ -235,6 +273,17 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
                 }
             }
         }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        //DispatchQueue.global(qos: .background).async {
+        let xOff = scrollView.contentOffset.x
+        
+        var ind = self.indexPathForItem(at: CGPoint(x: xOff+(self.frame.width/2), y: self.frame.height/2))
+        
+        let leftInd = self.indexPathForItem(at: CGPoint(x: xOff, y: self.frame.height/2))
+        let rightInd = self.indexPathForItem(at: CGPoint(x: xOff+self.frame.width, y: self.frame.height/2))
+        fixViews(leftInd: leftInd, centerInd: ind, rightInd: rightInd, xO: xOff);
         
     }
     

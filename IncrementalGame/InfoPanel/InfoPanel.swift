@@ -19,6 +19,7 @@ class InfoPanel: UIView {
     //var currentShapes: CurrentShapes;
     //var progressStore: ProgressStore
     var currencyLabel: UILabel;
+    var inactiveRateLabel: UILabel;
     var currencyImage: UIImageView;
     var feedbackGenerator = UIImpactFeedbackGenerator();
     override init(frame: CGRect) {
@@ -41,6 +42,12 @@ class InfoPanel: UIView {
         currencyImage = UIImageView(frame: CGRect(x: (frame.width/2)-100, y: height+10, width: 30, height: 50))
         currencyImage.image = UIImage(named: "PowerCurrency");
         
+        // Configure inactive rate label
+        inactiveRateLabel = UILabel(frame: CGRect(x: 0, y: height+70, width: frame.width, height: 20));
+        inactiveRateLabel.textColor = .white;
+        inactiveRateLabel.textAlignment = .center;
+        inactiveRateLabel.text = "Passive: -/second" 
+        
         // Configure logo
         let logoWidth = (183/77)*height
         logo = UIImageView(frame: CGRect(x: (frame.width/2)-(logoWidth/2), y: 10, width: logoWidth, height: height))
@@ -50,6 +57,7 @@ class InfoPanel: UIView {
         
         self.backgroundColor = .black;
         self.addSubview(currencyLabel);
+        self.addSubview(inactiveRateLabel)
         self.addSubview(currencyImage)
         currencyLabel.font = currencyLabel.font.withSize(50)
         //self.addSubview(curABar)
@@ -85,24 +93,9 @@ class InfoPanel: UIView {
     ///
     /// - Parameter amount: The rate at which inactive income is generated.
     func updateInactiveIncomeRate(rate: Int) {
-        //inactiveRateLabel.text = "\(rate)/second"
+        inactiveRateLabel.text = "Passive: \(rate)/second"
     }
     
-    
-    /// Callback method that is called when the user presses and holds the
-    /// progress bar. Changes the progress bar to display the passive income rate.
-    ///
-    /// - Parameter sender: <#sender description#>
-    @objc func longPress(sender: UITapGestureRecognizer) {
-        /*if (sender.state == UIGestureRecognizerState.began) {
-            curABar.isHidden = true
-            inactiveRateLabel.isHidden = false
-        }
-        if (sender.state == UIGestureRecognizerState.ended) {
-            curABar.isHidden = false
-            inactiveRateLabel.isHidden = true
-        }*/
-    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

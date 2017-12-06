@@ -66,9 +66,14 @@ class UpgradeShapeCell: ShopCollectionViewCell {
             if (val == nil) {
                 return;
             }
-            up1Button.setImage(val?.getType().getImage(), for: .normal);
-            up2Button.setImage(val?.getType().getImage(), for: .normal);
-            up3Button.setImage(val?.getType().getImage(), for: .normal);
+            var a = val?.nextUpgradeANode()
+            var b = val?.nextUpgradeBNode()
+            var c = val?.nextUpgradeCNode()
+            
+            
+            up1Button.setImage(a, for: .normal);
+            up2Button.setImage(b, for: .normal);
+            up3Button.setImage(c, for: .normal);
             upPrice1.text = val?.upgradePriceA().toCurrency();
             upPrice2.text = val?.upgradePriceB().toCurrency();
             upPrice3.text = val?.upgradePriceC().toCurrency();
