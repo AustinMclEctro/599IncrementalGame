@@ -370,7 +370,6 @@ class MasterView: UIView {
                 openShapeShop();
                 playArea.getZone().addAllowedObject(type: objectType);
                 progressStore.shapeAchieved(objectType: objectType)
-                
                 return;
             }
         }
