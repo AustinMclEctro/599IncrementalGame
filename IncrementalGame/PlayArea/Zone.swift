@@ -79,6 +79,12 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
         addAllowedObject(type: .Triangle)
         
+        // for Demo Only
+        addAllowedObject(type: .Bonus)
+        addAllowedObject(type: .Graviton)
+        addAllowedObject(type: .Vortex)
+        //
+        
         // Load zone properties
         if !children.isEmpty {
             for child in children {
@@ -270,14 +276,14 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             if let one = contact.bodyA.node as? Shape {
                 playArea.gained(amount: one.getPoints())
                 //hits += 1 // for testing collision rates only, not for production
-                one.getType().playCollisionSound(one)
+                if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {one.getType().playCollisionSound(one)}
                 one.animateCollision()
             }
             
             if let two = contact.bodyB.node as? Shape {
                 playArea.gained(amount: two.getPoints())
                 //hits += 1 // for testing collision rates only, not for production
-                two.getType().playCollisionSound(two)
+                if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {two.getType().playCollisionSound(two)}
                 two.animateCollision()
             }
         }
@@ -325,7 +331,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         let data: [String: Zone] = ["zone": self]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
         let playAddShapeSound = SKAction.playSoundFileNamed("ShapeCreation", waitForCompletion: false)
-        shape.run(playAddShapeSound)
+        if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {shape.run(playAddShapeSound)}
         return shape;
     }
     
@@ -338,7 +344,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         let data: [String: Zone] = ["zone": self]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
         let playAddFixtureSound = SKAction.playSoundFileNamed("FixtureCreation", waitForCompletion: false)
-        fix.run(playAddFixtureSound)
+        if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {fix.run(playAddFixtureSound)}
         return fix
     }
     

@@ -280,7 +280,7 @@ class MasterView: UIView {
         updateCurrencyA(by: -obj.upgradePrice())
         obj.upgrade();
         let playUpgradeSound = SKAction.playSoundFileNamed("ShapeUpgrade", waitForCompletion: false)
-        obj.run(playUpgradeSound)
+        if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {obj.run(playUpgradeSound)}
         shop.reloadDataShift()
     }
     
@@ -312,7 +312,7 @@ class MasterView: UIView {
                 break;
             }
             let playUpgradeSound = SKAction.playSoundFileNamed("ShapeUpgrade", waitForCompletion: false)
-            obj.run(playUpgradeSound)
+            if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {obj.run(playUpgradeSound)}
         }
         
         else if let fixture = obj as? Fixture {
