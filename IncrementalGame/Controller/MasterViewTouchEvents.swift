@@ -16,7 +16,6 @@ extension MasterView {
     func setupTouchEvents() {
         settingsButton.addTarget(self, action: #selector(onSettingsButtonPressed), for: .touchUpInside)
         scenePreviewButton.addTarget(self, action: #selector(tapDownPreview), for: .touchUpInside)
-        resetButton.addTarget(self, action: #selector(onResetButtonPress), for: .touchUpInside)
         var pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinch));
         self.addGestureRecognizer(pinchGesture)
         tapToClose.addTarget(self, action: #selector(tapToClosePress), for: .touchUpInside)
@@ -170,16 +169,6 @@ extension MasterView {
             // Does all the work, some redundancy but negligible on performance
             selectZone(index: playArea.zoneNumber);
         }
-    }
-    
-
-    /// Callback method that is called when the user presses the Reset button.
-    /// Restores the game back to the default game state.
-    ///
-    /// - Parameter sender: The UIButton that was pressed.
-    @objc func onResetButtonPress(sender: UIButton) {
-        print("I will reset the game state.")
-        gameState.restoreToDefault()
     }
 }
 

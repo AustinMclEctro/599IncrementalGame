@@ -33,7 +33,6 @@ class MasterView: UIView {
     var progressStore: ProgressStore;
     let shopWidth: CGFloat = 250.0;
     let gameState: GameState;
-    let resetButton: UIButton;
     var feedbackGenerator: UIImpactFeedbackGenerator;
     var settingsMenu: SettingsMenu;
     let settingsButton: UIButton;
@@ -88,11 +87,6 @@ class MasterView: UIView {
         //below will set background color to white, but washes out the buttons
         settingsMenu.backgroundColor = UIColor.black
         
-        // Configure the reset button
-        resetButton =  UIButton(frame: CGRect(x: 5, y: 25, width: frame.width/3, height: 20))
-        resetButton.setTitle("Reset", for: .normal)
-        resetButton.setTitleColor(UIColor.white, for: .normal)
-        
         // Create and configure the startup popup
         startupPopup = StartupPopup(frame: CGRect(x: ((frame.width/2) - StartupPopup.Dimensions.width/2), y: ((frame.height/2) - StartupPopup.Dimensions.height/2), width: 300, height: 400))
         startupPopup.isHidden = true
@@ -115,7 +109,6 @@ class MasterView: UIView {
         self.addSubview(playArea);
         //self.addSubview(shopButton);
         self.addSubview(scenePreviewButton);
-        self.addSubview(resetButton);
         self.addSubview(settingsButton)
         self.addSubview(shop);
         
