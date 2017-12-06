@@ -93,7 +93,7 @@ class InfoPanel: UIView {
     ///
     /// - Parameter amount: The rate at which inactive income is generated.
     func updateInactiveIncomeRate(rate: Int) {
-        inactiveRateLabel.text = "Passive: \(rate)/second"
+        inactiveRateLabel.text = "Passive: \(rate.toCurrency())/second"
     }
     
     
