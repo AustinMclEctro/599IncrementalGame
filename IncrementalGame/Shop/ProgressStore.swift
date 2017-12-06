@@ -366,7 +366,11 @@ class ProgressStore: SKView {
                             return;
                         }
                     }
-                    else if let node = nodes[ind] as? SKLabelNode {
+                    ind += 1;
+                }
+                ind = 0;
+                while ind < nodes.count {
+                    if let node = nodes[ind] as? SKLabelNode {
                         // TODO: Implement upgrade capacity
                         if let controller = self.superview as? MasterView {
                             controller.upgradeZone();
