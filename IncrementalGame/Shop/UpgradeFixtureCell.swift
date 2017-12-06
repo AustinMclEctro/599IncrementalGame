@@ -74,7 +74,7 @@ class UpgradeFixtureCell: ShopCollectionViewCell {
     override var frame: CGRect {
         set(val) {
             super.frame = val;
-            
+            foreground.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
             fixtureButton.frame = CGRect(x: (val.width/4), y: (val.height/2)-25, width: 50, height: 50)
             fixturePrice.frame = CGRect(x: (val.width/4)+50, y: val.height-30, width: frame.width-(val.width/4)-50, height: 30)
         }
