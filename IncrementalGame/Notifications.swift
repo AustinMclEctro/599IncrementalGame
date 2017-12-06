@@ -16,8 +16,12 @@ extension Notification.Name {
     static let shapesChanged = "shapesChanged"
     static let backgroundIncomeEarned = "backgroundIncomeEarned"
     static let soundPreferenceChanged = "soundPreferenceChanged"
+    static let musicPreferenceChanged = "musicPreferenceChanged"
     static let vibrationPreferenceChanged = "hapticFeedbackPreferenceChanged"
     static let resume = "resume"
     static let startupPopupClosed = "startupPopupClosed"
     static let celebration = "celebration"
+    static let playBGM = "playBackgroundMusic"
+    static let pauseBGM = "pauseBackgroundMusic"
+    static let stopBGM = "stopBackgroundMusic"
 }

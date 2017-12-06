@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import os.log
+import SpriteKit
+import AVFoundation
 
 // TODO: Is there another way to distinguish between adding fixtures and shapes?
 
@@ -37,7 +39,8 @@ class MasterView: UIView {
     let settingsButton: UIButton;
     let startupPopup: StartupPopup
     let settingsHelper = SettingsBundleHelper()
-    
+    var bgmPlayer:AVAudioPlayer?
+
     var currencyA: Int {
         set(val) {
             // Do we want to allow this?
@@ -129,8 +132,39 @@ class MasterView: UIView {
         notificationCenter.addObserver(self, selector: #selector(celebration), name: NSNotification.Name(rawValue: Notification.Name.celebration), object: nil)
         setupTouchEvents()
         self.layer.masksToBounds = true;
+
+        // Set up background music (BGM)
+        let bgmURL:URL = Bundle.main.url(forResource:"BGM1", withExtension: "mp3")!
+        do {
+            bgmPlayer = try AVAudioPlayer(contentsOf: bgmURL)
+            
+            notificationCenter.addObserver(self, selector: #selector(playBackgroundMusic), name: NSNotification.Name(rawValue: Notification.Name.playBGM), object: nil)
+            
+            notificationCenter.addObserver(self, selector: #selector(pauseBackgroundMusic), name: NSNotification.Name(rawValue: Notification.Name.pauseBGM), object: nil)
+            
+            notificationCenter.addObserver(self, selector: #selector(stopBackgroundMusic), name: NSNotification.Name(rawValue: Notification.Name.stopBGM), object: nil)
+            
+            bgmPlayer!.volume = 0.4
+            bgmPlayer!.numberOfLoops = -1 // -1 is forever
+            bgmPlayer!.prepareToPlay()
+        }
+        catch _{
+            bgmPlayer = nil
+        }
     }
 
+    @objc func playBackgroundMusic() {
+        bgmPlayer?.play()
+    }
+    
+    @objc func pauseBackgroundMusic() {
+        bgmPlayer?.pause()
+    }
+    
+    @objc func stopBackgroundMusic() {
+        bgmPlayer?.stop()
+        bgmPlayer?.currentTime = 0
+    }
     
     /// Callback method that is called when the user closes the startup popup. Resumes the
     /// PlayArea effects and starts the inactive income generator.

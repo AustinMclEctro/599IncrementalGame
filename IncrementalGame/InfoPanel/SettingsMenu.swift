@@ -19,6 +19,7 @@ class SettingsMenu: UIView {
     let newGameButton: UIButton;
     let resumeButton: UIButton;
     let soundButton: UIButton;
+    let musicButton: UIButton;
     let vibrationButton: UIButton;
     let guideButton: UIButton;
     let removeAdsButton: UIButton;
@@ -31,6 +32,17 @@ class SettingsMenu: UIView {
         }
         get {
             return _soundOn;
+        }
+    }
+    
+    private var _musicOn: Bool = false;
+    var musicOn: Bool {
+        set(val) {
+            _musicOn = val;
+            musicButton.backgroundColor = val ? .green : .red;
+        }
+        get {
+            return _musicOn;
         }
     }
     
@@ -56,9 +68,10 @@ class SettingsMenu: UIView {
         newGameButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y:  outerMargin + (height + objectMargins) * 1, width: width, height: height))
         resumeButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 2, width: width, height: height))
         soundButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 3, width: width, height: height))
-        vibrationButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 4, width: width, height: height ))
-        guideButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 5, width: width, height: height))
-        removeAdsButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 6, width: width, height: height ))
+        musicButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 4, width: width, height: height))
+        vibrationButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 5, width: width, height: height ))
+        guideButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 6, width: width, height: height))
+        removeAdsButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 7, width: width, height: height ))
         
         super.init(frame: frame)
         
@@ -76,6 +89,11 @@ class SettingsMenu: UIView {
         soundButton.setTitle("Sound", for: .normal)
         soundButton.backgroundColor = UIColor.red
         soundButton.addTarget(self, action: #selector(onSoundButtonPressed), for: .touchDown)
+        
+        musicButton.layer.cornerRadius = 15
+        musicButton.setTitle("Music", for: .normal)
+        musicButton.backgroundColor = UIColor.red
+        musicButton.addTarget(self, action: #selector(onMusicButtonPressed), for: .touchDown)
         
         vibrationButton.layer.cornerRadius =  15
         vibrationButton.setTitle("Vibration", for: .normal)
@@ -96,6 +114,7 @@ class SettingsMenu: UIView {
         self.addSubview(newGameButton)
         self.addSubview(resumeButton)
         self.addSubview(soundButton)
+        self.addSubview(musicButton)
         self.addSubview(vibrationButton)
         self.addSubview(guideButton)
         self.addSubview(removeAdsButton)
@@ -115,6 +134,12 @@ class SettingsMenu: UIView {
     @objc func onSoundButtonPressed (sender: UIButton){
         soundOn = !soundOn;
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.soundPreferenceChanged), object: nil, userInfo: nil)
+    }
+    
+    @objc func onMusicButtonPressed (sender: UIButton){
+        musicOn = !musicOn;
+        let data: [String: Bool] = ["music": musicOn]
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.musicPreferenceChanged), object: nil, userInfo: data)
     }
     
     @objc func onVibrationButtonPressed (sender: UIButton){

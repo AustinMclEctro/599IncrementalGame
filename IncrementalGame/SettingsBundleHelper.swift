@@ -20,6 +20,9 @@ class SettingsBundleHelper {
         // Register for notifications
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(onSoundSettingChanged), name: NSNotification.Name(rawValue: Notification.Name.soundPreferenceChanged), object: nil)
+        
+        notificationCenter.addObserver(self, selector: #selector(onMusicSettingChanged), name: NSNotification.Name(rawValue: Notification.Name.musicPreferenceChanged), object: nil)
+        
         notificationCenter.addObserver(self, selector: #selector(onVibrationChanged), name: NSNotification.Name(rawValue: Notification.Name.vibrationPreferenceChanged), object: nil)
     }
     
@@ -32,6 +35,18 @@ class SettingsBundleHelper {
             UserDefaults.standard.set(false, forKey: SettingsBundleKeys.Sound)
         } else {
             UserDefaults.standard.set(true, forKey: SettingsBundleKeys.Sound)
+        }
+    }
+    
+    /// Callback method which plays or stops the music based on the music button in the settings menu
+    @objc func onMusicSettingChanged(_ notification: Notification) {
+        if let musicStatus = notification.userInfo?["music"] as? Bool {
+            if(musicStatus){
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.playBGM), object: nil)
+            }
+            else if(!musicStatus){
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.stopBGM), object: nil)
+            }
         }
     }
     
