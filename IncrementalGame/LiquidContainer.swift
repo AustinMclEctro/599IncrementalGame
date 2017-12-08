@@ -10,11 +10,20 @@ import Foundation
 import UIKit
 import SpriteKit
 import CoreMotion
+
 class LiquidContainer: SKScene {
+    
+    // MARK: Properties
+    
     var motionManager = CMMotionManager()
     var gravityX = 0.0;
     var gravityY = 2.0;
     var liquid: SKSpriteNode;
+    
+    
+    // MARK: Initializers
+    
+    
     override init(size: CGSize) {
         motionManager.startAccelerometerUpdates()
         liquid = SKSpriteNode(color: .blue, size: CGSize(width: size.height*2, height: size.height*2))
@@ -31,9 +40,10 @@ class LiquidContainer: SKScene {
         self.addChild(liquid);
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    
+    // MARK: Functions
+    
+    
     override func update(_ currentTime: TimeInterval) {
         if let accelData = motionManager.accelerometerData {
             physicsWorld.gravity = CGVector(dx: (accelData.acceleration.x - gravityX) * 25, dy: (accelData.acceleration.y - gravityY) * 25)
@@ -41,5 +51,12 @@ class LiquidContainer: SKScene {
         
     }
     
+    
+    // MARK: NSCoding
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }    
 }
 

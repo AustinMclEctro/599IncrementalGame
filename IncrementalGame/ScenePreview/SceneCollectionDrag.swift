@@ -10,9 +10,14 @@ import Foundation
 import UIKit
 
 extension SceneCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+    
+    // MARK: Functions
+    
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         
     }
+    
+    
     func collectionView(_ collectionView: UICollectionView, dropSessionDidEnter session: UIDropSession) {
         if let up = self.cellForItem(at: IndexPath(row: 0, section: 0)) as? NewSceneCollectionViewCell {
             if (up.frame.contains(session.location(in: up))) {
@@ -34,8 +39,9 @@ extension SceneCollectionView: UICollectionViewDragDelegate, UICollectionViewDro
                 up.upgradeB.backgroundColor = .clear;
             }
         }
-        
     }
+    
+    
     func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession) {
         if let up = self.cellForItem(at: IndexPath(row: 0, section: 0)) as? NewSceneCollectionViewCell {
             up.isNew = true;
@@ -55,9 +61,13 @@ extension SceneCollectionView: UICollectionViewDragDelegate, UICollectionViewDro
             }
         }
     }
+    
+    
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         return true;
     }
+    
+    
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         if (indexPath.row == 0) {
             // Add cell
@@ -80,6 +90,8 @@ extension SceneCollectionView: UICollectionViewDragDelegate, UICollectionViewDro
             up.isNew = false;
         }
     }
+    
+    
     func collectionView(_ collectionView: UICollectionView, dragSessionAllowsMoveOperation session: UIDragSession) -> Bool {
         return true;
     }

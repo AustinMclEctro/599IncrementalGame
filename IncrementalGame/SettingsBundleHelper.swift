@@ -15,6 +15,7 @@ struct SettingsBundleKeys {
 }
 class SettingsBundleHelper {
     
+    // MARK: Initializers
     
     init() {
         // Register for notifications
@@ -27,6 +28,8 @@ class SettingsBundleHelper {
     }
     
     
+    // MARK: Functions
+    
     
     /// Callback method that is called when the Sound button in the settings menu
     /// is pressed. Changes the Sound setting.
@@ -37,6 +40,7 @@ class SettingsBundleHelper {
             UserDefaults.standard.set(true, forKey: SettingsBundleKeys.Sound)
         }
     }
+    
     
     /// Callback method which plays or stops the music based on the music button in the settings menu
     @objc func onMusicSettingChanged(_ notification: Notification) {

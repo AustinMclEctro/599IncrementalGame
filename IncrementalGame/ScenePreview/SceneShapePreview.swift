@@ -10,6 +10,9 @@ import Foundation
 import SpriteKit
 
 class SceneShapePreview: SKView {
+    
+    // MARK: Initializers
+    
     init(frame: CGRect, children: [SKNode]) {
         super.init(frame: frame);
         self.presentScene(SKScene(size: frame.size))
@@ -27,6 +30,10 @@ class SceneShapePreview: SKView {
             }
         }
     }
+    
+    
+    // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

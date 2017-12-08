@@ -12,7 +12,8 @@ import iAd
 
 class StartupPopup : UIView {
     
-    // MARK: Constants 
+    // MARK: Constants
+    
     struct Dimensions {
         static let width: CGFloat = 300.0
         static let height: CGFloat = 400.0
@@ -26,7 +27,9 @@ class StartupPopup : UIView {
         static let margin: CGFloat = 20.0
     }
     
+    
     // MARK: Properties
+    
     
     var headerLabel = UILabel()
     var backgroundIncomeLabel = UILabel()
@@ -34,7 +37,9 @@ class StartupPopup : UIView {
     var ad = UIImageView()
     var okButton = UIButton()
     
+    
     // MARK: Initializer
+    
     
     override init(frame: CGRect) {
         
@@ -89,16 +94,22 @@ class StartupPopup : UIView {
     }
     
     
+    // MARK: Functions
+    
+    
     /// Callback method that is called when the ok button in the startup popup is pressed.
     @objc func onOkButtonPressed(_ sender: UIButton) {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.startupPopupClosed), object: nil, userInfo: nil)
     }
     
+    
     func displayPopup(incomeEarned: Int) {
         self.backgroundIncomeLabel.text = "\(incomeEarned.toCurrency())"
     }
     
+    
     // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

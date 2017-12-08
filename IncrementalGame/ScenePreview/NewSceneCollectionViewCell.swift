@@ -10,6 +10,9 @@ import Foundation
 import UIKit
 
 class NewSceneCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: Properties
+    
     var newSceneButton: UIImageView;
     var newScenePrice: UILabel;
     private var _isNew: Bool = true;
@@ -34,8 +37,14 @@ class NewSceneCollectionViewCell: UICollectionViewCell {
             return _isNew;
         }
     }
+    
     var upgradeA = UIView();
     var upgradeB = UIView();
+    
+    
+    // MARK: Initializers
+    
+    
     override init(frame: CGRect) {
         let upgradeImage = UIImageView();
         upgradeImage.image = UIImage(named: "ShapeUpgrade");
@@ -65,6 +74,9 @@ class NewSceneCollectionViewCell: UICollectionViewCell {
         self.addSubview(newScenePrice)
     }
 
+    
+    // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

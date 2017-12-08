@@ -12,19 +12,70 @@ import UIKit
 /// The table view used for displaying and interacting with the user's zones.
 class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    // Allows dragging - used in delegates
-    var dragLoc: Int?;
+    // MARK: Properties
+    
+    var gameState: GameState;
+    var feedbackGenerator: UIImpactFeedbackGenerator
+    var dragLoc: Int?; // Allows dragging - used in delegates
+    
+    var zoneCells: [SceneCollectionViewCell] = [];
+    var zones: [Zone] {
+        get {
+            // Just a trash zone for the new button? Not sure of a better way to do this
+            var new = Zone(size: CGSize(), children: [], pIG: nil, allowedObjects: nil)
+            return [new]+gameState.zones
+        }
+    }
+    
+    
+    // MARK: Initializers
 
+    
+    init(frame: CGRect, gameState: GameState) {
+        self.gameState = gameState;
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical;
+        let startWidth = frame.width/4 > 100 ? 100 : frame.width/3;
+        flowLayout.itemSize = CGSize(width: startWidth,height: startWidth + 20)
+        flowLayout.minimumInteritemSpacing = startWidth/6;
+        flowLayout.minimumLineSpacing = startWidth/6
+        flowLayout.sectionInset = .init(top: 0, left: startWidth/3, bottom: 0, right: startWidth/3)
+        feedbackGenerator = UIImpactFeedbackGenerator();
+        feedbackGenerator.prepare();
+        
+        
+        super.init(frame: frame, collectionViewLayout: flowLayout)
+        
+        dataSource = self
+        delegate = self
+        
+        self.register(SceneCollectionViewCell.self, forCellWithReuseIdentifier: "previewZone");
+        self.register(NewSceneCollectionViewCell.self, forCellWithReuseIdentifier: "newZone");
+        self.backgroundColor = .black;
+        self.dragInteractionEnabled = true;
+        self.dragDelegate = self;
+        self.dropDelegate = self;
+        
+    }
+
+
+    // MARK: Functions
+
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         zoneCells = [];
         return zones.count;
     }
+    
+    
     func zoomingTo(index: Int) -> CGRect {
         //let index = zones.index(of: zone);
         let indexPath = IndexPath.init(row: index+1 ?? 0, section: 0)
         let cell = self.collectionView(self, cellForItemAt: indexPath)
         return CGRect(x: cell.frame.minX, y: cell.frame.minY-self.contentOffset.y, width: cell.frame.width, height: cell.frame.height)//cell.frame;
     }
+    
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if (indexPath.row == 0) {
             var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newZone", for: indexPath);
@@ -67,6 +118,8 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         }
         
     }
+    
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         var row = indexPath.row;
         feedbackGenerator.impactOccurred()
@@ -83,47 +136,14 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         }
         
     }
-    var zoneCells: [SceneCollectionViewCell] = [];
-    var zones: [Zone] {
-        get {
-            // Just a trash zone for the new button? Not sure of a better way to do this
-            var new = Zone(size: CGSize(), children: [], pIG: nil, allowedObjects: nil)
-            return [new]+gameState.zones
-        }
-    }
-    var gameState: GameState;
-    var feedbackGenerator: UIImpactFeedbackGenerator
-    init(frame: CGRect, gameState: GameState) {
-        self.gameState = gameState;
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical;
-        let startWidth = frame.width/4 > 100 ? 100 : frame.width/3;
-        flowLayout.itemSize = CGSize(width: startWidth,height: startWidth + 20)
-        flowLayout.minimumInteritemSpacing = startWidth/6;
-        flowLayout.minimumLineSpacing = startWidth/6
-        flowLayout.sectionInset = .init(top: 0, left: startWidth/3, bottom: 0, right: startWidth/3)
-        feedbackGenerator = UIImpactFeedbackGenerator();
-        feedbackGenerator.prepare();
-        
-        
-        super.init(frame: frame, collectionViewLayout: flowLayout)
-        
-        dataSource = self
-        delegate = self
-        
-        self.register(SceneCollectionViewCell.self, forCellWithReuseIdentifier: "previewZone");
-        self.register(NewSceneCollectionViewCell.self, forCellWithReuseIdentifier: "newZone");
-        self.backgroundColor = .black;
-        self.dragInteractionEnabled = true;
-        self.dragDelegate = self;
-        self.dropDelegate = self;
 
-    }
     
     override func didMoveToSuperview() {
         //self.backgroundView = superview;
         super.didMoveToSuperview()
     }
+    
+    
     func setCurrent(playArea: PlayArea) {
        // var zone = playArea.zoneNumber;
         /*if playArea.zoneNumber >= zoneCells.count  {
@@ -137,6 +157,9 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         self.reloadData()
     }
     
+    
+    // MARK: NSCoding
+
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

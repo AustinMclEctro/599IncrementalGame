@@ -8,6 +8,7 @@
 
 import Foundation
 extension Int {
+    
     func toCurrency() -> String {
         guard self >= 0 else {return ""}
         let symbols = ["","K","M","B","T","q","Q"]

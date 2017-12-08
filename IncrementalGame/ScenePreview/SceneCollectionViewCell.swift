@@ -11,6 +11,8 @@ import UIKit
 
 class SceneCollectionViewCell: UICollectionViewCell {
     
+    // MARK: Properties
+    
     var image: UIImage? {
         set(val) {
             imagePreview.image = val;
@@ -21,6 +23,10 @@ class SceneCollectionViewCell: UICollectionViewCell {
     }
     var imagePreview: UIImageView;
     var inactiveRateLabel: UILabel;
+    
+    
+    // MARK: Initializers
+
     
     override init(frame: CGRect) {
         
@@ -38,6 +44,10 @@ class SceneCollectionViewCell: UICollectionViewCell {
         self.addSubview(inactiveRateLabel)
         self.addSubview(imagePreview);
     }
+
+    
+    // MARK: NSCoding
+
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
