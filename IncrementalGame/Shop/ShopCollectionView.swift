@@ -10,83 +10,15 @@ import Foundation
 import UIKit
 
 class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    // MARK: Properties
+    
+    var curInd = 0;
+    var selectionFeedback: UISelectionFeedbackGenerator;
+    var shapesStore: UIButton;
+    var fixturesStore: UIButton;
     var tapToAddButton: UILabel;
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // Even with 1000 cells per minute would still take 21 days to hit either end if starting in middle
-        
-        if (_cs.count == 0) {
-            self.addSubview(tapToAddButton);
-            superview?.addSubview(shapesStore);
-            superview?.addSubview(fixturesStore);
-            fixturesStore.isEnabled = false;
-        }
-        else if (tapToAddButton.superview != nil) {
-            tapToAddButton.removeFromSuperview()
-        }
-        if (_cs.count == 0) {
-            return _cs.count;
-        }
-        fixturesStore.isEnabled = true;
-        return 60970891;
-    }
     var direction = 1;
-    func reloadDataShift() {
-        print("SHIFTING");
-        var mult = 1;
-        while visibleCells.count > mult*_cs.count {
-            mult += 1;
-        }
-        mult *= 2;
-        curInd += (mult*_cs.count*direction);
-        // curInd will change on scrollToItem, but scrollViewDidScroll is never called (not animated)
-        var curIndHold = curInd;
-        direction *= -1; // So that it moves in opposite directions each time
-        
-        scrollToItem(at: IndexPath(row: curIndHold, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200), execute: {
-            // TODO: if we change animated to false, change this back
-            //self.fixViews(leftInd: IndexPath(row: curIndHold-1, section: 0), centerInd: IndexPath(row: curIndHold, section: 0), rightInd: IndexPath(row: curIndHold+1, section: 0), xO: nil);
-        })
-    }
-
-    private var _cs: [GameObject] = [];
-    var currentShapes: [GameObject] {
-        set(val) {
-            // For some reason, it would not group these properly one line
-            let condA = _cs.count < 1 && val.count >= 1
-            let condB = (val.count == 0)
-            _cs = val;
-            if condA || condB  { // Reload data if 'state' of collection view changes
-                reloadData();
-                if (condA) {
-                    // Need to set here since animation hasnt necessarily finished
-                    curInd = 30485445
-                }
-            }
-            else {
-                reloadDataShift();
-            }
-        }
-        get {
-            return _cs;
-        }
-    }
-    func purchaseShape() {
-        if (centerIndex != nil) {
-            scrollToItem(at: centerIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
-            if let controller = superview as? MasterView {
-                controller.openShapeShop()
-            }
-        }
-    }
-    func purchaseFixture() {
-        if (centerIndex != nil) {
-            scrollToItem(at: centerIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
-            if let controller = superview as? MasterView {
-                controller.openFixtureShop()
-            }
-        }
-    }
     var _curA: Int = 0;
     var curA: Int {
         set(val) {
@@ -111,6 +43,129 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     var upgradeFixture: (Fixture) -> Void = {
         _ in
     }
+    private var _cs: [GameObject] = [];
+    var currentShapes: [GameObject] {
+        set(val) {
+            // For some reason, it would not group these properly one line
+            let condA = _cs.count < 1 && val.count >= 1
+            let condB = (val.count == 0)
+            _cs = val;
+            if condA || condB  { // Reload data if 'state' of collection view changes
+                reloadData();
+                if (condA) {
+                    // Need to set here since animation hasnt necessarily finished
+                    curInd = 30485445
+                }
+            }
+            else {
+                reloadDataShift();
+            }
+        }
+        get {
+            return _cs;
+        }
+    }
+    var oldCenterCell: UICollectionViewCell?;
+    var centerIndex: IndexPath?;
+
+    
+    // MARK: Initializers
+    
+    
+    init(frame: CGRect) {
+        selectionFeedback = UISelectionFeedbackGenerator()
+        selectionFeedback.prepare();
+        var layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal;
+        layout.itemSize = CGSize(width: frame.width/2, height: frame.height/2);
+        layout.minimumLineSpacing = frame.height/4
+        layout.minimumInteritemSpacing = frame.width/8
+        
+        shapesStore = UIButton(frame: CGRect(x: frame.minX, y: frame.minY, width: frame.height, height: frame.height));
+        shapesStore.setImage(UIImage(named: "ShapesStore"), for: .normal)
+        fixturesStore = UIButton(frame: CGRect(x: frame.minX+frame.width-frame.height, y: frame.minY, width: frame.height, height: frame.height));
+        fixturesStore.setImage(UIImage(named: "FixturesStore"), for: .normal);
+        tapToAddButton = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        tapToAddButton.text = "<- Tap to add your first shape";
+        tapToAddButton.textColor = .white
+        tapToAddButton.textAlignment = .center;
+        super.init(frame: frame, collectionViewLayout: layout)
+        delegate = self;
+        dataSource = self;
+        register(PurchaseShapeCell.self, forCellWithReuseIdentifier: "purchaseShape");
+        register(UpgradeShapeCell.self, forCellWithReuseIdentifier: "upgradeShape");
+        register(UpgradeFixtureCell.self, forCellWithReuseIdentifier: "upgradeFixture");
+        register(PurchaseFixtureCell.self, forCellWithReuseIdentifier: "purchaseFixture");
+        superview?.addSubview(fixturesStore);
+        superview?.addSubview(shapesStore);
+        shapesStore.addTarget(self, action: #selector(openShapeShop), for: .touchUpInside);
+        fixturesStore.addTarget(self, action: #selector(openFixtureShop), for: .touchUpInside);
+    }
+    
+    
+    // MARK: Functions
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // Even with 1000 cells per minute would still take 21 days to hit either end if starting in middle
+        
+        if (_cs.count == 0) {
+            self.addSubview(tapToAddButton);
+            superview?.addSubview(shapesStore);
+            superview?.addSubview(fixturesStore);
+            fixturesStore.isEnabled = false;
+        }
+        else if (tapToAddButton.superview != nil) {
+            tapToAddButton.removeFromSuperview()
+        }
+        if (_cs.count == 0) {
+            return _cs.count;
+        }
+        fixturesStore.isEnabled = true;
+        return 60970891;
+    }
+    
+    
+    func reloadDataShift() {
+        print("SHIFTING");
+        var mult = 1;
+        while visibleCells.count > mult*_cs.count {
+            mult += 1;
+        }
+        mult *= 2;
+        curInd += (mult*_cs.count*direction);
+        // curInd will change on scrollToItem, but scrollViewDidScroll is never called (not animated)
+        var curIndHold = curInd;
+        direction *= -1; // So that it moves in opposite directions each time
+        
+        scrollToItem(at: IndexPath(row: curIndHold, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200), execute: {
+            // TODO: if we change animated to false, change this back
+            //self.fixViews(leftInd: IndexPath(row: curIndHold-1, section: 0), centerInd: IndexPath(row: curIndHold, section: 0), rightInd: IndexPath(row: curIndHold+1, section: 0), xO: nil);
+        })
+    }
+
+    
+    func purchaseShape() {
+        if (centerIndex != nil) {
+            scrollToItem(at: centerIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
+            if let controller = superview as? MasterView {
+                controller.openShapeShop()
+            }
+        }
+    }
+    
+    
+    func purchaseFixture() {
+        if (centerIndex != nil) {
+            scrollToItem(at: centerIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
+            if let controller = superview as? MasterView {
+                controller.openFixtureShop()
+            }
+        }
+    }
+
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // +One fixture, +one shape
         
@@ -144,9 +199,9 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         //}
         return UICollectionViewCell();
     }
+    
+    
     override func reloadData() {
-        
-        
         super.reloadData()
         if (_cs.count >= 1) {
             scrollToItem(at: IndexPath(row: 30485444, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
@@ -155,17 +210,21 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         }
         
     }
-    var oldCenterCell: UICollectionViewCell?;
-    var centerIndex: IndexPath?;
+
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         snap(scrollView);
     }
+    
+    
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         var vel = scrollView.panGestureRecognizer.velocity(in: self);
         if (!decelerate) {
             snap(scrollView);
         }
     }
+    
+    
     func snap(_ scrollView: UIScrollView) {
         let xOff = scrollView.contentOffset.x
         let ind = indexPathForItem(at: CGPoint(x: xOff+(frame.width/2), y: frame.height/2))
@@ -192,7 +251,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
             
         }
     }
-    var curInd = 0;
+    
     
     func fixViews(leftInd: IndexPath?, centerInd: IndexPath?, rightInd: IndexPath?, xO: CGFloat?) {
         var xOff = xO;
@@ -275,6 +334,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         }
     }
     
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         //DispatchQueue.global(qos: .background).async {
         let xOff = scrollView.contentOffset.x
@@ -287,49 +347,21 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         
     }
     
-    var selectionFeedback: UISelectionFeedbackGenerator;
-    var shapesStore: UIButton;
-    var fixturesStore: UIButton;
-    init(frame: CGRect) {
-        selectionFeedback = UISelectionFeedbackGenerator()
-        selectionFeedback.prepare();
-        var layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal;
-        layout.itemSize = CGSize(width: frame.width/2, height: frame.height/2);
-        layout.minimumLineSpacing = frame.height/4
-        layout.minimumInteritemSpacing = frame.width/8
-        
-        shapesStore = UIButton(frame: CGRect(x: frame.minX, y: frame.minY, width: frame.height, height: frame.height));
-        shapesStore.setImage(UIImage(named: "ShapesStore"), for: .normal)
-        fixturesStore = UIButton(frame: CGRect(x: frame.minX+frame.width-frame.height, y: frame.minY, width: frame.height, height: frame.height));
-        fixturesStore.setImage(UIImage(named: "FixturesStore"), for: .normal);
-        tapToAddButton = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
-        tapToAddButton.text = "<- Tap to add your first shape";
-        tapToAddButton.textColor = .white
-        tapToAddButton.textAlignment = .center;
-        super.init(frame: frame, collectionViewLayout: layout)
-        delegate = self;
-        dataSource = self;
-        register(PurchaseShapeCell.self, forCellWithReuseIdentifier: "purchaseShape");
-        register(UpgradeShapeCell.self, forCellWithReuseIdentifier: "upgradeShape");
-        register(UpgradeFixtureCell.self, forCellWithReuseIdentifier: "upgradeFixture");
-        register(PurchaseFixtureCell.self, forCellWithReuseIdentifier: "purchaseFixture");
-        superview?.addSubview(fixturesStore);
-        superview?.addSubview(shapesStore);
-        shapesStore.addTarget(self, action: #selector(openShapeShop), for: .touchUpInside);
-        fixturesStore.addTarget(self, action: #selector(openFixtureShop), for: .touchUpInside);
-    }
+    
     @objc func openShapeShop(sender: UIButton) {
         if let controller = superview as? MasterView {
             controller.openShapeShop()
         }
     }
+    
+    
     @objc func openFixtureShop(sender: UIButton) {
         if let controller = superview as? MasterView {
             controller.openFixtureShop()
         }
     }
     
+    // MARK: NSCoding
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

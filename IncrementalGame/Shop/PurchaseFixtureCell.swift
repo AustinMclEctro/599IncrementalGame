@@ -10,10 +10,18 @@ import Foundation
 import UIKit
 
 class PurchaseFixtureCell: ShopCollectionViewCell {
+    
+    // MARK: Properties
+    
     var label: UILabel;
     var toggleShop: () -> Void = {
-        
+        // TODO
     }
+    
+    
+    // MARK: Initializers
+    
+    
     override init(frame: CGRect) {
         label = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         label.text = "Buy A Fixture";
@@ -33,11 +41,20 @@ class PurchaseFixtureCell: ShopCollectionViewCell {
         self.addSubview(label);
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapPurchase)))
     }
+    
+    
+    // MARK: Functions
+    
+    
     @objc func tapPurchase(sender: UITapGestureRecognizer) {
         if (sender.state == .ended && acceptsTouches) {
             toggleShop();
         }
     }
+    
+    
+    // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

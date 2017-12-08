@@ -9,17 +9,25 @@
 import Foundation
 import SpriteKit
 
-
 class StoreItem: SKSpriteNode {
+    
+    // MARK: Properties
     
     var objectType: ObjectType
     var object: GameObject?
     var unlocked = false;
     var priceLabel: SKLabelNode;
+    
+    
+    // MARK: Initializers
+    
+    
     convenience init(obj: GameObject) {
         self.init(objType: obj.objectType);
         object = obj;
     }
+    
+    
     init(objType: ObjectType) {
         objectType = objType
         // Configure the appearance of the object
@@ -38,6 +46,11 @@ class StoreItem: SKSpriteNode {
         self.isUserInteractionEnabled = true
         self.addChild(priceLabel);
     }
+    
+    
+    // MARK: Functions
+    
+    
     func canUpgrade(_ zone: Zone) {
         
         if (self.objectType == nil) {
@@ -57,6 +70,8 @@ class StoreItem: SKSpriteNode {
             priceLabel.text = objectType.getPrice().toCurrency();
         }
     }
+    
+    
     override func copy() -> Any {
         if (object != nil) {
             let storeItem = StoreItem(obj: self.object!);
@@ -72,7 +87,9 @@ class StoreItem: SKSpriteNode {
         }
     }
     
+    
     // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

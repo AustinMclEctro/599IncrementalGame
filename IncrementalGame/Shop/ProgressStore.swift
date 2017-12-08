@@ -10,6 +10,9 @@ import Foundation
 import SpriteKit
 
 class ProgressStore: SKView {
+    
+    // MARK: Properties
+    
     private var _curA: Int = 0;
     var curA: Int {
         set(val) {
@@ -41,13 +44,19 @@ class ProgressStore: SKView {
             return _curA;
         }
     }
+    
     var shapeNode: SKShapeNode;
     var fixtureNode: SKShapeNode;
     var isShape = true;
     var items: [[StoreItem]];
     let feedbackGenerator = UIImpactFeedbackGenerator();
-    
     var upgradeZoneAButton: SKLabelNode;
+    var selectedNode: StoreItem?;
+    var tempSelectedNode: StoreItem?;
+    
+    
+    // MARK: Initializers
+    
     
     override init(frame: CGRect) {
         
@@ -91,16 +100,11 @@ class ProgressStore: SKView {
         // @Austin - how can we make this more visible?
         upgradeZoneAButton.fontSize = 15;
         
-        
         super.init(frame: frame);
-        
-        
-        
         
         shapeNode.fillColor = appColor.withAlphaComponent(0.3);
         fixtureNode.fillColor = appColor.withAlphaComponent(0.3);
         presentScene(SKScene(size: frame.size));
-        
         
         self.backgroundColor = .clear;
         scene?.backgroundColor = .clear
@@ -117,10 +121,12 @@ class ProgressStore: SKView {
         
         self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(drag)));
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
-        
-        
     }
 
+    
+    // MARK: Functions
+    
+    
     func setupStoreShapes() {
         var storeNode = shapeNode;
         var counter = 7*CGFloat.pi/8;
@@ -154,6 +160,8 @@ class ProgressStore: SKView {
         upgradeZoneAButton.fontColor = .white;
         blackout();
     }
+    
+    
     func setupStoreFixtures() {
         var storeNode = fixtureNode;
         var counter = 7*CGFloat.pi/8;
@@ -187,9 +195,6 @@ class ProgressStore: SKView {
     }
     
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     func animateIn() {
         var storeNode = isShape ? shapeNode : fixtureNode;
         shapeNode.removeFromParent();
@@ -202,8 +207,9 @@ class ProgressStore: SKView {
         
         storeNode.run(scale);
         storeNode.run(move);
-        
     }
+    
+    
     func animateOut(callback: @escaping ()->Void) {
         var storeNode = isShape ? shapeNode : fixtureNode;
         let pos = storeNode.frame.width*(9/20) // half of a tenth of the width
@@ -217,8 +223,9 @@ class ProgressStore: SKView {
             storeNode.position = CGPoint(x: (self.frame.width/2)-(storeNode.frame.width/2), y: (self.frame.height/2)-(storeNode.frame.height/2))
             callback();
         })
-        
     }
+    
+    
     func blackout() {
         // Makes all shapes black, then shows only the ones that can be added
         // Should be called only when needed (purchasing objects, changing zones)
@@ -243,13 +250,12 @@ class ProgressStore: SKView {
             }
         }
         
-            
-        
         nextLowestRing1 = 0;
         nextLowestRing2 = 0;
         updateStores()
-        
     }
+    
+    
     var nextLowestRing1 = 0;
     var nextLowestRing2 = 0;
     func getPriceOf(_ storeItem: StoreItem) -> Int {
@@ -261,6 +267,8 @@ class ProgressStore: SKView {
             return storeItem.objectType.getUnlockPrice()
         }
     }
+    
+    
     func updateStores() {
     
         if let controller = superview as? MasterView {
@@ -288,9 +296,10 @@ class ProgressStore: SKView {
                     storeItem2 = items[1][nextLowestRing2];
                 }
             }
-            
         }
     }
+    
+    
     func applyFilter(item: StoreItem, controller: MasterView) {
         // Makes store items black or normal depending on ability to add
         if !(controller.playArea.getZone().allowedObjects.contains(item.objectType)) {
@@ -318,8 +327,8 @@ class ProgressStore: SKView {
             item.priceLabel.fontColor = item.objectType.isFixture() ? .white : .black;
         }
     }
-    var selectedNode: StoreItem?;
-    var tempSelectedNode: StoreItem?;
+    
+    
     // @Luke - I tried to add an emitter and it didnt show up. Not really sure how it works
     func shapeAchieved(objectType: ObjectType) {
         for shape in items[0] {
@@ -355,6 +364,8 @@ class ProgressStore: SKView {
             }
         }
     }
+    
+    
     @objc func tap(sender: UITapGestureRecognizer) {
         
         if (sender.state == .ended) {
@@ -389,6 +400,8 @@ class ProgressStore: SKView {
             }
         }
     }
+    
+    
     @objc func drag(sender: UIPanGestureRecognizer) {
         var storeNode = isShape ? shapeNode : fixtureNode;
         switch sender.state {
@@ -440,7 +453,6 @@ class ProgressStore: SKView {
             break;
         default: // ended, canceled etc.
             
-            
                 if let controller = superview as? MasterView {
                     var loc = sender.location(in: controller)
                     if (selectedNode != nil) && controller.playArea.frame.contains(loc) {
@@ -451,9 +463,7 @@ class ProgressStore: SKView {
                     }
                     
                 }
-                
-                
-            
+        
             if (selectedNode != nil) {
                 storeNode.addChild(selectedNode!);
             }
@@ -463,5 +473,13 @@ class ProgressStore: SKView {
             tempSelectedNode = nil;
             break;
         }
+    }
+    
+    
+    // MARK: NSCoding
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

@@ -10,6 +10,9 @@ import Foundation
 import UIKit
 
 class UpgradeShapeCell: ShopCollectionViewCell {
+    
+    // MARK: Properties
+    
     var stack: UIStackView;
     let up1: UIView;
     let up2: UIView;
@@ -27,11 +30,11 @@ class UpgradeShapeCell: ShopCollectionViewCell {
     let foreground2: UIView;
     let foreground3: UIView;
     
-    var _shape: Shape?;
-    private var _curA: Int = 0;
     var shouldUpgrade: (Shape, Int) -> Void =  {
         _, _ in
     }
+    
+    private var _curA: Int = 0;
     var curA: Int {
         set(val) {
             _curA = val;
@@ -41,24 +44,35 @@ class UpgradeShapeCell: ShopCollectionViewCell {
             return _curA;
         }
     };
-    func checkUpgraes() {
-        foreground1.removeFromSuperview()
-        foreground2.removeFromSuperview()
-        foreground3.removeFromSuperview()
-        if (!_shape!.canUpgradeA() || _shape!.upgradePriceA() > _curA) {
+    
+    private var _bounds: CGRect;
+    override var frame: CGRect {
+        set(val) {
+            super.frame = val;
+            stack.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+            up1.frame = CGRect(x: up1.frame.minX, y: 0, width: val.width/3, height: val.height);
+            up2.frame = CGRect(x: up2.frame.minX, y: 0, width: val.width/3, height: val.height);
+            up3.frame = CGRect(x: up3.frame.minX, y: 0, width: val.width/3, height: val.height);
+            var buttonFrame = CGRect(x: (up1.frame.width/2)-frame.height/4, y: 10, width: val.height/2, height: val.height/2)
+            up1Button.frame = buttonFrame;
+            up2Button.frame = buttonFrame
+            up3Button.frame = buttonFrame
+            let labelFrame = CGRect(x: 0, y: 2*up1.frame.height/3, width: up1.frame.width, height: up1.frame.height/3)
+            upPrice1.frame = labelFrame
+            upPrice2.frame = labelFrame
+            upPrice3.frame = labelFrame
+            let foregroundFrame = CGRect(x: 0, y: 0, width: up1.frame.width, height: up1.frame.height)
+            foreground1.frame = foregroundFrame
+            foreground2.frame = foregroundFrame
+            foreground3.frame = foregroundFrame
             
-            foreground1.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            up1.addSubview(foreground1)
         }
-        if (!_shape!.canUpgradeB() || _shape!.upgradePriceB() > _curA) {
-            foreground2.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            up2.addSubview(foreground2)
-        }
-        if (!_shape!.canUpgradeC() || _shape!.upgradePriceC() > _curA) {
-            foreground3.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            up3.addSubview(foreground3)
+        get {
+            return super.frame;
         }
     }
+    
+    var _shape: Shape?;
     var shape: Shape? {
         set(val) {
             
@@ -84,6 +98,11 @@ class UpgradeShapeCell: ShopCollectionViewCell {
             return _shape;
         }
     }
+    
+    
+    // MARK: Initializers
+    
+    
     override init(frame: CGRect) {
         foreground1 = UIView(frame: CGRect(x: 0, y: 0, width: frame.width/3, height: frame.height));
         foreground2 = UIView(frame: CGRect(x: 0, y: 0, width: frame.width/3, height: frame.height));
@@ -150,32 +169,31 @@ class UpgradeShapeCell: ShopCollectionViewCell {
         up3Button.addTarget(self, action: #selector(upgrade3), for: .touchUpInside)
         
     }
-    private var _bounds: CGRect;
-    override var frame: CGRect {
-        set(val) {
-            super.frame = val;
-            stack.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-            up1.frame = CGRect(x: up1.frame.minX, y: 0, width: val.width/3, height: val.height);
-            up2.frame = CGRect(x: up2.frame.minX, y: 0, width: val.width/3, height: val.height);
-            up3.frame = CGRect(x: up3.frame.minX, y: 0, width: val.width/3, height: val.height);
-            var buttonFrame = CGRect(x: (up1.frame.width/2)-frame.height/4, y: 10, width: val.height/2, height: val.height/2)
-            up1Button.frame = buttonFrame;
-            up2Button.frame = buttonFrame
-            up3Button.frame = buttonFrame
-            let labelFrame = CGRect(x: 0, y: 2*up1.frame.height/3, width: up1.frame.width, height: up1.frame.height/3)
-            upPrice1.frame = labelFrame
-            upPrice2.frame = labelFrame
-            upPrice3.frame = labelFrame
-            let foregroundFrame = CGRect(x: 0, y: 0, width: up1.frame.width, height: up1.frame.height)
-            foreground1.frame = foregroundFrame
-            foreground2.frame = foregroundFrame
-            foreground3.frame = foregroundFrame
+    
+    
+    // MARK: Functions
+    
+    
+    func checkUpgraes() {
+        foreground1.removeFromSuperview()
+        foreground2.removeFromSuperview()
+        foreground3.removeFromSuperview()
+        if (!_shape!.canUpgradeA() || _shape!.upgradePriceA() > _curA) {
             
+            foreground1.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            up1.addSubview(foreground1)
         }
-        get {
-            return super.frame;
+        if (!_shape!.canUpgradeB() || _shape!.upgradePriceB() > _curA) {
+            foreground2.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            up2.addSubview(foreground2)
+        }
+        if (!_shape!.canUpgradeC() || _shape!.upgradePriceC() > _curA) {
+            foreground3.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            up3.addSubview(foreground3)
         }
     }
+    
+    
     @objc func upgrade1(sender: UIButton) {
         if (shape == nil || !acceptsTouches) {
             return;
@@ -183,11 +201,13 @@ class UpgradeShapeCell: ShopCollectionViewCell {
         if (shape!.canUpgradeA() && _shape!.upgradePriceA() <= _curA) {
             //shape?.upgradeA();
             shouldUpgrade(_shape!, 1);
-        
+            
             upPrice1.text = shape?.upgradePriceA().toCurrency()
         }
         
     }
+    
+    
     @objc func upgrade2(sender: UIButton) {
         if (shape == nil || !acceptsTouches) {
             return;
@@ -198,6 +218,8 @@ class UpgradeShapeCell: ShopCollectionViewCell {
             upPrice2.text = shape?.upgradePriceB().toCurrency()
         }
     }
+    
+    
     @objc func upgrade3(sender: UIButton) {
         if (shape == nil || !acceptsTouches) {
             return;
@@ -208,6 +230,10 @@ class UpgradeShapeCell: ShopCollectionViewCell {
             upPrice3.text = shape?.upgradePriceC().toCurrency()
         }
     }
+    
+    
+    // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

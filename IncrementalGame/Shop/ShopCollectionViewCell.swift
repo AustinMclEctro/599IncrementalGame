@@ -8,12 +8,26 @@
 
 import Foundation
 import UIKit
+
 class ShopCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: Properties
+    
+    var acceptsTouches: Bool = false;
+
+    
+    // MARK: Initializers
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame);
         self.backgroundColor = .black
     }
-    var acceptsTouches: Bool = false;
+    
+    
+    // MARK: Functions
+    
+    
     override func isEqual(_ object: Any?) -> Bool {
         if let _ = self as? PurchaseShapeCell {
             if let _ = object as? PurchaseShapeCell {
@@ -48,6 +62,10 @@ class ShopCollectionViewCell: UICollectionViewCell {
         }
         return false
     }
+    
+    
+    // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
