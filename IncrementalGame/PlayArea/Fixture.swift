@@ -12,11 +12,17 @@ import SpriteKit
 /// Fixtures, such as the vortex, used in gameplay.
 class Fixture: GameObject {
     
+    // MARK: Properties
+    
     //var withSize: CGSize  // REFACTOR: This might not need to be stored
     var inZone: Zone
     var upgradeLevel = 0
     var border: SKShapeNode?
     let borderLineWidth: CGFloat = 20
+    
+    
+    // MARK: Initializers
+    
     
     override init(type: ObjectType, at: CGPoint, inZone: Zone) {
         self.inZone = inZone
@@ -75,22 +81,30 @@ class Fixture: GameObject {
         addChild(border!)
     }
     
+    
+    // MARK: Functions
+    
+    
     func focus() {
         border?.lineWidth = borderLineWidth
     }
     
+    
     func unfocus() {
         border?.lineWidth = 0
     }
+    
     
     func upgradePrice() -> Int {
         guard canUpgrade() else {return -1}
         return objectType.getUpgradePriceFix(upgradeLevel)
     }
     
+    
     func canUpgrade() -> Bool {
         return upgradeLevel < 5
     }
+    
     
     func upgrade() {
         guard canUpgrade() else {return}
@@ -108,11 +122,11 @@ class Fixture: GameObject {
         default:
             return
         }
-        
     }
     
+    
     // MARK: NSCoding
-    // REFACTOR: Move to GameObject
+
     
     /// Keys used to reference the properties in memory
     struct PropertyKey {
@@ -121,12 +135,14 @@ class Fixture: GameObject {
         static let zone = "zone"
     }
     
+    
     override func encode(with aCoder: NSCoder) {
         super.encode(with: aCoder)
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(objectType, forKey: PropertyKey.objectType)
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
         aCoder.encode(self.inZone, forKey: PropertyKey.zone)
     }
+    
     
     required convenience init?(coder aDecoder: NSCoder) {
         let objectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)

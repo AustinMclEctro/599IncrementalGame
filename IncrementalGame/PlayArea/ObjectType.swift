@@ -24,6 +24,10 @@ enum ObjectType: String, Codable {
     case Graviton
     case Vortex
     
+    
+    // MARK: Constants
+    
+    
     static let types = [Triangle,Square,Pentagon,Hexagon,Octagon,Circle,Bonus,Graviton,Vortex]
     
     struct triangle {
@@ -120,6 +124,9 @@ enum ObjectType: String, Codable {
     }
     
     
+    // MARK: Functions
+    
+    
     /// Retrieves the type for the ObjectType (fixture or shape).
     ///
     /// - Returns: true if fixture.
@@ -128,12 +135,14 @@ enum ObjectType: String, Codable {
         return fixtures.index(of: self) != nil;
     }
     
+    
     /// Retrieves the image for the ObjectType.
     ///
     /// - Returns: A UIImage object for the ObjectType.
     func getImage() -> UIImage? {
         return UIImage(named: String(describing: self))
     }
+    
     
     func getUnlockPrice() -> Int { // don't need under new mechanics?
         switch self {
@@ -159,6 +168,8 @@ enum ObjectType: String, Codable {
             return 0
         }
     }
+    
+    
     /// Retrieves the price for the ObjectType.
     ///
     /// - Returns: The price for the ObjectType.
@@ -186,6 +197,7 @@ enum ObjectType: String, Codable {
             return -1
         }
     }
+    
     
     func getPigRateNew() -> Int {
         switch self {
@@ -254,6 +266,7 @@ enum ObjectType: String, Codable {
         }
     }
     
+    
     func getUpgradePriceB(_ level: Int) -> Int {
         switch self {
         case .Triangle:
@@ -272,6 +285,7 @@ enum ObjectType: String, Codable {
             return -1
         }
     }
+    
     
     func getUpgradePriceC(_ level: Int) -> Int {
         switch self {
@@ -292,6 +306,7 @@ enum ObjectType: String, Codable {
         }
     }
     
+    
     func getUpgradePriceFix(_ level: Int) -> Int {
         switch self {
         case .Bonus:
@@ -304,6 +319,7 @@ enum ObjectType: String, Codable {
             return -1
         }
     }
+    
     
     func getPigRateA(_ level: Int) -> Int {
         switch self {
@@ -324,6 +340,7 @@ enum ObjectType: String, Codable {
         }
     }
     
+    
     func getPigRateB(_ level: Int) -> Int {
         switch self {
         case .Triangle:
@@ -342,6 +359,7 @@ enum ObjectType: String, Codable {
             return -1
         }
     }
+    
     
     func getPigRateC(_ level: Int) -> Int {
         switch self {
@@ -362,6 +380,7 @@ enum ObjectType: String, Codable {
         }
     }
     
+    
     func getPigRateFix(_ level: Int) -> Int {
         switch self {
         case .Bonus:
@@ -374,6 +393,7 @@ enum ObjectType: String, Codable {
             return -1
         }
     }
+    
     
     // Plays collision sound for a given object.
     func playCollisionSound(_ object: GameObject) {
@@ -398,8 +418,6 @@ enum ObjectType: String, Codable {
         
         let sound = SKAction.playSoundFileNamed(soundFile, waitForCompletion: false)
         object.run(sound)
-        
     }
-    
 }
 

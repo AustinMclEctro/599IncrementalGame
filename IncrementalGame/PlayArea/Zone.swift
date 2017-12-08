@@ -12,6 +12,8 @@ import CoreMotion
 
 class Zone: SKScene, SKPhysicsContactDelegate {
     
+    // MARK: Properties
+    
     var motionManager = CMMotionManager()
     var shapeCapacity = 3
     let maxCapacity = 12
@@ -36,10 +38,13 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var cumulative: Int = 0
     //This needs to be set to the next multiple above the starting amount. 
     var lastCurrency = 100
-
     
     //var seconds: Double = 0 // for testing collision rates only, not for production
     //var hits: Double = 0 // for testing collision rates only, not for production
+    
+    
+    // MARK: Initializers
+    
     
     init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
         liquid = SKSpriteNode(color: .blue, size: CGSize(width: size.width, height: size.height))
@@ -58,8 +63,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         motionManager.startAccelerometerUpdates()
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
-        
-        
         
         let boundRect = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
         let boundPath = UIBezierPath(roundedRect: boundRect, cornerRadius: 75.0)
@@ -101,9 +104,16 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: basePigRate)
         }
     }
+    
+    
+    // MARK: Functions
+    
+    
     func getCumulative() -> Int {
         return cumulative
     }
+    
+    
     func updateProgress(money: Int) {
         cumulative += money
         if cumulative > lastCurrency {
@@ -139,6 +149,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
     func getNextShape() -> ObjectType? {
         for shape in ObjectType.types {
             if !canAdd(type: shape){
@@ -147,6 +158,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
         return nil
     }
+    
     
     /*func canUpgradeA() -> Bool {
         return upgradeALevel < 3
@@ -188,9 +200,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }*/
     
+    
     func getPassiveRate() -> Int {
         return pIG.inactiveRate
     }
+    
     
     override func update(_ currentTime: TimeInterval) {
         
@@ -199,6 +213,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
  
     }
+    
     
     @objc func resetGravity() {
         if let accelData = motionManager.accelerometerData {
@@ -213,9 +228,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         //print(hits/seconds) // for testing collision rates only, not for production
     }
     
+    
     func hasSounds() -> Bool {
         return false;
     }
+    
     
     func hapticFor(contact: SKPhysicsContact) {
         let hasHaptics = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Vibration);
@@ -247,12 +264,14 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    
     func soundFor(_ object: GameObject) {
         let hasSound = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound);
         if hasSound {
             object.getType().playCollisionSound(object)
         }
     }
+    
     
     func didBegin(_ contact: SKPhysicsContact) {
         // one contact body will always be a shape so forced downcasting ok
@@ -290,6 +309,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
     func didEnd(_ contact: SKPhysicsContact) {
         let categoryA = contact.bodyA.categoryBitMask
         let categoryB = contact.bodyB.categoryBitMask
@@ -302,6 +322,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             (contact.bodyA.node as! Shape).bonusValue = 0
         }
     }
+    
     
     /// Returns a Boolean indicating whether the ObjectType can be added. Only allowed objects
     /// below the maximum permitted amount of items under that ObjectType can be added.
@@ -324,6 +345,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         return shapeCount < shapeCapacity
     }
     
+    
     func addShape(of: ObjectType, at: CGPoint) -> Shape? {
         guard canAdd(type: of) else {return nil}
         let shape = Shape(type: of, at: at, inZone: self);
@@ -335,6 +357,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {shape.run(playAddShapeSound)}
         return shape;
     }
+    
     
     func addFixture(of: ObjectType, at: CGPoint) -> Fixture? {
         guard canAdd(type: of) else {return nil}
@@ -349,19 +372,23 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         return fix
     }
     
+    
     func canIncreaseCapacity() -> Bool {
         return shapeCapacity < maxCapacity
     }
+    
     
     func increaseShapeCapacity() {
         guard canIncreaseCapacity() else {return}
         shapeCapacity += 1
     }
     
+    
     func increaseCapacityPrice() -> Int {
         guard canIncreaseCapacity() else {return -1}
         return 100
     }
+    
     
     /// Adds an ObjectType to the allowedObjects array.
     ///
@@ -381,6 +408,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     // MARK: NSCoding
     
+    
     /// Keys used to reference the properties in memory
     struct PropertyKey {
         static let size = "size"
@@ -388,6 +416,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         static let allowedObjects = "allowedObjects"
         static let pIG = "pIG"
     }
+    
     
     override func encode(with aCoder: NSCoder) {
         super.encode(with: aCoder)
@@ -405,6 +434,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         aCoder.encode(childrenToSave, forKey: PropertyKey.children)
     }
     
+    
     required convenience init?(coder aDecoder: NSCoder) {
         let size = aDecoder.decodeCGSize(forKey: PropertyKey.size)
         let children = aDecoder.decodeObject(forKey: PropertyKey.children) as! [SKNode]
@@ -413,6 +443,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         self.init(size: size, children: children, pIG: pIG, allowedObjects: allowedObjects)
     }
 }
+
 
 extension CGVector {
     func magnitudeSquared() -> CGFloat {

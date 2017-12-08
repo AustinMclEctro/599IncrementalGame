@@ -18,6 +18,10 @@ class GameObject: SKSpriteNode {
     var dimension: CGFloat
     //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
     
+    
+    // MARK: Initializers
+
+    
     init(type: ObjectType, at: CGPoint, inZone: Zone) {
         objectType = type
         
@@ -53,6 +57,7 @@ class GameObject: SKSpriteNode {
         
     }
 
+    
     init(type: ObjectType) {
         objectType = type
         
@@ -63,6 +68,10 @@ class GameObject: SKSpriteNode {
         
         super.init(texture: texture, color: UIColor.clear, size: im.size)
     }
+    
+    
+    // MARK: Functions
+    
     
     /*
     /// A helper method used to set up a GameObject by configuring its starting
@@ -105,11 +114,15 @@ class GameObject: SKSpriteNode {
             self.addChild(emitter!)
         }
     }*/
+    
+    
     func getType() -> ObjectType {
         return objectType
     }
     
+    
     // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

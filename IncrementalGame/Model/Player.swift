@@ -11,22 +11,31 @@ import Foundation
 
 /// Used to store information about the current player
 class Player: NSObject, NSCoding {
+    
     // MARK: Properties
+    
     var id: Int // TODO: Create an ID generator
     var lastLogin = Date()
     var lastLogout = Date()
+   
+    
+    // MARK: Initializers
+    
     
     init(id: Int) {
         self.id = id;
     }
   
+    
     init(id: Int, lastLogin: Date, lastLogout: Date) {
         self.id = id;
         self.lastLogin = lastLogin
         self.lastLogout = lastLogout
     }
     
+    
     // MARK: NSCoding
+    
     
     /// Keys used to reference the properties in memory
     struct PropertyKey {

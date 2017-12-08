@@ -20,17 +20,24 @@ class GameState: NSObject, NSCoding {
     var zones: [Zone]
     var player: Player
     
+    
+    // MARK: Initializers
+    
+    
     init(_ startingCurrency: Int, _ existingZones: [Zone], _ player: Player) {
         self.currencyA = startingCurrency
         self.zones = existingZones
         self.player = player
     }
     
+    
     // MARK: NSCoding
+    
     
     // Archiving paths
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("gameState")
+    
     
     struct PropertyKey {
         static let currencyA = "currencyA"
@@ -46,13 +53,15 @@ class GameState: NSObject, NSCoding {
         
         self.init(currencyA, zones, player)
     }
-     
+    
+    
     func encode(with aCoder: NSCoder) {
         aCoder.encode(currencyA, forKey: PropertyKey.currencyA)
         aCoder.encode(zones, forKey: PropertyKey.zones)
         aCoder.encode(player, forKey: PropertyKey.player)
     }
-     
+    
+    
     func saveGameState() {
         let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(self, toFile: GameState.ArchiveURL.path)
         if isSuccessfulSave {
@@ -61,7 +70,8 @@ class GameState: NSObject, NSCoding {
             os_log("Failed to save GameState...", log: OSLog.default, type: .error)
         }
     }
-     
+    
+    
     static func loadGameState() -> GameState?  {
         return NSKeyedUnarchiver.unarchiveObject(withFile: GameState.ArchiveURL.path) as? GameState
     }

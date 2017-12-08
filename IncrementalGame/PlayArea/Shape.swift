@@ -13,6 +13,8 @@ import SpriteKit
 /// Shape objects, such as the triangle and square, used for gameplay. 
 class Shape: GameObject {
     
+    // MARK: Properties
+    
     //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
     //var withSize: CGSize // REFACTOR: Might need to remove
     var inZone: Zone
@@ -24,6 +26,10 @@ class Shape: GameObject {
     var pointsLabel = SKLabelNode(fontNamed: "PingFangSC-Light")    // for upgradeA
     var border: SKShapeNode?                                        // for upgradeB
     let borderLineWidth: CGFloat = 8
+    
+    
+    // MARK: Initializers
+    
     
     override init(type: ObjectType, at: CGPoint, inZone: Zone) {
         self.inZone = inZone
@@ -72,6 +78,11 @@ class Shape: GameObject {
         self.color = SKColor.black      // set so it can be blended into (to make darker) for upgradeC
         self.colorBlendFactor = 0
     }
+    
+    
+    // MARK: Functions
+    
+    
     func nextUpgradeANode() -> UIImage {
         if (!self.canUpgradeA()) {
             return self.objectType.getImage()!
@@ -90,6 +101,8 @@ class Shape: GameObject {
             return self.objectType.getImage()!
         }
     }
+    
+    
     func nextUpgradeBNode() -> UIImage {
         if (!self.canUpgradeB()) {
             return self.objectType.getImage()!
@@ -109,6 +122,8 @@ class Shape: GameObject {
             return self.objectType.getImage()!
         }
     }
+    
+    
     func nextUpgradeCNode() -> UIImage {
         if (!self.canUpgradeC()) {
             return self.objectType.getImage()!
@@ -127,6 +142,8 @@ class Shape: GameObject {
             return self.objectType.getImage()!
         }
     }
+    
+    
     func softCopy() -> Shape {
         let sh = Shape(type: self.objectType, at: CGPoint(), inZone: self.inZone);
         sh.upgradeALevel = self.upgradeALevel;
@@ -134,14 +151,18 @@ class Shape: GameObject {
         sh.upgradeCLevel = self.upgradeCLevel;
         return sh;
     }
+    
+    
     func getPoints() -> Int {
         return pointValue + bonusValue
     }
+    
     
     func updatePointsLabel()
     {
         pointsLabel.text = String(pointValue)
     }
+    
     
     /// Animates the collision after being passed an emitter node by setting the proper duration,
     /// adding a child node and then letting the animation play before removing itself
@@ -159,50 +180,61 @@ class Shape: GameObject {
         run(pulse, withKey: "pulse")
     }
     
+    
     // Called from ShopCollectionView to show which shape has upgrade focus.
     // TODO: Maybe make the focus a separate border around the shape, away from the main border?
-    func focus()
-    {
+    func focus() {
         // Put in place a temp border if the shape has no upgradeB
         if(border?.lineWidth == 0) { border?.lineWidth = borderLineWidth }
 
         border?.strokeColor = UIColor.yellow
     }
     
+    
     // Undoes shape upgrade focus.
-    func unfocus()
-    {
+    func unfocus() {
         if(self.upgradeBLevel == 0) { border?.lineWidth = 0 }
         else { border?.lineWidth = borderLineWidth }
         
         border?.strokeColor = UIColor.white
     }
     
+    
     // MARK: Upgrade Methods
+    
     
     func upgradePriceA() -> Int {
         guard canUpgradeA() else {return -1}
         return objectType.getUpgradePriceA(upgradeALevel)
     }
+    
+    
     func upgradePriceB() -> Int {
         guard canUpgradeB() else {return -1}
         return objectType.getUpgradePriceB(upgradeBLevel)
     }
+    
+    
     func upgradePriceC() -> Int {
         guard canUpgradeC() else {return -1}
         return objectType.getUpgradePriceC(upgradeCLevel)
     }
+    
+    
     func canUpgradeA() -> Bool {
         return upgradeALevel < 9
     }
+    
     
     func canUpgradeB() -> Bool {
         return upgradeBLevel < 5
     }
     
+    
     func canUpgradeC() -> Bool {
         return upgradeCLevel < 5
     }
+    
     
     // Do upgradeA
     func upgradeA() {
@@ -213,6 +245,7 @@ class Shape: GameObject {
         updatePointsLabel()
     }
     
+    
     // Do upgradeB
     func upgradeB() {
         guard canUpgradeB() else {return}
@@ -222,6 +255,7 @@ class Shape: GameObject {
         drawUpgradeB()
     }
     
+    
     // Do upgradeC
     func upgradeC() {
         guard canUpgradeC() else {return}
@@ -230,6 +264,7 @@ class Shape: GameObject {
         self.physicsBody?.linearDamping -= 0.15
         drawUpgradeC()
     }
+    
     
     // Draw in shape border for bounce upgrade.
     func drawUpgradeB()
@@ -242,12 +277,14 @@ class Shape: GameObject {
         }
     }
     
+    
     // Darkens color of shape for reduced friction upgrade.
     func drawUpgradeC()
     {
         // @Austin, changed this from += 0.1 to variable dependent on upgradeCLevel :)
         self.colorBlendFactor = CGFloat(self.upgradeCLevel)*0.1
     }
+    
     
     // Draws an SKShapeNode border around the given shape.
     // Relevant for upgradeB.
@@ -312,8 +349,9 @@ class Shape: GameObject {
         addChild(border!)
     }
     
+    
     // MARK: NSCoding
-    // REFACTOR: Move to GameObject
+
     
     /// Keys used to reference the properties in memory
     struct PropertyKey {
@@ -322,12 +360,14 @@ class Shape: GameObject {
         static let zone = "zone"
     }
     
+    
     override func encode(with aCoder: NSCoder) {
         super.encode(with: aCoder)
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(objectType, forKey: PropertyKey.objectType)
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
         aCoder.encode(self.inZone, forKey: PropertyKey.zone)
     }
+    
     
     required convenience init?(coder aDecoder: NSCoder) {
         let objectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)

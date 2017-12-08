@@ -11,6 +11,8 @@ import UIKit
 
 extension PlayArea {
     
+    // MARK: Functions
+    
     func setupTouchEvents() {
         
         let edgePanRight = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgePan))
@@ -29,6 +31,7 @@ extension PlayArea {
         singleTap.require(toFail: pan)
         self.addGestureRecognizer(singleTap)
     }
+    
     
     @objc func drag(sender: UIPanGestureRecognizer) {
         let location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
@@ -63,6 +66,7 @@ extension PlayArea {
         }
     }
     
+    
     @objc func oneTap(recognizer: UITapGestureRecognizer) {
         var location = recognizer.location(in: self)
         location = zone.convertPoint(fromView: location)
@@ -94,6 +98,7 @@ extension PlayArea {
             }
         }
     }
+    
     
     @objc func handleEdgePan(recognizer: UIScreenEdgePanGestureRecognizer) {
         // Allows draging shapes to override pan
@@ -201,6 +206,7 @@ extension PlayArea {
         }
     }
     
+    
     /*@objc func pinchSelf(sender: UIPinchGestureRecognizer) {
         let scale = sender.scale
         
@@ -236,6 +242,4 @@ extension PlayArea {
             }
         }
     }*/
-    
-    
 }

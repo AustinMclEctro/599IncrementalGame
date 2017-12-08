@@ -10,6 +10,9 @@ import Foundation
 import SpriteKit
 
 class Shop: SKView {
+    
+    // MARK: Properties
+    
     var curA: Int {
         get {
             if let controller = superview as? MasterView {
@@ -22,6 +25,24 @@ class Shop: SKView {
     var storeItems: [[GameObject]] = [[],[]];
     var ringOne: SKShapeNode;
     var ringTwo: SKShapeNode;
+    
+    var selectedNode: GameObject?;
+    var tempSelectedNode: GameObject?;
+    
+    var nextLowestRing1 = 0;
+    var nextLowestRing2 = 0;
+    
+    let numShapes : [CGFloat] = [8.0, 5.0]
+    var ringPositions: [[CGPoint]] = [[],[]];
+    
+    var upgradeRingOne: SKShapeNode?;
+    var upgradeLabelOne: SKLabelNode?;
+    var upgradeRingTwo: SKShapeNode?;
+    var upgradeLabelTwo: SKLabelNode?;
+    
+    // MARK: Initializers
+    
+    
     override init(frame: CGRect) {
         // Outer ring
         ringOne = SKShapeNode(ellipseIn: CGRect(x: 0, y: -frame.height, width: frame.width*2, height: frame.height*2))
@@ -75,7 +96,6 @@ class Shop: SKView {
         addStoreItem(ring: 2, gameObject: gravitron)
         */
         
-        
         self.scene?.backgroundColor = .clear;
         self.backgroundColor = .clear;
         blackout();
@@ -83,6 +103,11 @@ class Shop: SKView {
         self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(drag)));
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
     }
+    
+    
+    // MARK: Functions
+    
+    
     func blackout() {
         // Makes all shapes black, then shows only the ones that can be added
         // Should be called only when needed (purchasing objects, changing zones)
@@ -97,19 +122,21 @@ class Shop: SKView {
         updateStores()
         
     }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    
     override func didMoveToSuperview() {
         
         super.didMoveToSuperview()
         blackout();
     }
+    
+    
     override func removeFromSuperview() {
         animateOut {
             super.removeFromSuperview()
         }
     }
+    
+    
     func animateIn(callback: @escaping () -> Void) {
         let move = SKAction.move(to: CGPoint(x: 0, y: 0), duration:0.45)
         move.timingMode = .easeOut
@@ -122,8 +149,9 @@ class Shop: SKView {
                 callback()
             });
         });
-        
     }
+    
+    
     func animateOut(callback: @escaping () -> Void) {
         let move = SKAction.move(to: CGPoint(x: self.frame.width, y: -self.frame.height), duration:0.5)
         move.timingMode = .easeOut
@@ -138,8 +166,8 @@ class Shop: SKView {
             });
         });
     }
-    let numShapes : [CGFloat] = [8.0, 5.0]
-    var ringPositions: [[CGPoint]] = [[],[]];
+
+    
     func addStoreItem(ring: Int, gameObject: GameObject) {
         let shapeWidth = (frame.width/numShapes[0]);
         gameObject.zPosition = 10
@@ -169,8 +197,7 @@ class Shop: SKView {
     
     }
     
-    var nextLowestRing1 = 0;
-    var nextLowestRing2 = 0;
+
     func updateStores() {
         if let controller = superview as? MasterView {
             if (nextLowestRing1 < storeItems[0].count) {
@@ -212,6 +239,8 @@ class Shop: SKView {
             //}
         }
     }
+    
+    
     func applyFilter(item: GameObject, controller: MasterView) {
         // Makes store items black or normal depending on ability to add
         if (item.objectType.getPrice() > curA || !(controller.playArea.getZone().canAdd(type: item.objectType))) {
@@ -223,10 +252,7 @@ class Shop: SKView {
             item.colorBlendFactor = 0.0;
         }
     }
-    var upgradeRingOne: SKShapeNode?;
-    var upgradeLabelOne: SKLabelNode?;
-    var upgradeRingTwo: SKShapeNode?;
-    var upgradeLabelTwo: SKLabelNode?;
+
     
     func upgradeTree(object: GameObject) {
         
@@ -248,10 +274,14 @@ class Shop: SKView {
         self.scene?.addChild(upgradeRingOne!);
         self.scene?.addChild(upgradeRingTwo!);
     }
+    
+    
     func closeUpgradeTree() {
         upgradeRingTwo?.removeFromParent();
         upgradeRingOne?.removeFromParent();
     }
+    
+    
     func inRings(location: CGPoint) -> Bool {
         let loc = CGPoint(x: frame.width-location.x, y: frame.height-location.y);
         
@@ -263,6 +293,8 @@ class Shop: SKView {
         }
         return false
     }
+    
+    
     func upgradeIn(location: CGPoint) {
         let loc = CGPoint(x: frame.width-location.x, y: frame.height-location.y);
         
@@ -279,12 +311,14 @@ class Shop: SKView {
             upgradeRingOne?.fillColor = .gray;
         }
     }
+    
+    
     func purchaseUpgrade(object: GameObject, touch: UITouch) {
         closeUpgradeTree();
         self.removeFromSuperview()
     }
-    var selectedNode: GameObject?;
-    var tempSelectedNode: GameObject?;
+
+    
     @objc func tap(sender: UITapGestureRecognizer) {
         if (sender.state == .ended) {
             let location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
@@ -303,6 +337,8 @@ class Shop: SKView {
             }
         }
     }
+    
+    
     @objc func drag(sender: UIPanGestureRecognizer) {
         
         switch sender.state {
@@ -363,6 +399,14 @@ class Shop: SKView {
             tempSelectedNode = nil;
             break;
         }
+    }
+    
+    
+    // MARK: NSCoding
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

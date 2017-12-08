@@ -14,6 +14,8 @@ import UIKit
 /// A view primarily used as a container for the active zone.
 class PlayArea: SKView {
     
+    // MARK: Properties
+    
     var zone: Zone
     var zoneNumber = 0
     var gameState: GameState
@@ -22,6 +24,10 @@ class PlayArea: SKView {
 
     // For edge pans to allow two scenes at once, with only one moving. See PlayAreaTouchEvents for more
     var tempImageZone: UIImageView?;
+  
+    
+    // MARK: Initializers
+    
     
     init(frame: CGRect, gameState: GameState) {
         self.gameState = gameState
@@ -43,16 +49,16 @@ class PlayArea: SKView {
         
         self.layer.masksToBounds = true
         
-        
         setupTouchEvents()
         //self.showsPhysics = true// testing only
-        
         
         presentScene(zone)
         let data: [String: Zone] = ["zone": zone]
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
-
     }
+    
+    
+    // MARK: Functions
     
     
     // Returns list of game objects within current zone.
@@ -67,6 +73,8 @@ class PlayArea: SKView {
         }
         return obs;
     }
+    
+    
     /// Selects and presents the specified zone.
     ///
     /// - Parameter index: The index number of the zone in the zones array.
@@ -83,6 +91,7 @@ class PlayArea: SKView {
     func getZone() -> Zone {
         return zone
     }
+    
     
     func newZonePrice() -> Int {
         if gameState.zones.count < 17 {
@@ -147,6 +156,10 @@ class PlayArea: SKView {
             zone.resetGravity()
         }
     }*/
+    
+    
+    // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
