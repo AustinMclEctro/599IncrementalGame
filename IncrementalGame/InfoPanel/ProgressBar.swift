@@ -15,19 +15,24 @@ import UIKit
  - BUG: animation delay after reset
  */
 class ProgressBar: UIView {
-    var ringColors: [UIColor] = [.red, .orange, .yellow, .green];
-    var _currency: Int = 0;
+    
+    // MARK: Properties
+    
     var needsUpdate = false;
-    var curColor = UIColor.red.cgColor;
     var curIndex = 0
     var selectionFeedback = UISelectionFeedbackGenerator()
     var feedbackGenerator = UIImpactFeedbackGenerator();
+    
+    var ringColors: [UIColor] = [.red, .orange, .yellow, .green];
+    var curColor = UIColor.red.cgColor;
     var nextColor: CGColor {
         get {
             curIndex += 1;
             return ringColors[curIndex%ringColors.count].cgColor;
         }
     }
+    
+    var _currency: Int = 0;
     var currency: Int {
         set(val) {
             valLabel.text = val.toCurrency();
@@ -76,21 +81,28 @@ class ProgressBar: UIView {
             return _currency;
         }
     }
+    
     var lastCur: Int = 0;
     var maxCur: Int = 10
-    
-    
     var circleStroke: CGFloat = 10.0;
     var circleLayer: CAShapeLayer;
     var backCircleLayer: CAShapeLayer;
-    var valLabel: UILabel;
     
+    var availUpgrades: [Int] = [];
+    var lastUpgrade: Int? = nil;
+
+    var valLabel: UILabel;
     let upgradeOne: UILabel;
     let upgradeTwo: UILabel;
     let upgradeThree: UILabel;
     let upgradesStack: UIStackView;
     //var shopButton: UIImageView
     var upgradeLabel: UILabel;
+    
+    
+    // MARK: Initializers
+    
+    
     override init(frame: CGRect) {
         upgradeLabel = UILabel(frame: CGRect(x: 0, y: (frame.height/2)-50, width: frame.width, height: 50))
         upgradeLabel.textAlignment = .center
@@ -147,6 +159,7 @@ class ProgressBar: UIView {
     }
 
     
+    // MARK: Functions
     
     
     func updateCircleOuter(from: CGFloat, to: CGFloat, delay: Double=0) {
@@ -158,10 +171,8 @@ class ProgressBar: UIView {
         self.circleLayer.strokeEnd = to
         circleLayer.add(animation, forKey: "animateCircle")
     }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    var availUpgrades: [Int] = [];
+
+    
     func updatesFor(gameObject: GameObject?) {
         if (gameObject != nil) {
             // TODO: if fixture
@@ -195,10 +206,9 @@ class ProgressBar: UIView {
         else {
             lastUpgrade = nil;
             upgradesStack.removeFromSuperview()
-            
         }
     }
-    var lastUpgrade: Int? = nil;
+    
     
     func updatesPos(pos: CGPoint) {
         upgradeThree.backgroundColor = .black;
@@ -228,6 +238,8 @@ class ProgressBar: UIView {
         }
         lastUpgrade = newLastUpgrade;
     }
+    
+    
     func pathFor(pos: CGPoint) -> Int {
         if upgradeThree.frame.contains(pos) && availUpgrades.index(of: 3) != nil {
             // Upgrade 3
@@ -244,6 +256,13 @@ class ProgressBar: UIView {
         return -1;
     }
     
+    
+    // MARK: NSCoding
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 

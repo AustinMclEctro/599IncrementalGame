@@ -14,6 +14,8 @@ import UIKit
 /// related to the game including the game logo and the user's current score.
 class InfoPanel: UIView {
     
+    // MARK: Properties
+    
     //var curABar: ProgressBar;
     var logo: UIImageView;
     //var currentShapes: CurrentShapes;
@@ -22,6 +24,11 @@ class InfoPanel: UIView {
     var inactiveRateLabel: UILabel;
     var currencyImage: UIImageView;
     var feedbackGenerator = UIImpactFeedbackGenerator();
+    
+    
+    // MARK: Initializers
+    
+    
     override init(frame: CGRect) {
         let height = min(frame.height, 50.0)
         let navButtonsHeight: CGFloat = 20.0
@@ -65,9 +72,12 @@ class InfoPanel: UIView {
         
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
         //curABar.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPress)))
-
     }
 
+    
+    // MARK: Functions
+    
+    
     @objc func tap(sender: UITapGestureRecognizer) {
         /*if !curABar.frame.contains(sender.location(in: self)) {
             return;
@@ -76,6 +86,7 @@ class InfoPanel: UIView {
         feedbackGenerator.impactOccurred();
         
     }
+    
     
     /// Updates the currency label to a new value.
     ///
@@ -95,6 +106,9 @@ class InfoPanel: UIView {
     func updateInactiveIncomeRate(rate: Int) {
         inactiveRateLabel.text = "Passive: \(rate.toCurrency())/second"
     }
+    
+    
+    // MARK: NSCoding
     
     
     required init?(coder aDecoder: NSCoder) {

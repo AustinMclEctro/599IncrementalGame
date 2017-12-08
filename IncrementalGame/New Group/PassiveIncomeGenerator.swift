@@ -20,7 +20,9 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
         static let defaultBackground = 50
     }
     
+    
     // MARK: Properties
+    
     
     // Rates
     private var _backgroundRate: Int = 0
@@ -53,7 +55,9 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
     var backgroundGeneratorStartTime = Date()
     var backgroundGeneratorStopTime = Date()
     
+    
     // MARK: Initializers
+    
     
     init(backgroundRate: Int, inactiveRate: Int, bGStartTime: Date = Date(), bGStopTime: Date = Date()) {
         super.init()
@@ -64,6 +68,9 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
         // Subscribe to notifications
         NotificationCenter.default.addObserver(self, selector: #selector(startBackgroundGenerator), name: NSNotification.Name(rawValue: Notification.Name.willSaveGameState), object: nil)
     }
+    
+    
+    // MARK: Functions
     
     
     /// Saves the date and time when the app goes to the background
@@ -133,6 +140,7 @@ class PassiveIncomeGenerator: NSObject, NSCoding {
         // QUESTION: Do we want to increase the background rate as well? Yes, for now.  Maybe go to just one rate eventually?
         backgroundRate += portion
     }
+    
     
     // MARK: NSCoding
     

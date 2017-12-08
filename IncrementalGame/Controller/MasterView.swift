@@ -18,6 +18,8 @@ import AVFoundation
 /// view for the InfoPanel, the PlayArea and the Shop. It also contains the GameState.
 class MasterView: UIView {
     
+    // MARK: Properties
+    
     var isSavingOn = false
     
     var zoomingTo: CGRect?;
@@ -49,6 +51,9 @@ class MasterView: UIView {
             return gameState.currencyA;
         }
     }
+    
+    
+    // MARK: Initializers
     
     
     override init(frame: CGRect) {
@@ -147,18 +152,25 @@ class MasterView: UIView {
         }
     }
 
+    
+    // MARK: Functions
+    
+    
     @objc func playBackgroundMusic() {
         bgmPlayer?.play()
     }
+    
     
     @objc func pauseBackgroundMusic() {
         bgmPlayer?.pause()
     }
     
+    
     @objc func stopBackgroundMusic() {
         bgmPlayer?.stop()
         bgmPlayer?.currentTime = 0
     }
+    
     
     /// Callback method that is called when the user closes the startup popup. Resumes the
     /// PlayArea effects and starts the inactive income generator.
@@ -184,6 +196,7 @@ class MasterView: UIView {
             self.settingsMenu.removeFromSuperview()
         }
     }
+    
     
     /// Callback method that is called when the PassiveIncomeManager sends the background income earned after startup.
     ///
@@ -266,6 +279,7 @@ class MasterView: UIView {
         
     }
     
+    
     func upgradeFixture(obj: Fixture) {
         if (obj.upgradePrice() > currencyA) {
             return
@@ -276,6 +290,7 @@ class MasterView: UIView {
         if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {obj.run(playUpgradeSound)}
         shop.reloadDataShift()
     }
+    
     
     func upgradeShape(obj: GameObject, path: Int) {
         if let shape = obj as? Shape {
@@ -314,6 +329,7 @@ class MasterView: UIView {
         shop.reloadDataShift()
     }
     
+    
     /// Updates the value for currencyA. Used for shop purchases.
     ///
     /// - Parameter by: The amount to add to currencyA
@@ -325,6 +341,8 @@ class MasterView: UIView {
             progressStore.curA = gameState.currencyA;
         }
     }
+    
+    
     func closeShop() {
         if progressStore.isShape {
             openShapeShop()
@@ -333,6 +351,7 @@ class MasterView: UIView {
             openFixtureShop()
         }
     }
+    
     
     func openShapeShop() {
         progressStore.curA = currencyA;
@@ -352,9 +371,9 @@ class MasterView: UIView {
             
         }
         shopOpen = !shopOpen;
-        
-        
     }
+    
+    
     // @Luke - this is what you call to animate a shape. To see the animation (couldnt figure it out need your expertise) look at ProgressStore "@Luke"
     @objc func celebration(_ notification: Notification) {
         // TODO - check if shape achieved already
@@ -369,6 +388,7 @@ class MasterView: UIView {
 //        let playDingSound = SKAction.playSoundFileNamed("PowerMeterDing", waitForCompletion: false)
 //        dingSoundNode.run(playDingSound)
     }
+    
     
     func openFixtureShop() {
         
@@ -389,6 +409,7 @@ class MasterView: UIView {
         }
         shopOpen = !shopOpen;
     }
+    
     
     /// Purchases an object for gameplay and adds the object to the playarea.
     ///
@@ -428,7 +449,6 @@ class MasterView: UIView {
         self.shop.currentShapes = self.playArea.getGameObjects();
         
         closeShop();
-        
     }
     
     
@@ -462,6 +482,7 @@ class MasterView: UIView {
     
     
     // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

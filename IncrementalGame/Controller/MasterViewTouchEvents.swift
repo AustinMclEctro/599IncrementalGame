@@ -12,6 +12,8 @@ import UIKit
 
 extension MasterView {
     
+    // MARK: Functions
+    
     /// Adds a touch event for the shop button.
     func setupTouchEvents() {
         settingsButton.addTarget(self, action: #selector(onSettingsButtonPressed), for: .touchUpInside)

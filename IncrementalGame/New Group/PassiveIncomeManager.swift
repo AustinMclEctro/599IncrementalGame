@@ -19,7 +19,9 @@ class PassiveIncomeManager {
     var isCollectingInactiveInc = false
     var timer = Timer()
     
+    
     // MARK: Initializers
+    
     
     init( gameState: GameState) {
         self.gameState = gameState
@@ -28,6 +30,9 @@ class PassiveIncomeManager {
         NotificationCenter.default.addObserver(self, selector: #selector(onPigStart), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sendInactiveIncomeRate), name: NSNotification.Name(rawValue: Notification.Name.inactiveIncomeRateChanged), object: nil)
     }
+    
+    
+    // MARK: Functions
     
     
     /// Callback method that is called when there has been an update in one of the

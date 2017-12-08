@@ -11,6 +11,8 @@ import UIKit
 
 class SettingsMenu: UIView {
    
+    // MARK: Properties
+    
     let width: CGFloat = 200.0
     let height: CGFloat = 50.0
     let objectMargins: CGFloat = 25.0
@@ -56,6 +58,9 @@ class SettingsMenu: UIView {
             return _vibrationOn;
         }
     }
+    
+    
+    // MARK: Initializers
     
     
     override init(frame: CGRect) {
@@ -123,18 +128,25 @@ class SettingsMenu: UIView {
         soundOn = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound);
     }
 
+    
+    // MARK: Functions
+    
+    
     @objc func onNewGameButtonPressed (sender: UIButton){
         // TODO
     }
+    
     
     @objc func onResumeButtonPressed (sender: UIButton){
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.resume), object: nil, userInfo: nil)
     }
     
+    
     @objc func onSoundButtonPressed (sender: UIButton){
         soundOn = !soundOn;
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.soundPreferenceChanged), object: nil, userInfo: nil)
     }
+    
     
     @objc func onMusicButtonPressed (sender: UIButton){
         musicOn = !musicOn;
@@ -142,18 +154,25 @@ class SettingsMenu: UIView {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.musicPreferenceChanged), object: nil, userInfo: data)
     }
     
+    
     @objc func onVibrationButtonPressed (sender: UIButton){
         vibrationOn = !vibrationOn
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.vibrationPreferenceChanged), object: nil, userInfo: nil)
     }
     
+    
     @objc func onGuideButtonPressed (sender: UIButton){
         // TODO
     }
     
+    
     @objc func onRemoveAdsButtonPressed (sender: UIButton){
         // TODO
     }
+    
+    
+    // MARK: NSCoding
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

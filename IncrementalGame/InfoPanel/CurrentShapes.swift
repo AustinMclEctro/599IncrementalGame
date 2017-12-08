@@ -9,9 +9,37 @@
 import Foundation
 import UIKit
 import SpriteKit
+
 class CurrentShapes: SKView {
+    
+    // MARK: Properties
+    
     var shapes: [Shape] = [];
     var fixtures: [Fixture] = [];
+    
+    var progressBar: ProgressBar?;
+    var feedbackGenerator = UIImpactFeedbackGenerator();
+    
+    var selectedObjectTemp: StoreItem?;
+    var selectedObject: StoreItem?;
+    
+    
+    // MARK: Initializers
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        var scene = SKScene(size: frame.size);
+        self.presentScene(scene);
+        NotificationCenter.default.addObserver(self, selector: #selector(shapesChanged), name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil)
+        scene.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(drag)))
+    }
+    
+    
+    // MARK: Functions
+    
+    
     func drawObjects() {
         var counter = 3*CGFloat.pi/4;
         var incr = (CGFloat.pi)/CGFloat(shapes.count)
@@ -19,8 +47,6 @@ class CurrentShapes: SKView {
         
         let imSize = CGSize(width: (frame.width/8.5), height: (frame.width/8.5))
         let hypot = halfWidth - (imSize.width/2)
-        
-        
         
         for child in scene!.children {
             child.removeFromParent()
@@ -61,6 +87,8 @@ class CurrentShapes: SKView {
         self.backgroundColor = .clear;
         self.scene?.backgroundColor = .clear;
     }
+    
+    
     @objc func shapesChanged(sender: Notification) {
         if let zone = sender.userInfo?["zone"] as? Zone {
             shapes = [];
@@ -76,23 +104,8 @@ class CurrentShapes: SKView {
         }
         drawObjects();
     }
-    var progressBar: ProgressBar?;
-    var feedbackGenerator = UIImpactFeedbackGenerator();
-    override init(frame: CGRect) {
-       
-        super.init(frame: frame)
-        var scene = SKScene(size: frame.size);
-        self.presentScene(scene);
-        NotificationCenter.default.addObserver(self, selector: #selector(shapesChanged), name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil)
-        scene.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-        self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(drag)))
-    }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    var selectedObjectTemp: StoreItem?;
-    var selectedObject: StoreItem?;
+
     @objc func drag(sender: UIPanGestureRecognizer) {
         
         switch sender.state {
@@ -157,5 +170,12 @@ class CurrentShapes: SKView {
             break;
         }
     }
+ 
     
+    // MARK: NSCoding
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
