@@ -15,8 +15,8 @@ class Fixture: GameObject {
     // MARK: Properties
     
     //var withSize: CGSize  // REFACTOR: This might not need to be stored
-    var inZone: Zone
-    var upgradeLevel = 0
+    var inZone: Zone        // TO SAVE
+    var upgradeLevel = 0    // TO SAVE
     var border: SKShapeNode?
     let borderLineWidth: CGFloat = 20
     
@@ -28,7 +28,6 @@ class Fixture: GameObject {
         self.inZone = inZone
         
         super.init(type: type, at: at, inZone: inZone)
-        //super.setUp(at: at, withSize: withSize)
         
         self.physicsBody?.categoryBitMask = 4
         self.physicsBody?.contactTestBitMask = 1

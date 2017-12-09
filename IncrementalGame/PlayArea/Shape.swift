@@ -17,12 +17,12 @@ class Shape: GameObject {
     
     //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
     //var withSize: CGSize // REFACTOR: Might need to remove
-    var inZone: Zone
-    var pointValue = 0
-    var bonusValue = 0
-    var upgradeALevel = 0
-    var upgradeBLevel = 0
-    var upgradeCLevel = 0
+    var inZone: Zone        // TO SAVE
+    var pointValue = 0      // TO SAVE - MAYBE NOT AS SET FROM UPGRADELEVELA IN INIT
+    var bonusValue = 0      // TO SAVE
+    var upgradeALevel = 0   // TO SAVE
+    var upgradeBLevel = 0   // TO SAVE
+    var upgradeCLevel = 0   // TO SAVE
     var pointsLabel = SKLabelNode(fontNamed: "PingFangSC-Light")    // for upgradeA
     var border: SKShapeNode?                                        // for upgradeB
     let borderLineWidth: CGFloat = 8
@@ -35,7 +35,6 @@ class Shape: GameObject {
         self.inZone = inZone
         
         super.init(type: type, at: at, inZone: inZone)
-        //super.setUp(at: at, withSize: withSize)
         
         self.pointValue = objectType.getPoints(upgradeALevel)
         self.physicsBody?.isDynamic = true

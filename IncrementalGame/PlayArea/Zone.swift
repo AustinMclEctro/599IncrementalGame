@@ -15,16 +15,14 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     // MARK: Properties
     
     var motionManager = CMMotionManager()
-    var shapeCapacity = 3
+    var shapeCapacity = 3                   // TO SAVE
     let maxCapacity = 12
     let minHit: CGFloat = 200 // lowered for demo
-    var allowedObjects: Set<ObjectType> = []
+    var allowedObjects: Set<ObjectType> = []    // TO SAVE
     var gravityX: Double = 0
     var gravityY: Double = 0
-    var pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: PassiveIncomeGenerator.Rates.defaultInactive)
+    var pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: PassiveIncomeGenerator.Rates.defaultInactive)    // TO SAVE
     let basePigRate = 5
-    var upgradeALevel = 0
-    var upgradeBLevel = 0
     var timer = Timer();
     var lastGravX: Double = 0;
     var lastGravY: Double = 0;
@@ -35,12 +33,12 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     var liquid: SKSpriteNode
     
-    var cumulative: Int = 0
+    var cumulative: Int = 0     // TO SAVE
     //This needs to be set to the next multiple above the starting amount. 
-    var lastCurrency = 100
+    var lastCurrency = 100      // TO SAVE
     
-    //var seconds: Double = 0 // for testing collision rates only, not for production
-    //var hits: Double = 0 // for testing collision rates only, not for production
+    // TO SAVE - children should be saved
+    
     
     
     // MARK: Initializers
@@ -160,47 +158,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    /*func canUpgradeA() -> Bool {
-        return upgradeALevel < 3
-    }
-    
-    func upgradeA() {
-        guard canUpgradeA() else {return}
-        upgradeALevel += 1
-        pIG.feed(portion: PigRates.upgradeA[upgradeALevel])
-        maxShapes += 3
-    }
-    
-    func canUpgradeB() -> Bool {
-        return upgradeBLevel < 7
-    }
-    func upgradeB(objectType: ObjectType) {
-        addAllowedObject(type: objectType)
-    }
-    func upgradeB() {
-        upgradeBLevel += 1
-        pIG.feed(portion: PigRates.upgradeB[upgradeBLevel])
-        switch upgradeBLevel {
-        case 1:
-            addAllowedObject(type: .Square)
-        case 2:
-            addAllowedObject(type: .Graviton)
-        case 3:
-            addAllowedObject(type: .Pentagon)
-        case 4:
-            addAllowedObject(type: .Hexagon)
-        case 5:
-            addAllowedObject(type: .Vortex)
-        case 6:
-            addAllowedObject(type: .Circle)
-        case 7:
-            addAllowedObject(type: .Star)
-        default:
-            return
-        }
-    }*/
-    
-    
     func getPassiveRate() -> Int {
         return pIG.inactiveRate
     }
@@ -224,8 +181,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             lastGravX = accelData.acceleration.x
             lastGravY = accelData.acceleration.y
         }
-        //seconds += 1 // for testing collision rates only, not for production
-        //print(hits/seconds) // for testing collision rates only, not for production
     }
     
     
@@ -295,14 +250,12 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         if let playArea = view as? PlayArea {
             if let one = contact.bodyA.node as? Shape {
                 playArea.gained(amount: one.getPoints())
-                //hits += 1 // for testing collision rates only, not for production
                 if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {one.getType().playCollisionSound(one)}
                 one.animateCollision()
             }
             
             if let two = contact.bodyB.node as? Shape {
                 playArea.gained(amount: two.getPoints())
-                //hits += 1 // for testing collision rates only, not for production
                 if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {two.getType().playCollisionSound(two)}
                 two.animateCollision()
             }

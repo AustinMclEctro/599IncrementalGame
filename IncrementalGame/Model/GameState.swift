@@ -16,8 +16,8 @@ class GameState: NSObject, NSCoding {
     
     // MARK: Properties
     
-    var currencyA: Int
-    var zones: [Zone]
+    var currencyA: Int      // TO SAVE
+    var zones: [Zone]       // TO SAVE
     var player: Player
     
     
