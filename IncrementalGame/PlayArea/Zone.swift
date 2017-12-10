@@ -31,6 +31,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var hapticMediumGenerator = UIImpactFeedbackGenerator(style: .medium);
     var hapticHeavyGenerator = UIImpactFeedbackGenerator(style: .heavy);
     
+    let playDingSound = SKAction.playSoundFileNamed("PowerMeterDing", waitForCompletion: false)
     var liquid: SKSpriteNode
     
     var cumulative: Int = 0     // TO SAVE
@@ -134,6 +135,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             let moveBot = SKAction.moveTo(y: -size.height + size.height*0.1, duration: 0.5)
             let celebrate = SKAction.sequence([moveTop,addEmitter,wait,remove, moveBot])
             liquid.run(celebrate)
+            liquid.run(playDingSound)
             
             //Post the notification that the area is upgraded
             let data: [String: ObjectType] = ["Shape": getNextShape()!]

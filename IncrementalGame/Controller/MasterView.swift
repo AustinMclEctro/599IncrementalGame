@@ -41,7 +41,6 @@ class MasterView: UIView {
     let startupPopup: StartupPopup
     let settingsHelper = SettingsBundleHelper()
     var bgmPlayer:AVAudioPlayer?
-    var dingSoundNode = SKNode()
 
     var currencyA: Int {
         set(val) {
@@ -385,8 +384,6 @@ class MasterView: UIView {
                 return;
             }
         }
-//        let playDingSound = SKAction.playSoundFileNamed("PowerMeterDing", waitForCompletion: false)
-//        dingSoundNode.run(playDingSound)
     }
     
     
