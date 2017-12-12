@@ -17,7 +17,6 @@ class CurrentShapes: SKView {
     var shapes: [Shape] = [];
     var fixtures: [Fixture] = [];
     
-    var progressBar: ProgressBar?;
     var feedbackGenerator = UIImpactFeedbackGenerator();
     
     var selectedObjectTemp: StoreItem?;
@@ -29,7 +28,7 @@ class CurrentShapes: SKView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        var scene = SKScene(size: frame.size);
+        let scene = SKScene(size: frame.size);
         self.presentScene(scene);
         NotificationCenter.default.addObserver(self, selector: #selector(shapesChanged), name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil)
         scene.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
@@ -42,8 +41,8 @@ class CurrentShapes: SKView {
     
     func drawObjects() {
         var counter = 3*CGFloat.pi/4;
-        var incr = (CGFloat.pi)/CGFloat(shapes.count)
-        var halfWidth = frame.width/2;
+        let incr = (CGFloat.pi)/CGFloat(shapes.count)
+        let halfWidth = frame.width/2;
         
         let imSize = CGSize(width: (frame.width/8.5), height: (frame.width/8.5))
         let hypot = halfWidth - (imSize.width/2)
@@ -110,7 +109,7 @@ class CurrentShapes: SKView {
         
         switch sender.state {
         case .began:
-            var location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
+            let location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
             let nodes = scene?.nodes(at: location) ?? []
             if (nodes.count > 0) {
                 var node: StoreItem?;
@@ -130,9 +129,6 @@ class CurrentShapes: SKView {
                 selectedObject?.color = UIColor.black;
                 selectedObject?.colorBlendFactor = 1.0;
                 self.scene?.addChild(selectedObjectTemp!)
-                if (progressBar != nil) {
-                    progressBar?.updatesFor(gameObject: selectedObject?.object);
-                }
             }
             
             break;
@@ -142,30 +138,12 @@ class CurrentShapes: SKView {
             if (selectedObjectTemp != nil) {
                 selectedObjectTemp?.position = location;
             }
-            if (progressBar != nil) {
-                progressBar?.updatesPos(pos: sender.location(in: progressBar))
-            }
             
             break;
         default: // ended, canceled etc.
             selectedObjectTemp?.removeFromParent()
             selectedObjectTemp = nil;
             selectedObject?.colorBlendFactor = 0
-            if (progressBar != nil && selectedObject != nil) {
-                
-                if let controller = superview?.superview as? MasterView {
-                    let path = progressBar?.pathFor(pos: sender.location(in: progressBar))
-                    
-                    if path != -1 {
-                        controller.upgradeShape(obj: selectedObject!.object!, path: path!)
-                        feedbackGenerator.prepare();
-                        feedbackGenerator.impactOccurred()
-                    }
-                    
-                }
-                
-                progressBar?.updatesFor(gameObject: nil);
-            }
             selectedObject = nil;
             break;
         }

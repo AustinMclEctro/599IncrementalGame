@@ -42,7 +42,6 @@ class UpgradeFixtureCell: ShopCollectionViewCell {
     var fixture: Fixture? {
         set(val) {
             _fixture = val;
-            var a = val?.upgradePrice()
             fixturePrice.text = val?.upgradePrice().toCurrency();
             fixtureButton.setImage(val?.getType().getImage(), for: .normal)
             self.addSubview(fixtureButton);
