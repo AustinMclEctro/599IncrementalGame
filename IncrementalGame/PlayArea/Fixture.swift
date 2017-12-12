@@ -15,6 +15,7 @@ class Fixture: GameObject {
     // MARK: Properties
     
     //var withSize: CGSize  // REFACTOR: This might not need to be stored
+    var zoneSize: CGSize    // TO SAVE
     var inZone: Zone        // TO SAVE
     var upgradeLevel = 0    // TO SAVE
     var border: SKShapeNode?
@@ -24,10 +25,15 @@ class Fixture: GameObject {
     // MARK: Initializers
     
     
-    override init(type: ObjectType, at: CGPoint, inZone: Zone) {
-        self.inZone = inZone
+    init(type: ObjectType, at: CGPoint, inZone: Zone, zoneSize: CGSize, upgradeLevel: Int? = nil) {
         
-        super.init(type: type, at: at, inZone: inZone)
+        self.inZone = inZone
+        self.zoneSize = zoneSize
+        
+        // Load optional values
+        if let uL = upgradeLevel { self.upgradeLevel = upgradeLevel! }
+        
+        super.init(type: type, at: at, zoneSize: zoneSize)
         
         self.physicsBody?.categoryBitMask = 4
         self.physicsBody?.contactTestBitMask = 1
@@ -132,7 +138,8 @@ class Fixture: GameObject {
         static let objectType = "objectType"
         static let lastPosition = "lastPosition"
         static let upgradeLevel = "upgradeLevel"
-        static let zone = "zone" // TODO
+        static let zone = "zone"
+        static let zoneSize = "zoneSize"
     }
     
     
@@ -142,17 +149,17 @@ class Fixture: GameObject {
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
         aCoder.encode(self.upgradeLevel, forKey: PropertyKey.upgradeLevel)
         aCoder.encode(self.inZone, forKey: PropertyKey.zone) // TODO
+        aCoder.encode(self.zoneSize, forKey: PropertyKey.zoneSize) // TODO
     }
     
     
     required convenience init?(coder aDecoder: NSCoder) {
         let loadedObjectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
         let loadedLastPosition = aDecoder.decodeCGPoint(forKey: PropertyKey.lastPosition)
-        let loadedUpgradeLevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeLevel)
         let loadedZone = aDecoder.decodeObject(forKey: PropertyKey.zone) as! Zone // TODO
+        let loadedZoneSize = aDecoder.decodeCGSize(forKey: PropertyKey.zoneSize)
+        let loadedUpgradeLevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeLevel)
         
-        self.init(type: loadedObjectType!, at: loadedLastPosition, inZone: loadedZone) // TODO
-        
-        self.upgradeLevel = loadedUpgradeLevel
+        self.init(type: loadedObjectType!, at: loadedLastPosition, inZone: loadedZone, zoneSize: loadedZoneSize, upgradeLevel: loadedUpgradeLevel)
     }
 }

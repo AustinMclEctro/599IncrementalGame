@@ -44,10 +44,32 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     // MARK: Initializers
     
     
-    init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>?) {
+    init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>? = nil, shapeCapacity: Int? = nil, cumulative: Int? = nil, lastCurrency: Int? = nil) {
+        
+
         liquid = SKSpriteNode(color: .blue, size: CGSize(width: size.width, height: size.height))
         
         super.init(size: size)
+        
+        // Load zone properties
+        
+        if allowedObjects != nil { self.allowedObjects = allowedObjects! }
+        if let sC = shapeCapacity { self.shapeCapacity = sC }
+        if let c = cumulative { self.cumulative = c }
+        if let lC = lastCurrency { self.lastCurrency = lC }
+        
+        if !children.isEmpty {
+            for child in children {
+                self.addChild(child)
+            }
+        }
+
+        if pIG != nil {
+            self.pIG = pIG!
+        } else {
+            self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: basePigRate)
+        }
+        
         //Add progress "Liquid"
         liquid.position = CGPoint(x: size.width/2, y: -size.height)
         liquid.anchorPoint = CGPoint(x: 0.5, y: 0)
@@ -85,22 +107,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         addAllowedObject(type: .Bonus)
         addAllowedObject(type: .Graviton)
         addAllowedObject(type: .Vortex)
-        //
-        
-        // Load zone properties
-        if !children.isEmpty {
-            for child in children {
-                self.addChild(child)
-            }
-        }
-        if allowedObjects != nil {
-            self.allowedObjects = allowedObjects!
-        }
-        if pIG != nil {
-            self.pIG = pIG!
-        } else {
-            self.pIG = PassiveIncomeGenerator(backgroundRate: PassiveIncomeGenerator.Rates.defaultBackground, inactiveRate: basePigRate)
-        }
     }
     
     
@@ -301,7 +307,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     func addShape(of: ObjectType, at: CGPoint) -> Shape? {
         guard canAdd(type: of) else {return nil}
-        let shape = Shape(type: of, at: at, inZone: self);
+        let shape = Shape(type: of, at: at, zoneSize: size, inZone: self);
         addChild(shape);
         pIG.feed(portion: shape.objectType.getPigRateNew());
         let data: [String: Zone] = ["zone": self]
@@ -314,7 +320,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     func addFixture(of: ObjectType, at: CGPoint) -> Fixture? {
         guard canAdd(type: of) else {return nil}
-        let fix = Fixture(type: of, at: at, inZone: self);
+        let fix = Fixture(type: of, at: at, inZone: self, zoneSize: size);
         addChild(fix);
         pIG.feed(portion: fix.objectType.getPigRateNew());
         removeAllowedObject(type: of)
@@ -403,11 +409,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         let loadedCumulative = aDecoder.decodeInteger(forKey: PropertyKey.cumulative)
         let loadedLastCurrency = aDecoder.decodeInteger(forKey: PropertyKey.lastCurrency)
         
-        self.init(size: loadedSize, children: loadedChildren, pIG: loadedPIG, allowedObjects: loadedAllowedObjects)
-        
-        self.shapeCapacity = loadedShapeCapacity
-        self.cumulative = loadedCumulative
-        self.lastCurrency = loadedLastCurrency
+        self.init(size: loadedSize, children: loadedChildren, pIG: loadedPIG, allowedObjects: loadedAllowedObjects, shapeCapacity: loadedShapeCapacity, cumulative: loadedCumulative, lastCurrency: loadedLastCurrency)
     }
 }
 

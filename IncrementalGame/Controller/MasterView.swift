@@ -20,7 +20,7 @@ class MasterView: UIView {
     
     // MARK: Properties
     
-    var isSavingOn = false
+    var isSavingOn = true
     
     var zoomingTo: CGRect?;
     var infoPanel: InfoPanel;

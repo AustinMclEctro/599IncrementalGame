@@ -22,7 +22,7 @@ class GameObject: SKSpriteNode {
     // MARK: Initializers
 
     
-    init(type: ObjectType, at: CGPoint, inZone: Zone) {
+    init(type: ObjectType, at: CGPoint, zoneSize: CGSize) {
         objectType = type
         
         // Configure the appearance of the object
@@ -36,13 +36,13 @@ class GameObject: SKSpriteNode {
         
         // Set starting position
         if at.x == 0 && at.y == 0 {
-            self.position = CGPoint(x: inZone.size.width*0.5, y: inZone.size.height*0.5)
+            self.position = CGPoint(x: zoneSize.width*0.5, y: zoneSize.height*0.5)
         } else {
             self.position = at
         }
         
         // Set size depending on screen dimensions
-        dimension = inZone.size.width/9
+        dimension = zoneSize.width/9
         self.scale(to: CGSize(width: dimension, height: dimension))
         
         // Configure physics body settings relative to the shape
@@ -79,6 +79,11 @@ class GameObject: SKSpriteNode {
     
     
     // MARK: NSCoding
+    
+    
+    override func encode(with aCoder: NSCoder) {
+        super.encode(with: aCoder)
+    }
     
     
     required init?(coder aDecoder: NSCoder) {

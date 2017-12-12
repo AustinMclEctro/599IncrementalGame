@@ -17,6 +17,7 @@ class Shape: GameObject {
     
     //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
     //var withSize: CGSize // REFACTOR: Might need to remove
+    var zoneSize: CGSize
     var inZone: Zone        // TO SAVE
     var pointValue = 0      // TO SAVE - MAYBE NOT AS SET FROM UPGRADELEVELA IN INIT
     var bonusValue = 0      // TO SAVE
@@ -31,11 +32,20 @@ class Shape: GameObject {
     // MARK: Initializers
     
     
-    override init(type: ObjectType, at: CGPoint, inZone: Zone) {
-        self.inZone = inZone
+    init(type: ObjectType, at: CGPoint, zoneSize: CGSize, inZone: Zone, pointValue: Int? = nil, bonusValue: Int? = nil, upgradeALevel: Int? = nil, upgradeBLevel: Int? = nil, upgradeCLevel: Int? = nil) {
         
-        super.init(type: type, at: at, inZone: inZone)
-        self.pointValue = objectType.getPoints(upgradeALevel)
+        self.inZone = inZone
+        self.zoneSize = zoneSize
+        
+        // Get saved values
+        if let pV = pointValue { self.pointValue = pV }
+        if let bV = bonusValue { self.bonusValue = bV }
+        if let uAL = upgradeALevel { self.upgradeALevel = uAL }
+        if let uBL = upgradeBLevel { self.upgradeBLevel = uBL }
+        if let uCL = upgradeCLevel { self.upgradeCLevel = uCL }
+        
+        super.init(type: type, at: at, zoneSize: zoneSize)
+        self.pointValue = objectType.getPoints(self.upgradeALevel)
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = true
         self.physicsBody?.restitution = 0.2
@@ -47,12 +57,12 @@ class Shape: GameObject {
         self.physicsBody?.categoryBitMask = 1
         self.physicsBody?.contactTestBitMask = 1|2|4|8
         self.physicsBody?.collisionBitMask = 1|2|4
-        let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.width-(dimension/2)+5))
-        let rangeY = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (inZone.size.height-(dimension/2)+5))
-        let rangeD = SKRange(upperLimit: inZone.size.width * 0.6) // Need to tweak value still!!!!
+        let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (zoneSize.width-(dimension/2)+5))
+        let rangeY = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (zoneSize.height-(dimension/2)+5))
+        let rangeD = SKRange(upperLimit: zoneSize.width * 0.6) // Need to tweak value still!!!!
         let conX = SKConstraint.positionX(rangeX)
         let conY = SKConstraint.positionY(rangeY)
-        let conD = SKConstraint.distance(rangeD, to: CGPoint(x: inZone.size.width * 0.5, y: inZone.size.width * 0.5), in: inZone)
+        let conD = SKConstraint.distance(rangeD, to: CGPoint(x: zoneSize.width * 0.5, y: zoneSize.width * 0.5), in: inZone)
         self.constraints = [conX,conY,conD]
 
         //emitter?.particleTexture = SKTexture(image: self.getType().getImage()!)
@@ -64,7 +74,7 @@ class Shape: GameObject {
         //self.addChild(emitter!)
         
         // Setup points label
-        pointsLabel.text = String(pointValue)
+        pointsLabel.text = String(self.pointValue)
         pointsLabel.fontSize = 75
         pointsLabel.fontColor = UIColor.white
         pointsLabel.horizontalAlignmentMode = .center
@@ -143,7 +153,7 @@ class Shape: GameObject {
     
     
     func softCopy() -> Shape {
-        let sh = Shape(type: self.objectType, at: CGPoint(), inZone: self.inZone);
+        let sh = Shape(type: self.objectType, at: CGPoint(), zoneSize: self.zoneSize, inZone: self.inZone);
         sh.upgradeALevel = self.upgradeALevel;
         sh.upgradeBLevel = self.upgradeBLevel;
         sh.upgradeCLevel = self.upgradeCLevel;
@@ -361,6 +371,7 @@ class Shape: GameObject {
         static let upgradeBLevel = "upgradeBLevel"
         static let upgradeCLevel = "upgradeCLevel"
         static let zone = "zone"
+        static let zoneSize = "zoneSize"
     }
     
     
@@ -374,10 +385,11 @@ class Shape: GameObject {
         aCoder.encode(self.upgradeBLevel, forKey: PropertyKey.upgradeBLevel)
         aCoder.encode(self.upgradeCLevel, forKey: PropertyKey.upgradeCLevel)
         aCoder.encode(self.inZone, forKey: PropertyKey.zone)
+        aCoder.encode(self.zoneSize, forKey: PropertyKey.zoneSize)
     }
     
     
-    required convenience init?(coder aDecoder: NSCoder) {
+    required convenience init?(coder aDecoder: NSCoder) {        
         let loadedObjectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
         let loadedLastPosition = aDecoder.decodeCGPoint(forKey: PropertyKey.lastPosition)
         let loadedPointValue = aDecoder.decodeInteger(forKey: PropertyKey.pointsValue)
@@ -386,14 +398,8 @@ class Shape: GameObject {
         let loadedUpgradeBLevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeBLevel)
         let loadedUpgradeCLevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeCLevel)
         let loadedZone = aDecoder.decodeObject(forKey: PropertyKey.zone) as! Zone
-
+        let loadedSize = aDecoder.decodeCGSize(forKey: PropertyKey.zoneSize)
         
-        self.init(type: loadedObjectType!, at: loadedLastPosition, inZone: loadedZone) // TODO
-
-        self.pointValue = loadedPointValue
-        self.bonusValue = loadedBonusValue
-        self.upgradeALevel = loadedUpgradeALevel
-        self.upgradeBLevel = loadedUpgradeBLevel
-        self.upgradeCLevel = loadedUpgradeCLevel
+        self.init(type: loadedObjectType!, at: loadedLastPosition, zoneSize: loadedSize, inZone: loadedZone, pointValue: loadedPointValue, bonusValue: loadedBonusValue, upgradeALevel: loadedUpgradeALevel, upgradeBLevel: loadedUpgradeBLevel, upgradeCLevel: loadedUpgradeCLevel)
     }
 }

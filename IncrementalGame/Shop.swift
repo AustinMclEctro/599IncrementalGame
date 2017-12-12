@@ -357,7 +357,7 @@ class Shop: SKView {
                             selectedNode = node;
                             self.selectedNode!.removeFromParent();
                             location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
-                            self.tempSelectedNode = GameObject(type: (self.selectedNode?.objectType)!, at: location, inZone: controller.playArea.getZone());
+                            self.tempSelectedNode = GameObject(type: (self.selectedNode?.objectType)!, at: location, zoneSize: controller.playArea.getZone().size);
                             controller.playArea.scene?.addChild(self.tempSelectedNode!)
                             //self.tempSelectedNode?.setUp(at: location, withSize: controller.playArea.getZone().size)
                             self.tempSelectedNode?.physicsBody?.isDynamic = false;
