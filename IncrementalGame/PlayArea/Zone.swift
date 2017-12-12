@@ -367,6 +367,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         static let size = "size"
         static let children = "children"
         static let allowedObjects = "allowedObjects"
+        static let shapeCapacity = "shapeCapacity"
+        static let cumulative = "cumulative"
+        static let lastCurrency = "lastCurrency"
         static let pIG = "pIG"
     }
     
@@ -376,6 +379,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         aCoder.encode(size, forKey: PropertyKey.size)
         aCoder.encode(pIG, forKey: PropertyKey.pIG)
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(Array(allowedObjects), forKey: PropertyKey.allowedObjects)
+        aCoder.encode(self.shapeCapacity, forKey: PropertyKey.shapeCapacity)
+        aCoder.encode(self.cumulative, forKey: PropertyKey.cumulative)
+        aCoder.encode(self.lastCurrency, forKey: PropertyKey.lastCurrency)
         
         //Save only GameObjects
         var childrenToSave = [SKNode]()
@@ -389,11 +395,19 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let size = aDecoder.decodeCGSize(forKey: PropertyKey.size)
-        let children = aDecoder.decodeObject(forKey: PropertyKey.children) as! [SKNode]
-        let allowedObjects = Set((aDecoder as! NSKeyedUnarchiver).decodeDecodable([ObjectType].self, forKey: PropertyKey.allowedObjects)!)
-        let pIG = aDecoder.decodeObject(forKey: PropertyKey.pIG) as! PassiveIncomeGenerator
-        self.init(size: size, children: children, pIG: pIG, allowedObjects: allowedObjects)
+        let loadedSize = aDecoder.decodeCGSize(forKey: PropertyKey.size)
+        let loadedChildren = aDecoder.decodeObject(forKey: PropertyKey.children) as! [SKNode]
+        let loadedAllowedObjects = Set((aDecoder as! NSKeyedUnarchiver).decodeDecodable([ObjectType].self, forKey: PropertyKey.allowedObjects)!)
+        let loadedPIG = aDecoder.decodeObject(forKey: PropertyKey.pIG) as! PassiveIncomeGenerator
+        let loadedShapeCapacity = aDecoder.decodeInteger(forKey: PropertyKey.shapeCapacity)
+        let loadedCumulative = aDecoder.decodeInteger(forKey: PropertyKey.cumulative)
+        let loadedLastCurrency = aDecoder.decodeInteger(forKey: PropertyKey.lastCurrency)
+        
+        self.init(size: loadedSize, children: loadedChildren, pIG: loadedPIG, allowedObjects: loadedAllowedObjects)
+        
+        self.shapeCapacity = loadedShapeCapacity
+        self.cumulative = loadedCumulative
+        self.lastCurrency = loadedLastCurrency
     }
 }
 

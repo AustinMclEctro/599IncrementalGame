@@ -35,7 +35,6 @@ class Shape: GameObject {
         self.inZone = inZone
         
         super.init(type: type, at: at, inZone: inZone)
-        
         self.pointValue = objectType.getPoints(upgradeALevel)
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = true
@@ -356,6 +355,11 @@ class Shape: GameObject {
     struct PropertyKey {
         static let objectType = "objectType"
         static let lastPosition = "lastPosition"
+        static let pointsValue = "pointsValue"
+        static let bonusValue = "bonusValue"
+        static let upgradeALevel = "upgradeALevel"
+        static let upgradeBLevel = "upgradeBLevel"
+        static let upgradeCLevel = "upgradeCLevel"
         static let zone = "zone"
     }
     
@@ -364,15 +368,32 @@ class Shape: GameObject {
         super.encode(with: aCoder)
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(objectType, forKey: PropertyKey.objectType)
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
+        aCoder.encode(self.pointValue, forKey: PropertyKey.pointsValue)
+        aCoder.encode(self.bonusValue, forKey: PropertyKey.bonusValue)
+        aCoder.encode(self.upgradeALevel, forKey: PropertyKey.upgradeALevel)
+        aCoder.encode(self.upgradeBLevel, forKey: PropertyKey.upgradeBLevel)
+        aCoder.encode(self.upgradeCLevel, forKey: PropertyKey.upgradeCLevel)
         aCoder.encode(self.inZone, forKey: PropertyKey.zone)
     }
     
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let objectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
-        let lastPosition = aDecoder.decodeCGPoint(forKey: PropertyKey.lastPosition)
-        let zone = aDecoder.decodeObject(forKey: PropertyKey.zone) as! Zone
+        let loadedObjectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
+        let loadedLastPosition = aDecoder.decodeCGPoint(forKey: PropertyKey.lastPosition)
+        let loadedPointValue = aDecoder.decodeInteger(forKey: PropertyKey.pointsValue)
+        let loadedBonusValue = aDecoder.decodeInteger(forKey: PropertyKey.bonusValue)
+        let loadedUpgradeALevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeALevel)
+        let loadedUpgradeBLevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeBLevel)
+        let loadedUpgradeCLevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeCLevel)
+        let loadedZone = aDecoder.decodeObject(forKey: PropertyKey.zone) as! Zone
+
         
-        self.init(type: objectType!, at: lastPosition, inZone: zone)
+        self.init(type: loadedObjectType!, at: loadedLastPosition, inZone: loadedZone) // TODO
+
+        self.pointValue = loadedPointValue
+        self.bonusValue = loadedBonusValue
+        self.upgradeALevel = loadedUpgradeALevel
+        self.upgradeBLevel = loadedUpgradeBLevel
+        self.upgradeCLevel = loadedUpgradeCLevel
     }
 }

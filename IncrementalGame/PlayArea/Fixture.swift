@@ -34,33 +34,33 @@ class Fixture: GameObject {
         self.physicsBody?.collisionBitMask = 1
         
         switch objectType {
-        case .Bonus:
-            self.physicsBody = SKPhysicsBody(circleOfRadius: dimension*2)
-            let sizing = (objectType.getImage()?.size.width)!
-            let bonusArea = SKShapeNode(circleOfRadius: sizing)
-            bonusArea.setScale(2)
-            bonusArea.fillColor = .green
-            bonusArea.alpha = 0.05
-            self.addChild(bonusArea)
-            self.physicsBody?.categoryBitMask = 8
-            self.physicsBody?.collisionBitMask = 0
-        case .Graviton:
-            let grav = SKFieldNode.radialGravityField()
-            grav.categoryBitMask = 1
-            grav.isEnabled = true
-            grav.strength = 35
-            grav.isExclusive = false
-            grav.falloff = 0.7
-            self.addChild(grav)
-        case .Vortex:
-            let vort = SKFieldNode.vortexField()
-            vort.categoryBitMask = 1
-            vort.isEnabled = true
-            vort.strength = 10
-            vort.isExclusive = false
-            self.addChild(vort)
-        default:
-            return
+            case .Bonus:
+                self.physicsBody = SKPhysicsBody(circleOfRadius: dimension*2)
+                let sizing = (objectType.getImage()?.size.width)!
+                let bonusArea = SKShapeNode(circleOfRadius: sizing)
+                bonusArea.setScale(2)
+                bonusArea.fillColor = .green
+                bonusArea.alpha = 0.05
+                self.addChild(bonusArea)
+                self.physicsBody?.categoryBitMask = 8
+                self.physicsBody?.collisionBitMask = 0
+            case .Graviton:
+                let grav = SKFieldNode.radialGravityField()
+                grav.categoryBitMask = 1
+                grav.isEnabled = true
+                grav.strength = 35
+                grav.isExclusive = false
+                grav.falloff = 0.7
+                self.addChild(grav)
+            case .Vortex:
+                let vort = SKFieldNode.vortexField()
+                vort.categoryBitMask = 1
+                vort.isEnabled = true
+                vort.strength = 10
+                vort.isExclusive = false
+                self.addChild(vort)
+            default:
+                return
         }
         
         self.physicsBody?.isDynamic = false
@@ -131,7 +131,8 @@ class Fixture: GameObject {
     struct PropertyKey {
         static let objectType = "objectType"
         static let lastPosition = "lastPosition"
-        static let zone = "zone"
+        static let upgradeLevel = "upgradeLevel"
+        static let zone = "zone" // TODO
     }
     
     
@@ -139,15 +140,19 @@ class Fixture: GameObject {
         super.encode(with: aCoder)
         try? (aCoder as! NSKeyedArchiver).encodeEncodable(objectType, forKey: PropertyKey.objectType)
         aCoder.encode(self.position, forKey: PropertyKey.lastPosition)
-        aCoder.encode(self.inZone, forKey: PropertyKey.zone)
+        aCoder.encode(self.upgradeLevel, forKey: PropertyKey.upgradeLevel)
+        aCoder.encode(self.inZone, forKey: PropertyKey.zone) // TODO
     }
     
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let objectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
-        let lastPosition = aDecoder.decodeCGPoint(forKey: PropertyKey.lastPosition)
-        let zone = aDecoder.decodeObject(forKey: PropertyKey.zone) as! Zone
+        let loadedObjectType = (aDecoder as! NSKeyedUnarchiver).decodeDecodable(ObjectType.self, forKey: PropertyKey.objectType)
+        let loadedLastPosition = aDecoder.decodeCGPoint(forKey: PropertyKey.lastPosition)
+        let loadedUpgradeLevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeLevel)
+        let loadedZone = aDecoder.decodeObject(forKey: PropertyKey.zone) as! Zone // TODO
         
-        self.init(type: objectType!, at: lastPosition, inZone: zone)
+        self.init(type: loadedObjectType!, at: loadedLastPosition, inZone: loadedZone) // TODO
+        
+        self.upgradeLevel = loadedUpgradeLevel
     }
 }
