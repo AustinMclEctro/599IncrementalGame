@@ -113,7 +113,7 @@ class MasterView: UIView {
         self.addSubview(scenePreviewButton);
         self.addSubview(settingsButton)
         self.addSubview(shop);
-        
+                
         //Update the progress bar for the first time
         playArea.getZone().updateProgress(money: playArea.getZone().getCumulative())
         
@@ -147,6 +147,9 @@ class MasterView: UIView {
         catch _{
             bgmPlayer = nil
         }
+        
+        self.shop.currentShapes = self.playArea.getGameObjects();
+        self.shop.reloadData()
     }
 
     

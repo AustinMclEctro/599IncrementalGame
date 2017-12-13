@@ -202,11 +202,11 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     override func reloadData() {
         super.reloadData()
         if (_cs.count >= 1) {
+            tapToAddButton.removeFromSuperview()
             scrollToItem(at: IndexPath(row: 30485444, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
             // Have to scroll at least one to get to propper size (plus shows dragability)
             scrollToItem(at: IndexPath(row: 30485445, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
         }
-        
     }
 
     
