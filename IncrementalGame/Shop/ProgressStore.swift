@@ -327,9 +327,7 @@ class ProgressStore: SKView {
             item.priceLabel.fontColor = item.objectType.isFixture() ? .white : .black;
         }
     }
-    
-    
-    // @Luke - I tried to add an emitter and it didnt show up. Not really sure how it works
+
     func shapeAchieved(objectType: ObjectType) {
         for shape in items[0] {
             if shape.objectType == objectType {
@@ -337,7 +335,7 @@ class ProgressStore: SKView {
                 emitter?.particleTexture = SKTexture(image: shape.objectType.getImage()!)
                 emitter?.numParticlesToEmit = 25
                 emitter?.particleLifetime = 1.0
-                emitter?.position = CGPoint(x:shape.size.width/2 , y:shape.size.height/2)
+                emitter?.position = CGPoint(x:0, y:0)
                 emitter?.particleSize = CGSize(width: 40, height: 40)
                 emitter?.emissionAngleRange = 10
                 emitter?.targetNode = self.shapeNode
