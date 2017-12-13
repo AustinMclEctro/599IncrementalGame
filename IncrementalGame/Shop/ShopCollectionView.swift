@@ -109,8 +109,9 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         
         if (_cs.count == 0) {
             self.addSubview(tapToAddButton);
-            
             fixturesStore.isEnabled = false;
+            superview?.addSubview(shapesStore);
+            superview?.addSubview(fixturesStore);
         }
         else if (tapToAddButton.superview != nil) {
             tapToAddButton.removeFromSuperview()
