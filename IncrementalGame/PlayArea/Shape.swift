@@ -304,7 +304,7 @@ class Shape: GameObject {
             border?.lineWidth = 6
         }
         else{
-            border?.glowWidth += CGFloat(self.upgradeBLevel * 3)
+            border?.glowWidth = CGFloat(self.upgradeBLevel * 3)
         }
     }
     

@@ -74,6 +74,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         //Add progress "Liquid"
         liquid.position = CGPoint(x: size.width/2, y: -size.height)
         liquid.anchorPoint = CGPoint(x: 0.5, y: 0)
+        liquid.zPosition = -1
 
         //liquid.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 10, height: 10), center: CGPoint(x: 0, y: liquid.size.height/2));
         //liquid.physicsBody?.pinned = true;
