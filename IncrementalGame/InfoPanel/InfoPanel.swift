@@ -31,17 +31,6 @@ class InfoPanel: UIView {
     
     override init(frame: CGRect) {
         let height = min(frame.height, 50.0)
-        let navButtonsHeight: CGFloat = 20.0
-        // Configure currency label
-        var progressBarFrame = CGRect(x: 30, y: 30, width: height, height: height);
-        // TODO - remove menu buttons too?
-        let roomLeft = min(frame.height-height-navButtonsHeight, frame.width);
-        // TODO: remove if successful - had the progress bar in the left corner
-        //if (roomLeft > 100) {
-        progressBarFrame = CGRect(x: (frame.width/2)-((roomLeft-20)/2), y: height+10, width: roomLeft-20, height: roomLeft-20)
-        //}
-        /*curABar = ProgressBar(frame: progressBarFrame)
-        curABar.valLabel.textColor = .white;*/
         currencyLabel = UILabel(frame: CGRect(x: 0, y: height+10, width: frame.width, height: 50))
         currencyLabel.textColor = .white;
         currencyLabel.textAlignment = .center;
@@ -93,8 +82,8 @@ class InfoPanel: UIView {
     /// - Parameter to: The new currency value.
     func upgradeCurrencyA(to: Int) {
         //curABar.currency = to;
-        var cur = to.toCurrency();
-        var len = cur.count.distance(to: 0);
+        let cur = to.toCurrency();
+        let len = cur.count.distance(to: 0);
         currencyImage.frame = CGRect(x: (frame.width/2)-50.0+(CGFloat(len)*10.0), y: currencyImage.frame.minY, width: currencyImage.frame.width, height: currencyImage.frame.height)
         currencyLabel.text = cur
     }

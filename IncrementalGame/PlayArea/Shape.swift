@@ -190,7 +190,7 @@ class Shape: GameObject {
     
     
     // Called from ShopCollectionView to show which shape has upgrade focus.
-    // TODO: Maybe make the focus a separate border around the shape, away from the main border?
+    // TODO: Maybe make the focus a separate border around the shape, away from the main border
     func focus() {
         // Put in place a temp border if the shape has no upgradeB
         if(border?.lineWidth == 0) { border?.lineWidth = borderLineWidth }
@@ -289,7 +289,6 @@ class Shape: GameObject {
     // Darkens color of shape for reduced friction upgrade.
     func drawUpgradeC()
     {
-        // @Austin, changed this from += 0.1 to variable dependent on upgradeCLevel :)
         self.colorBlendFactor = CGFloat(self.upgradeCLevel)*0.1
     }
     
@@ -321,29 +320,40 @@ class Shape: GameObject {
             
         case .Pentagon:
             points = [
-                CGPoint(x: 0, y: self.size.height * 2.2),                             // top
-                CGPoint(x: -self.size.width * 2.2, y: self.size.height * 0.5),                           // left
+                CGPoint(x: 0, y: self.size.height * 2.2),                           // top
+                CGPoint(x: -self.size.width * 2.2, y: self.size.height * 0.5),      // left
                 CGPoint(x: -self.size.width * 1.4, y: -self.size.height * 2.2),     // bottom-left
                 CGPoint(x: self.size.width * 1.4, y: -self.size.height * 2.2),      // bottom-right
-                CGPoint(x: self.size.width * 2.2, y: self.size.height * 0.5),                            // right
-                CGPoint(x: 0, y: self.size.height * 2.2)                              // back to top
+                CGPoint(x: self.size.width * 2.2, y: self.size.height * 0.5),       // right
+                CGPoint(x: 0, y: self.size.height * 2.2)                            // back to top
             ]
             border = SKShapeNode(points: &points, count: points.count)
             
         case .Hexagon:
             points = [
                 CGPoint(x: -self.size.width * 1.2, y: self.size.height * 2),    // top-left
-                CGPoint(x: -self.size.width * 2.2, y: 0),                          // left
+                CGPoint(x: -self.size.width * 2.2, y: 0),                       // left
                 CGPoint(x: -self.size.width * 1.2, y: -self.size.height * 2),   // bottom-left
                 CGPoint(x: self.size.width * 1.2, y: -self.size.height * 2),    // bottom-right
-                CGPoint(x: self.size.width * 2.2, y: 0),                          // right
-                CGPoint(x: self.size.width * 1.2, y: self.size.height * 2),    // top-right
-                CGPoint(x: -self.size.width * 1.2, y: self.size.height * 2),    // back to top-left
+                CGPoint(x: self.size.width * 2.2, y: 0),                        // right
+                CGPoint(x: self.size.width * 1.2, y: self.size.height * 2),     // top-right
+                CGPoint(x: -self.size.width * 1.2, y: self.size.height * 2)     // back to top-left
             ]
             border = SKShapeNode(points: &points, count: points.count)
             
-            //case .Octagon:
-            //shape = drawOctagon()
+        case .Octagon:
+            points = [
+                CGPoint(x: -self.size.width, y: self.size.height * 2.5),   // top-left
+                CGPoint(x: -self.size.width * 2.5, y: self.size.height),     // left-up
+                CGPoint(x: -self.size.width * 2.5, y: -self.size.height),    // left-down
+                CGPoint(x: -self.size.width, y: -self.size.height * 2.5),      // bottom-left
+                CGPoint(x: self.size.width, y: -self.size.height * 2.5),       // bottom-right
+                CGPoint(x: self.size.width * 2.5, y: -self.size.height),     // right-down
+                CGPoint(x: self.size.width * 2.5, y: self.size.height),      // right-up
+                CGPoint(x: self.size.width, y: self.size.height * 2.5),        // top-right
+                CGPoint(x: -self.size.width, y: self.size.height * 2.5)        // back to top-left
+            ]
+            border = SKShapeNode(points: &points, count: points.count)
             
         case .Circle:
             border = SKShapeNode(circleOfRadius: self.size.width * 2.5)

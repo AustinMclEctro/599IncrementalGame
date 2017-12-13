@@ -52,11 +52,6 @@ class StoreItem: SKSpriteNode {
     
     
     func canUpgrade(_ zone: Zone) {
-        
-        if (self.objectType == nil) {
-            return;
-        }
-        
         if !zone.allowedObjects.contains(self.objectType) {
             unlocked = false;
             let lock = UIImage(named: "Lock") ?? UIImage();

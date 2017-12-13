@@ -30,7 +30,6 @@
 		D504733A1FD85D4E002C058B /* FixtureCreation.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473361FD85D4D002C058B /* FixtureCreation.mp3 */; };
 		D504733B1FD85D4E002C058B /* ShapeCreation.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473371FD85D4D002C058B /* ShapeCreation.mp3 */; };
 		D504733C1FD85D4E002C058B /* PowerMeterDing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473381FD85D4E002C058B /* PowerMeterDing.mp3 */; };
-		F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00D1F90485F0028A5A1 /* Shop.swift */; };
 		F804A0101F904B8D0028A5A1 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F804A00F1F904B8D0028A5A1 /* GameState.swift */; };
 		F80E2A081FBCF6A5003E3A2E /* UIClick.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F80E2A001FBCF6A5003E3A2E /* UIClick.mp3 */; };
 		F80E2A091FBCF6A5003E3A2E /* TriangleHit.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F80E2A021FBCF6A5003E3A2E /* TriangleHit.mp3 */; };
@@ -43,7 +42,6 @@
 		F83FF1EC1F95596700200B30 /* SceneShapePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83FF1EB1F95596700200B30 /* SceneShapePreview.swift */; };
 		F852D27E1FA2A7E2008168A3 /* SceneCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F852D27D1FA2A7E2008168A3 /* SceneCollectionViewCell.swift */; };
 		F852D2811FA2D43B008168A3 /* NewSceneCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F852D2801FA2D43B008168A3 /* NewSceneCollectionViewCell.swift */; };
-		F898DEBD1FA2FD850028425B /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F898DEBC1FA2FD850028425B /* ProgressBar.swift */; };
 		F8B7C8861FB6867700F072D9 /* CurrentShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7C8851FB6867700F072D9 /* CurrentShapes.swift */; };
 		F8B7C8881FB69F8100F072D9 /* StoreItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7C8871FB69F8100F072D9 /* StoreItem.swift */; };
 		F8B7C88A1FB6BB8A00F072D9 /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7C8891FB6BB8A00F072D9 /* ProgressStore.swift */; };
@@ -51,8 +49,6 @@
 		F8F307C91FC3417300054D37 /* ShopCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307C81FC3417300054D37 /* ShopCollectionViewCell.swift */; };
 		F8F307CB1FC3417C00054D37 /* UpgradeShapeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307CA1FC3417C00054D37 /* UpgradeShapeCell.swift */; };
 		F8F307CD1FC3418700054D37 /* UpgradeFixtureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307CC1FC3418700054D37 /* UpgradeFixtureCell.swift */; };
-		F8F307CF1FC3419100054D37 /* PurchaseShapeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307CE1FC3419100054D37 /* PurchaseShapeCell.swift */; };
-		F8F307D11FC3419E00054D37 /* PurchaseFixtureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F307D01FC3419E00054D37 /* PurchaseFixtureCell.swift */; };
 		F8F7D5131FB64ED900D28CA1 /* SceneCollectionDrag.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F7D5121FB64ED900D28CA1 /* SceneCollectionDrag.swift */; };
 		F8FF74201F86ED1A0057AF21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */; };
 		F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FF74211F86ED1A0057AF21 /* ViewController.swift */; };
@@ -109,7 +105,6 @@
 		D50473361FD85D4D002C058B /* FixtureCreation.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = FixtureCreation.mp3; sourceTree = "<group>"; };
 		D50473371FD85D4D002C058B /* ShapeCreation.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ShapeCreation.mp3; sourceTree = "<group>"; };
 		D50473381FD85D4E002C058B /* PowerMeterDing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = PowerMeterDing.mp3; sourceTree = "<group>"; };
-		F804A00D1F90485F0028A5A1 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		F804A00F1F904B8D0028A5A1 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		F80E2A001FBCF6A5003E3A2E /* UIClick.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = UIClick.mp3; sourceTree = "<group>"; };
 		F80E2A021FBCF6A5003E3A2E /* TriangleHit.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = TriangleHit.mp3; sourceTree = "<group>"; };
@@ -122,7 +117,6 @@
 		F83FF1EB1F95596700200B30 /* SceneShapePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneShapePreview.swift; sourceTree = "<group>"; };
 		F852D27D1FA2A7E2008168A3 /* SceneCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCollectionViewCell.swift; sourceTree = "<group>"; };
 		F852D2801FA2D43B008168A3 /* NewSceneCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSceneCollectionViewCell.swift; sourceTree = "<group>"; };
-		F898DEBC1FA2FD850028425B /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		F8B7C8851FB6867700F072D9 /* CurrentShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentShapes.swift; sourceTree = "<group>"; };
 		F8B7C8871FB69F8100F072D9 /* StoreItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreItem.swift; sourceTree = "<group>"; };
 		F8B7C8891FB6BB8A00F072D9 /* ProgressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStore.swift; sourceTree = "<group>"; };
@@ -130,8 +124,6 @@
 		F8F307C81FC3417300054D37 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
 		F8F307CA1FC3417C00054D37 /* UpgradeShapeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeShapeCell.swift; sourceTree = "<group>"; };
 		F8F307CC1FC3418700054D37 /* UpgradeFixtureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeFixtureCell.swift; sourceTree = "<group>"; };
-		F8F307CE1FC3419100054D37 /* PurchaseShapeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseShapeCell.swift; sourceTree = "<group>"; };
-		F8F307D01FC3419E00054D37 /* PurchaseFixtureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseFixtureCell.swift; sourceTree = "<group>"; };
 		F8F7D5121FB64ED900D28CA1 /* SceneCollectionDrag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCollectionDrag.swift; sourceTree = "<group>"; };
 		F8FF741C1F86ED1A0057AF21 /* IncrementalGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IncrementalGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8FF741F1F86ED1A0057AF21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -281,7 +273,6 @@
 			children = (
 				A37CF7921FB6467200697D70 /* SettingsMenu.swift */,
 				F8FF74521F86ED700057AF21 /* InfoPanel.swift */,
-				F898DEBC1FA2FD850028425B /* ProgressBar.swift */,
 				F8B7C8851FB6867700F072D9 /* CurrentShapes.swift */,
 			);
 			path = InfoPanel;
@@ -292,9 +283,7 @@
 			children = (
 				F8F307C61FC3416400054D37 /* ShopCollectionView.swift */,
 				F8F307C81FC3417300054D37 /* ShopCollectionViewCell.swift */,
-				F8F307CE1FC3419100054D37 /* PurchaseShapeCell.swift */,
 				F8F307CC1FC3418700054D37 /* UpgradeFixtureCell.swift */,
-				F8F307D01FC3419E00054D37 /* PurchaseFixtureCell.swift */,
 				F8F307CA1FC3417C00054D37 /* UpgradeShapeCell.swift */,
 				F8B7C8871FB69F8100F072D9 /* StoreItem.swift */,
 				F8B7C8891FB6BB8A00F072D9 /* ProgressStore.swift */,
@@ -334,7 +323,6 @@
 				F898DEBE1FA2FDEA0028425B /* InfoPanel */,
 				F82CA3EF1FAE3C520020DD98 /* PlayArea */,
 				F82CA3F11FAE3C7A0020DD98 /* Model */,
-				F804A00D1F90485F0028A5A1 /* Shop.swift */,
 				F852D27F1FA2A7E5008168A3 /* ScenePreview */,
 				F8FF74231F86ED1A0057AF21 /* Main.storyboard */,
 				F8FF742B1F86ED1A0057AF21 /* LaunchScreen.storyboard */,
@@ -529,7 +517,6 @@
 				A3E9A9CB1FCE3FCE002C46A6 /* LiquidVIew.swift in Sources */,
 				F852D27E1FA2A7E2008168A3 /* SceneCollectionViewCell.swift in Sources */,
 				4C24BA0E1FB3C08C00EE91B9 /* PassiveIncomeManager.swift in Sources */,
-				F8F307CF1FC3419100054D37 /* PurchaseShapeCell.swift in Sources */,
 				F8FF74531F86ED700057AF21 /* InfoPanel.swift in Sources */,
 				F8FF74281F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld in Sources */,
 				F83FF1EA1F95497100200B30 /* SceneCollectionView.swift in Sources */,
@@ -546,8 +533,6 @@
 				F8B7C8881FB69F8100F072D9 /* StoreItem.swift in Sources */,
 				49B715271F9D04FD00132AD7 /* Shape.swift in Sources */,
 				A3E9A9CC1FCE3FCE002C46A6 /* LiquidContainer.swift in Sources */,
-				F8F307D11FC3419E00054D37 /* PurchaseFixtureCell.swift in Sources */,
-				F804A00E1F90485F0028A5A1 /* Shop.swift in Sources */,
 				F8FF74221F86ED1A0057AF21 /* ViewController.swift in Sources */,
 				F8B7C8861FB6867700F072D9 /* CurrentShapes.swift in Sources */,
 				F8FF74511F86ED2D0057AF21 /* MasterView.swift in Sources */,
@@ -556,7 +541,6 @@
 				4C3CBA351FAA515F0022FFC2 /* PassiveIncomeGenerator.swift in Sources */,
 				49B715291F9D05EA00132AD7 /* Fixture.swift in Sources */,
 				4C4898AC1FBBECC500D6C420 /* StartupPopup.swift in Sources */,
-				F898DEBD1FA2FD850028425B /* ProgressBar.swift in Sources */,
 				49B7152B1F9D58D100132AD7 /* PlayAreaTouchEvents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

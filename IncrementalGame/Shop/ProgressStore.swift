@@ -22,7 +22,7 @@ class ProgressStore: SKView {
             _curA = val;
             updateStores();
             if let controller = superview as? MasterView {
-                var zone = controller.playArea.getZone();
+                let zone = controller.playArea.getZone();
                 if (!zone.canIncreaseCapacity()) {
                     upgradeZoneAButton.text = "Max Zone Capacity Reached"
                 }
@@ -128,10 +128,10 @@ class ProgressStore: SKView {
     
     
     func setupStoreShapes() {
-        var storeNode = shapeNode;
+        let storeNode = shapeNode;
         var counter = 7*CGFloat.pi/8;
-        var incr = -(3*CGFloat.pi/4)/CGFloat(items[0].count) // Base the spacing on the shapes not fixtures
-        var halfWidth = frame.width/2;
+        let incr = -(3*CGFloat.pi/4)/CGFloat(items[0].count) // Base the spacing on the shapes not fixtures
+        let halfWidth = frame.width/2;
         
         let imSize = CGSize(width: (frame.width/8.5), height: (frame.width/8.5))
         let hypot = halfWidth - (imSize.width/2)
@@ -163,10 +163,10 @@ class ProgressStore: SKView {
     
     
     func setupStoreFixtures() {
-        var storeNode = fixtureNode;
+        let storeNode = fixtureNode;
         var counter = 7*CGFloat.pi/8;
-        var incr = -(3*CGFloat.pi/4)/CGFloat(items[0].count) // Base the spacing on the shapes not fixtures
-        var halfWidth = frame.width/2;
+        let incr = -(3*CGFloat.pi/4)/CGFloat(items[0].count) // Base the spacing on the shapes not fixtures
+        let halfWidth = frame.width/2;
         
         let imSize = CGSize(width: (frame.width/8.5), height: (frame.width/8.5))
         let hypot = halfWidth - (imSize.width/2)
@@ -196,7 +196,7 @@ class ProgressStore: SKView {
     
     
     func animateIn() {
-        var storeNode = isShape ? shapeNode : fixtureNode;
+        let storeNode = isShape ? shapeNode : fixtureNode;
         shapeNode.removeFromParent();
         fixtureNode.removeFromParent();
         scene?.addChild(storeNode);
@@ -211,7 +211,7 @@ class ProgressStore: SKView {
     
     
     func animateOut(callback: @escaping ()->Void) {
-        var storeNode = isShape ? shapeNode : fixtureNode;
+        let storeNode = isShape ? shapeNode : fixtureNode;
         let pos = storeNode.frame.width*(9/20) // half of a tenth of the width
         let move = SKAction.move(to: CGPoint(x: pos, y: pos), duration:0.45)
         
@@ -229,7 +229,7 @@ class ProgressStore: SKView {
     func blackout() {
         // Makes all shapes black, then shows only the ones that can be added
         // Should be called only when needed (purchasing objects, changing zones)
-        var items = isShape ? self.items[0] : self.items[1]
+        let items = isShape ? self.items[0] : self.items[1]
         if let controller = superview as? MasterView {
             for x in items {
                 if controller.playArea.getZone().canAdd(type: x.objectType) {
@@ -333,8 +333,7 @@ class ProgressStore: SKView {
     func shapeAchieved(objectType: ObjectType) {
         for shape in items[0] {
             if shape.objectType == objectType {
-                // TODO: Do some animation
-                var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+                let emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
                 emitter?.particleTexture = SKTexture(image: shape.objectType.getImage()!)
                 emitter?.numParticlesToEmit = 25
                 emitter?.particleLifetime = 1.0
@@ -388,7 +387,7 @@ class ProgressStore: SKView {
                 }
                 ind = 0;
                 while ind < nodes.count {
-                    if let node = nodes[ind] as? SKLabelNode {
+                    if nodes[ind] is SKLabelNode {
                         // TODO: Implement upgrade capacity
                         if let controller = self.superview as? MasterView {
                             controller.upgradeZone();
@@ -403,7 +402,7 @@ class ProgressStore: SKView {
     
     
     @objc func drag(sender: UIPanGestureRecognizer) {
-        var storeNode = isShape ? shapeNode : fixtureNode;
+        let storeNode = isShape ? shapeNode : fixtureNode;
         switch sender.state {
         case .began:
             var location = CGPoint(x: sender.location(in: self).x, y: frame.height-sender.location(in: self).y)
@@ -417,12 +416,12 @@ class ProgressStore: SKView {
                         nodeFound = true;
                         if let controller = self.superview as? MasterView {
                             if !controller.playArea.getZone().allowedObjects.contains(node.objectType) {
-                                // TODO: Add wiggle animation
+                                // TODO: Add wiggle animation?
                                 return;
                             }
                             selectedNode = node;
                             self.selectedNode!.removeFromParent();
-                            self.tempSelectedNode = selectedNode!.copy() as! StoreItem;
+                            self.tempSelectedNode = selectedNode!.copy() as? StoreItem;
                             controller.playArea.scene?.addChild(self.tempSelectedNode!)
                             location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
                             self.tempSelectedNode?.position = location;
@@ -454,9 +453,8 @@ class ProgressStore: SKView {
         default: // ended, canceled etc.
             
                 if let controller = superview as? MasterView {
-                    var loc = sender.location(in: controller)
+                    let loc = sender.location(in: controller)
                     if (selectedNode != nil) && controller.playArea.frame.contains(loc) {
-                        let location = CGPoint(x: sender.location(in: controller.playArea).x, y: controller.playArea.frame.height-sender.location(in: controller.playArea).y)
                         feedbackGenerator.prepare();
                         feedbackGenerator.impactOccurred();
                         controller.purchaseObject(of: selectedNode!.objectType, sender: sender);

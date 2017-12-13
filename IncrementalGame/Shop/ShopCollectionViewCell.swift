@@ -29,22 +29,10 @@ class ShopCollectionViewCell: UICollectionViewCell {
     
     
     override func isEqual(_ object: Any?) -> Bool {
-        if let _ = self as? PurchaseShapeCell {
-            if let _ = object as? PurchaseShapeCell {
-                return true;
-            }
-            return false;
-        }
-        else if let _ = self as? PurchaseFixtureCell {
-            if let _ = object as? PurchaseFixtureCell {
-                return true;
-            }
-            return false;
-        }
-        else if let shape = self as? UpgradeShapeCell {
+        if let shape = self as? UpgradeShapeCell {
             if let shape2 = object as? UpgradeShapeCell {
-                var sh2 = shape2.shape
-                var sh1 = shape.shape;
+                let sh2 = shape2.shape
+                let sh1 = shape.shape;
                 if (sh1?.objectType != sh2?.objectType) {
                     return false
                 }

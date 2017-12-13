@@ -22,7 +22,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     var zones: [Zone] {
         get {
             // Just a trash zone for the new button? Not sure of a better way to do this
-            var new = Zone(size: CGSize(), children: [], pIG: nil, allowedObjects: nil)
+            let new = Zone(size: CGSize(), children: [], pIG: nil, allowedObjects: nil)
             return [new]+gameState.zones
         }
     }
@@ -53,8 +53,6 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         self.register(NewSceneCollectionViewCell.self, forCellWithReuseIdentifier: "newZone");
         self.backgroundColor = .black;
         self.dragInteractionEnabled = true;
-        self.dragDelegate = self;
-        self.dropDelegate = self;
         
     }
 
@@ -70,7 +68,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     
     func zoomingTo(index: Int) -> CGRect {
         //let index = zones.index(of: zone);
-        let indexPath = IndexPath.init(row: index+1 ?? 0, section: 0)
+        let indexPath = IndexPath.init(row: index+1, section: 0)
         let cell = self.collectionView(self, cellForItemAt: indexPath)
         return CGRect(x: cell.frame.minX, y: cell.frame.minY-self.contentOffset.y, width: cell.frame.width, height: cell.frame.height)//cell.frame;
     }
@@ -78,7 +76,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if (indexPath.row == 0) {
-            var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newZone", for: indexPath);
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newZone", for: indexPath);
             if let new = cell as? NewSceneCollectionViewCell {
                 // TODO: add game state price
                 if let controller = superview as? MasterView {
@@ -91,12 +89,12 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         }
         else {
             
-            var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "previewZone", for: indexPath) as! SceneCollectionViewCell;
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "previewZone", for: indexPath) as! SceneCollectionViewCell;
             //var cell = UICollectionViewCell(frame: CGRect(x: 0, y: 0, width: frame.width/3, height: frame.width/3*1.2))
             
             if let controller = superview as? MasterView {
-                var im = controller.playArea.texture(from: zones[indexPath.row]);
-                var playArea = controller.playArea;
+                let im = controller.playArea.texture(from: zones[indexPath.row]);
+                let playArea = controller.playArea;
                 if indexPath.row-1 == playArea.zoneNumber {
                     // If the play area is not displayed
                     if let _ = playArea.superview as? MasterView {
@@ -121,7 +119,7 @@ class SceneCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        var row = indexPath.row;
+        let row = indexPath.row;
         feedbackGenerator.impactOccurred()
         feedbackGenerator.prepare()
         if let controller = superview as? MasterView {

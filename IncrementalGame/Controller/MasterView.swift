@@ -12,8 +12,6 @@ import os.log
 import SpriteKit
 import AVFoundation
 
-// TODO: Is there another way to distinguish between adding fixtures and shapes?
-
 /// The master view for the app. Contains a number of subviews including a
 /// view for the InfoPanel, the PlayArea and the Shop. It also contains the GameState.
 class MasterView: UIView {
@@ -41,7 +39,6 @@ class MasterView: UIView {
     let startupPopup: StartupPopup
     let settingsHelper = SettingsBundleHelper()
     var bgmPlayer:AVAudioPlayer?
-    var dingSoundNode = SKNode()
 
     var currencyA: Int {
         set(val) {
@@ -61,7 +58,7 @@ class MasterView: UIView {
         if let savedGameState = GameState.loadGameState(), isSavingOn {
             gameState = savedGameState
         } else {
-            var player = Player(id: 1)
+            let player = Player(id: 1)
             gameState = GameState(9000, [], player)
         }
         
@@ -268,7 +265,7 @@ class MasterView: UIView {
      
      }*/
     func upgradeZone() {
-        var zonePrice = playArea.getZone().increaseCapacityPrice()
+        let zonePrice = playArea.getZone().increaseCapacityPrice()
         if (playArea.getZone().canIncreaseCapacity() && zonePrice <= currencyA) {
             playArea.getZone().increaseShapeCapacity()
             updateCurrencyA(by: -zonePrice);
@@ -323,7 +320,7 @@ class MasterView: UIView {
             if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {obj.run(playUpgradeSound)}
         }
         
-        else if let fixture = obj as? Fixture {
+        else if obj is Fixture {
             
         }
         shop.reloadDataShift()
@@ -385,8 +382,6 @@ class MasterView: UIView {
                 return;
             }
         }
-//        let playDingSound = SKAction.playSoundFileNamed("PowerMeterDing", waitForCompletion: false)
-//        dingSoundNode.run(playDingSound)
     }
     
     
@@ -432,17 +427,17 @@ class MasterView: UIView {
                 shape?.physicsBody?.velocity = velocity;
             }
             else {
-                playArea.zone.addFixture(of: of, at: location);
+                let _ = playArea.zone.addFixture(of: of, at: location);
             }
         }
         else {
             // Placed at ambiguous point
             let location =  CGPoint(x: 0, y: 0);
             if !of.isFixture() {
-                playArea.zone.addShape(of: of, at: location);
+                let _ = playArea.zone.addShape(of: of, at: location);
             }
             else {
-                playArea.zone.addFixture(of: of, at: location);
+                let _ = playArea.zone.addFixture(of: of, at: location);
             }
         }
         

@@ -75,7 +75,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     init(frame: CGRect) {
         selectionFeedback = UISelectionFeedbackGenerator()
         selectionFeedback.prepare();
-        var layout = UICollectionViewFlowLayout()
+        let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal;
         layout.itemSize = CGSize(width: frame.width/2, height: frame.height/2);
         layout.minimumLineSpacing = frame.height/4
@@ -92,10 +92,8 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         super.init(frame: frame, collectionViewLayout: layout)
         delegate = self;
         dataSource = self;
-        register(PurchaseShapeCell.self, forCellWithReuseIdentifier: "purchaseShape");
         register(UpgradeShapeCell.self, forCellWithReuseIdentifier: "upgradeShape");
         register(UpgradeFixtureCell.self, forCellWithReuseIdentifier: "upgradeFixture");
-        register(PurchaseFixtureCell.self, forCellWithReuseIdentifier: "purchaseFixture");
         superview?.addSubview(fixturesStore);
         superview?.addSubview(shapesStore);
         shapesStore.addTarget(self, action: #selector(openShapeShop), for: .touchUpInside);
@@ -135,7 +133,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         mult *= 2;
         curInd += (mult*_cs.count*direction);
         // curInd will change on scrollToItem, but scrollViewDidScroll is never called (not animated)
-        var curIndHold = curInd;
+        let curIndHold = curInd;
         direction *= -1; // So that it moves in opposite directions each time
         
         scrollToItem(at: IndexPath(row: curIndHold, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
@@ -218,7 +216,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        var vel = scrollView.panGestureRecognizer.velocity(in: self);
+        _ = scrollView.panGestureRecognizer.velocity(in: self);
         if (!decelerate) {
             snap(scrollView);
         }
@@ -233,7 +231,6 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
             scrollToItem(at: ind!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
         }
         else {
-            // TODO: Get propper index to left or right
             let leftInd = indexPathForItem(at: CGPoint(x: xOff, y: frame.height/2))
 
             if (leftInd != nil) {
@@ -254,7 +251,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     func fixViews(leftInd: IndexPath?, centerInd: IndexPath?, rightInd: IndexPath?, xO: CGFloat?) {
-        var xOff = xO;
+        let xOff = xO;
         var ind = centerInd;
         if (ind?.row == leftInd?.row) {
             ind = nil;
@@ -339,7 +336,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         //DispatchQueue.global(qos: .background).async {
         let xOff = scrollView.contentOffset.x
         
-        var ind = self.indexPathForItem(at: CGPoint(x: xOff+(self.frame.width/2), y: self.frame.height/2))
+        let ind = self.indexPathForItem(at: CGPoint(x: xOff+(self.frame.width/2), y: self.frame.height/2))
         
         let leftInd = self.indexPathForItem(at: CGPoint(x: xOff, y: self.frame.height/2))
         let rightInd = self.indexPathForItem(at: CGPoint(x: xOff+self.frame.width, y: self.frame.height/2))

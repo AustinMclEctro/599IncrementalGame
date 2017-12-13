@@ -53,7 +53,7 @@ class UpgradeShapeCell: ShopCollectionViewCell {
             up1.frame = CGRect(x: up1.frame.minX, y: 0, width: val.width/3, height: val.height);
             up2.frame = CGRect(x: up2.frame.minX, y: 0, width: val.width/3, height: val.height);
             up3.frame = CGRect(x: up3.frame.minX, y: 0, width: val.width/3, height: val.height);
-            var buttonFrame = CGRect(x: (up1.frame.width/2)-frame.height/4, y: 10, width: val.height/2, height: val.height/2)
+            let buttonFrame = CGRect(x: (up1.frame.width/2)-frame.height/4, y: 10, width: val.height/2, height: val.height/2)
             up1Button.frame = buttonFrame;
             up2Button.frame = buttonFrame
             up3Button.frame = buttonFrame
@@ -80,9 +80,9 @@ class UpgradeShapeCell: ShopCollectionViewCell {
             if (val == nil) {
                 return;
             }
-            var a = val?.nextUpgradeANode()
-            var b = val?.nextUpgradeBNode()
-            var c = val?.nextUpgradeCNode()
+            let a = val?.nextUpgradeANode()
+            let b = val?.nextUpgradeBNode()
+            let c = val?.nextUpgradeCNode()
             
             
             up1Button.setImage(a, for: .normal);

@@ -18,7 +18,7 @@ extension MasterView {
     func setupTouchEvents() {
         settingsButton.addTarget(self, action: #selector(onSettingsButtonPressed), for: .touchUpInside)
         scenePreviewButton.addTarget(self, action: #selector(tapDownPreview), for: .touchUpInside)
-        var pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinch));
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinch));
         self.addGestureRecognizer(pinchGesture)
         tapToClose.addTarget(self, action: #selector(tapToClosePress), for: .touchUpInside)
         //tapToClose.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapToClosePress)))
@@ -66,8 +66,8 @@ extension MasterView {
                     if (perc > 1) {
                         perc = 1;
                     }
-                    var width = playAreaFrame.width-(playAreaFrame.width-zoomingTo!.width)*perc;
-                    var height = playAreaFrame.height-(playAreaFrame.height-zoomingTo!.height)*perc;
+                    let width = playAreaFrame.width-(playAreaFrame.width-zoomingTo!.width)*perc;
+                    let height = playAreaFrame.height-(playAreaFrame.height-zoomingTo!.height)*perc;
                     playArea.frame = CGRect(x: playAreaFrame.minX+perc*zoomingTo!.minX, y: playAreaFrame.minY+perc*zoomingTo!.minY, width: width, height: height)
                 }
                 else {
@@ -85,8 +85,8 @@ extension MasterView {
                     }
                     print(perc)
                     
-                    var width = playAreaFrame.width-(1-perc)*(playAreaFrame.width-zoomingTo!.width)
-                    var height = playAreaFrame.height-(1-perc)*(playAreaFrame.height-zoomingTo!.height)
+                    let width = playAreaFrame.width-(1-perc)*(playAreaFrame.width-zoomingTo!.width)
+                    let height = playAreaFrame.height-(1-perc)*(playAreaFrame.height-zoomingTo!.height)
                     playArea.frame = CGRect(x: zoomingTo!.minX*(1-perc), y: playAreaFrame.minY+zoomingTo!.minY*(1-perc), width: width, height: height)
                 }
                 break;
@@ -117,7 +117,7 @@ extension MasterView {
     
     
     func transitionToOpen() {
-        var fr = self.sceneCollection.zoomingTo(index: self.playArea.zoneNumber);
+        let fr = self.sceneCollection.zoomingTo(index: self.playArea.zoneNumber);
         UIView.animate(withDuration: 0.5, animations: {
             self.playArea.frame = CGRect(x: self.playAreaFrame.minX+fr.minX, y: self.playAreaFrame.minY+fr.minY, width: fr.width, height: fr.height - 20) // - 20 for passive rate label
         }) { (success) in
