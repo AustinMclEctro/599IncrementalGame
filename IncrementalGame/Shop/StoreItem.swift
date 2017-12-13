@@ -35,7 +35,7 @@ class StoreItem: SKSpriteNode {
         let texture = SKTexture(image: im)
         unlocked = false;
         
-        priceLabel = SKLabelNode(text: "TEST")
+        priceLabel = SKLabelNode(text: "")
         priceLabel.color = .white
         priceLabel.fontSize = 20
         priceLabel.horizontalAlignmentMode = .center;

@@ -47,9 +47,8 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     
     init(size: CGSize, children: [SKNode], pIG: PassiveIncomeGenerator?, allowedObjects: Set<ObjectType>? = nil, shapeCapacity: Int? = nil, cumulative: Int? = nil, lastCurrency: Int? = nil) {
         
-
         liquid = SKSpriteNode(color: .blue, size: CGSize(width: size.width, height: size.height))
-        
+        liquid.color = UIColor(red:0.08, green:0.62, blue:0.93, alpha:0.8);
         super.init(size: size)
         
         // Load zone properties
