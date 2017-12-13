@@ -31,7 +31,7 @@ class Fixture: GameObject {
         self.zoneSize = zoneSize
         
         // Load optional values
-        if let uL = upgradeLevel { self.upgradeLevel = upgradeLevel! }
+        if upgradeLevel != nil { self.upgradeLevel = upgradeLevel! }
         
         super.init(type: type, at: at, zoneSize: zoneSize)
         

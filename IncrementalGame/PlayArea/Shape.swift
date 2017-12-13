@@ -101,7 +101,7 @@ class Shape: GameObject {
         sh.updatePointsLabel()
         sh.drawUpgradeB()
         sh.drawUpgradeC()
-        var cg = scene?.view?.texture(from: sh)?.cgImage()
+        let cg = scene?.view?.texture(from: sh)?.cgImage()
         if (cg != nil) {
             return UIImage(cgImage: cg!)
         }
@@ -122,7 +122,7 @@ class Shape: GameObject {
         sh.updatePointsLabel()
         sh.drawUpgradeB()
         sh.drawUpgradeC()
-        var cg = scene?.view?.texture(from: sh)?.cgImage()
+        let cg = scene?.view?.texture(from: sh)?.cgImage()
         if (cg != nil) {
             return UIImage(cgImage: cg!)
         }
@@ -142,7 +142,7 @@ class Shape: GameObject {
         sh.updatePointsLabel()
         sh.drawUpgradeB()
         sh.drawUpgradeC()
-        var cg = scene?.view?.texture(from: sh)?.cgImage()
+        let cg = scene?.view?.texture(from: sh)?.cgImage()
         if (cg != nil) {
             return UIImage(cgImage: cg!)
         }

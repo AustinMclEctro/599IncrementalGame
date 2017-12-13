@@ -164,8 +164,7 @@ enum ObjectType: String, Codable {
             return 20000
         case .Vortex:
             return 30000
-        default:
-            return 0
+        
         }
     }
     
@@ -193,8 +192,7 @@ enum ObjectType: String, Codable {
             return graviton.price
         case .Vortex:
             return vortex.price
-        default:
-            return -1
+        
         }
     }
     
@@ -219,8 +217,7 @@ enum ObjectType: String, Codable {
             return graviton.pigRateNew
         case .Vortex:
             return vortex.pigRateNew
-        default:
-            return -1
+        
         }
     }
     
