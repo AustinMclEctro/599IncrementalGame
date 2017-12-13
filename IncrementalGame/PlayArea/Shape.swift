@@ -243,6 +243,26 @@ class Shape: GameObject {
         return upgradeCLevel < 5
     }
     
+    func animateUpgrade() {
+        let emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
+        emitter?.particleTexture = self.texture
+        emitter?.numParticlesToEmit = 30
+        emitter?.particleLifetime = 0.4
+        emitter?.particleSpeed = 1000
+        emitter?.emissionAngleRange = CGFloat.pi/2
+        emitter?.emissionAngleRange = 2*CGFloat.pi
+        emitter?.position = CGPoint(x: size.width/2, y: size.height/2)
+        emitter?.particleSize = CGSize(width:100, height: 100)
+        let addEmitter = SKAction.run({
+            self.addChild(emitter!)
+        })
+        let wait = SKAction.wait(forDuration: 1)
+        let remove = SKAction.run({
+            emitter?.removeFromParent()
+        })
+        let celebrate = SKAction.sequence([addEmitter,wait,remove])
+        self.run(celebrate)
+    }
     
     // Do upgradeA
     func upgradeA() {
@@ -251,6 +271,7 @@ class Shape: GameObject {
         upgradeALevel += 1
         pointValue = objectType.getPoints(upgradeALevel)
         updatePointsLabel()
+        animateUpgrade()
     }
     
     
@@ -261,6 +282,7 @@ class Shape: GameObject {
         upgradeBLevel += 1
         self.physicsBody?.restitution += 0.15
         drawUpgradeB()
+        animateUpgrade()
     }
     
     
@@ -271,6 +293,7 @@ class Shape: GameObject {
         upgradeCLevel += 1
         self.physicsBody?.linearDamping -= 0.15
         drawUpgradeC()
+        animateUpgrade()
     }
     
     
