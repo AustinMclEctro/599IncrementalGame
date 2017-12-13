@@ -295,6 +295,9 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
         guard !type.isFixture() else {return true}
         
+        return !zoneFull();
+    }
+    func zoneFull() -> Bool {
         var shapeCount = 0
         
         // Get and check shape count
@@ -303,7 +306,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
                 shapeCount += 1
             }
         }
-        return shapeCount < shapeCapacity
+        return shapeCount >= shapeCapacity
     }
     
     

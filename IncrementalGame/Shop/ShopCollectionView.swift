@@ -109,8 +109,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         
         if (_cs.count == 0) {
             self.addSubview(tapToAddButton);
-            superview?.addSubview(shapesStore);
-            superview?.addSubview(fixturesStore);
+            
             fixturesStore.isEnabled = false;
         }
         else if (tapToAddButton.superview != nil) {
@@ -120,6 +119,9 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
             return _cs.count;
         }
         fixturesStore.isEnabled = true;
+        superview?.addSubview(shapesStore);
+        superview?.addSubview(fixturesStore);
+        
         return 60970891;
     }
     

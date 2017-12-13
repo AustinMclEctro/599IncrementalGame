@@ -232,7 +232,7 @@ class ProgressStore: SKView {
         let items = isShape ? self.items[0] : self.items[1]
         if let controller = superview as? MasterView {
             for x in items {
-                if controller.playArea.getZone().canAdd(type: x.objectType) {
+                if !controller.playArea.getZone().canAdd(type: x.objectType) {
                     x.color = UIColor.black;
                     x.priceLabel.fontColor = .white;
                     x.colorBlendFactor = 1.0;
@@ -272,7 +272,9 @@ class ProgressStore: SKView {
     func updateStores() {
     
         if let controller = superview as? MasterView {
-            
+            if (controller.playArea.getZone().zoneFull()) {
+                return;
+            }
             if (nextLowestRing1 < items[0].count) && isShape {
                 var storeItem1 = items[0][nextLowestRing1];
                 
