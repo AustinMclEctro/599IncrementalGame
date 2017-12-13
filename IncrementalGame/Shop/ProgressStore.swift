@@ -232,20 +232,21 @@ class ProgressStore: SKView {
         let items = isShape ? self.items[0] : self.items[1]
         if let controller = superview as? MasterView {
             for x in items {
-                if !controller.playArea.getZone().canAdd(type: x.objectType) {
-                    x.color = UIColor.black;
-                    x.priceLabel.fontColor = .white;
-                    x.colorBlendFactor = 1.0;
-                }
-                else {
-                    x.colorBlendFactor = 0.0;
+                //if !controller.playArea.getZone().canAdd(type: x.objectType) {
+                
+                /*}
+                else {*/
+                x.color = UIColor.black;
+                x.priceLabel.fontColor = .white;
+                x.colorBlendFactor = 1.0;
+                    //x.colorBlendFactor = 0.0;
                     if (x.objectType.isFixture()) {
                         x.priceLabel.fontColor = .white;
                     }
                     else {
                         x.priceLabel.fontColor = .black;
                     }
-                }
+                //}
                 x.canUpgrade(controller.playArea.getZone());
             }
         }
