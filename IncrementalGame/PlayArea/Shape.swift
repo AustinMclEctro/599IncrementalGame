@@ -32,10 +32,12 @@ class Shape: GameObject {
     // MARK: Initializers
     
     
-    init(type: ObjectType, at: CGPoint, zoneSize: CGSize, inZone: Zone, pointValue: Int? = nil, bonusValue: Int? = nil, upgradeALevel: Int? = nil, upgradeBLevel: Int? = nil, upgradeCLevel: Int? = nil) {
+    init(type: ObjectType, at: CGPoint, zoneSize: CGSize, inZone: Zone, pointValue: Int? = nil, bonusValue: Int? = nil, upgradeALevel: Int? = nil, upgradeBLevel: Int? = nil, upgradeCLevel: Int? = nil, restitution: CGFloat? = nil, linearDampening: CGFloat? = nil) {
         
         self.inZone = inZone
         self.zoneSize = zoneSize
+        
+        super.init(type: type, at: at, zoneSize: zoneSize)
         
         // Get saved values
         if let pV = pointValue { self.pointValue = pV }
@@ -44,19 +46,29 @@ class Shape: GameObject {
         if let uBL = upgradeBLevel { self.upgradeBLevel = uBL }
         if let uCL = upgradeCLevel { self.upgradeCLevel = uCL }
         
-        super.init(type: type, at: at, zoneSize: zoneSize)
+        if let r = restitution {
+            self.physicsBody?.restitution = r
+        } else {
+            self.physicsBody?.restitution = 0.2
+        }
+        if let lD = linearDampening {
+            self.physicsBody?.linearDamping = lD
+        } else {
+            self.physicsBody?.linearDamping = 0.8
+        }
+        
         self.pointValue = objectType.getPoints(self.upgradeALevel)
+        
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = true
-        self.physicsBody?.restitution = 0.2
         self.physicsBody?.angularDamping = 0.5
         self.physicsBody?.friction = 0.5
-        self.physicsBody?.linearDamping = 0.8
         self.physicsBody?.mass = 1
         self.physicsBody?.usesPreciseCollisionDetection = true
         self.physicsBody?.categoryBitMask = 1
         self.physicsBody?.contactTestBitMask = 1|2|4|8
         self.physicsBody?.collisionBitMask = 1|2|4
+        
         let rangeX = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (zoneSize.width-(dimension/2)+5))
         let rangeY = SKRange(lowerLimit: (dimension/2)-5, upperLimit: (zoneSize.height-(dimension/2)+5))
         let rangeD = SKRange(upperLimit: zoneSize.width * 0.6) // Need to tweak value still!!!!
@@ -85,6 +97,9 @@ class Shape: GameObject {
         
         self.color = SKColor.black      // set so it can be blended into (to make darker) for upgradeC
         self.colorBlendFactor = 0
+        
+        print("restitution: \(self.physicsBody?.restitution)")
+        print("dampening: \(self.physicsBody?.linearDamping)")
     }
     
     
@@ -403,6 +418,8 @@ class Shape: GameObject {
         static let upgradeALevel = "upgradeALevel"
         static let upgradeBLevel = "upgradeBLevel"
         static let upgradeCLevel = "upgradeCLevel"
+        static let restitution = "restitution"
+        static let linearDampening = "linearDampening"
         static let zone = "zone"
         static let zoneSize = "zoneSize"
     }
@@ -417,6 +434,8 @@ class Shape: GameObject {
         aCoder.encode(self.upgradeALevel, forKey: PropertyKey.upgradeALevel)
         aCoder.encode(self.upgradeBLevel, forKey: PropertyKey.upgradeBLevel)
         aCoder.encode(self.upgradeCLevel, forKey: PropertyKey.upgradeCLevel)
+        aCoder.encode(self.physicsBody?.restitution, forKey: PropertyKey.restitution)
+        aCoder.encode(self.physicsBody?.linearDamping, forKey: PropertyKey.linearDampening)
         aCoder.encode(self.inZone, forKey: PropertyKey.zone)
         aCoder.encode(self.zoneSize, forKey: PropertyKey.zoneSize)
     }
@@ -430,9 +449,11 @@ class Shape: GameObject {
         let loadedUpgradeALevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeALevel)
         let loadedUpgradeBLevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeBLevel)
         let loadedUpgradeCLevel = aDecoder.decodeInteger(forKey: PropertyKey.upgradeCLevel)
+        let loadedRestitution = aDecoder.decodeObject(forKey: PropertyKey.restitution) as! CGFloat
+        let loadedLinearDampening = aDecoder.decodeObject(forKey: PropertyKey.linearDampening) as! CGFloat
         let loadedZone = aDecoder.decodeObject(forKey: PropertyKey.zone) as! Zone
         let loadedSize = aDecoder.decodeCGSize(forKey: PropertyKey.zoneSize)
         
-        self.init(type: loadedObjectType!, at: loadedLastPosition, zoneSize: loadedSize, inZone: loadedZone, pointValue: loadedPointValue, bonusValue: loadedBonusValue, upgradeALevel: loadedUpgradeALevel, upgradeBLevel: loadedUpgradeBLevel, upgradeCLevel: loadedUpgradeCLevel)
+        self.init(type: loadedObjectType!, at: loadedLastPosition, zoneSize: loadedSize, inZone: loadedZone, pointValue: loadedPointValue, bonusValue: loadedBonusValue, upgradeALevel: loadedUpgradeALevel, upgradeBLevel: loadedUpgradeBLevel, upgradeCLevel: loadedUpgradeCLevel, restitution: loadedRestitution, linearDampening: loadedLinearDampening)
     }
 }
