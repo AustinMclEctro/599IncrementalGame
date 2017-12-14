@@ -98,8 +98,8 @@ class Shape: GameObject {
         self.color = SKColor.black      // set so it can be blended into (to make darker) for upgradeC
         self.colorBlendFactor = 0
         
-        print("restitution: \(self.physicsBody?.restitution)")
-        print("dampening: \(self.physicsBody?.linearDamping)")
+        drawUpgradeB()
+        drawUpgradeC()
     }
     
     
