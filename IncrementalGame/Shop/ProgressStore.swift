@@ -227,13 +227,14 @@ class ProgressStore: SKView {
                 x.priceLabel.fontColor = .white;
                 x.colorBlendFactor = 1.0;
                     //x.colorBlendFactor = 0.0;
+                /*
                     if (x.objectType.isFixture()) {
                         x.priceLabel.fontColor = .white;
                     }
                     else {
                         x.priceLabel.fontColor = .black;
                     }
-                //}
+                //}*/
                 x.canUpgrade(controller.playArea.getZone());
             }
         }
