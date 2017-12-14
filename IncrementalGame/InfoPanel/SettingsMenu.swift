@@ -18,7 +18,6 @@ class SettingsMenu: UIView {
     let objectMargins: CGFloat = 25.0
 
     let collidrLogo: UIImageView;
-    let newGameButton: UIButton;
     let resumeButton: UIButton;
     let soundButton: UIButton;
     let musicButton: UIButton;
@@ -70,20 +69,14 @@ class SettingsMenu: UIView {
         
         collidrLogo = UIImageView(frame: CGRect(x: (frame.width/2)-(logoWidth/2), y: outerMargin + (height + objectMargins) * 0, width: logoWidth, height: height))
         collidrLogo.image = UIImage(named: "colidr")
-        newGameButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y:  outerMargin + (height + objectMargins) * 1, width: width, height: height))
-        resumeButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 2, width: width, height: height))
-        soundButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 3, width: width, height: height))
-        musicButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 4, width: width, height: height))
-        vibrationButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 5, width: width, height: height ))
-        guideButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 6, width: width, height: height))
-        removeAdsButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 7, width: width, height: height ))
+        resumeButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 1, width: width, height: height))
+        soundButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 2, width: width, height: height))
+        musicButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 3, width: width, height: height))
+        vibrationButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 4, width: width, height: height ))
+        guideButton =  UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 5, width: width, height: height))
+        removeAdsButton = UIButton(frame: CGRect(x: frame.width/2 - width/2, y: outerMargin + (height + objectMargins) * 6, width: width, height: height ))
         
         super.init(frame: frame)
-        
-        newGameButton.layer.cornerRadius = 15
-        newGameButton.setTitle("New Game", for: .normal)
-        newGameButton.backgroundColor = appColor
-        newGameButton.addTarget(self, action: #selector(onNewGameButtonPressed), for: .touchDown)
         
         resumeButton.layer.cornerRadius = 15
         resumeButton.setTitle("Resume", for: .normal)
@@ -105,18 +98,21 @@ class SettingsMenu: UIView {
         vibrationButton.backgroundColor = UIColor.red
         vibrationButton.addTarget(self, action: #selector(onVibrationButtonPressed), for: .touchDown)
         
+        guideButton.isEnabled = false
+        guideButton.alpha = 0.5
         guideButton.layer.cornerRadius =  15
         guideButton.setTitle("Guide", for: .normal)
         guideButton.backgroundColor = appColor
         guideButton.addTarget(self, action: #selector(onGuideButtonPressed), for: .touchDown)
 
+        removeAdsButton.isEnabled = false
+        removeAdsButton.alpha = 0.5
         removeAdsButton.layer.cornerRadius =  15
         removeAdsButton.setTitle("Remove Banner Ads", for: .normal)
         removeAdsButton.backgroundColor = UIColor.red
         removeAdsButton.addTarget(self, action: #selector(onResumeButtonPressed), for: .touchDown)
         
         self.addSubview(collidrLogo)
-        self.addSubview(newGameButton)
         self.addSubview(resumeButton)
         self.addSubview(soundButton)
         self.addSubview(musicButton)
@@ -130,11 +126,6 @@ class SettingsMenu: UIView {
 
     
     // MARK: Functions
-    
-    
-    @objc func onNewGameButtonPressed (sender: UIButton){
-        // TODO
-    }
     
     
     @objc func onResumeButtonPressed (sender: UIButton){
@@ -162,12 +153,12 @@ class SettingsMenu: UIView {
     
     
     @objc func onGuideButtonPressed (sender: UIButton){
-        // TODO
+        // FUTURE
     }
     
     
     @objc func onRemoveAdsButtonPressed (sender: UIButton){
-        // TODO
+        // FUTURE
     }
     
     
