@@ -253,7 +253,6 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         }
     }
     
-    
     func fixViews(leftInd: IndexPath?, centerInd: IndexPath?, rightInd: IndexPath?, xO: CGFloat?) {
         // Fix views resizes the views according to whether they are center, left, or right and applies the propper alphas
         let xOff = xO;
