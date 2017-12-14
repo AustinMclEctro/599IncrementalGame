@@ -14,7 +14,7 @@ class UpgradeFixtureCell: ShopCollectionViewCell {
     // MARK: Properties
     
     private var _curA: Int = 0;
-    
+    // Change the appearance if cur> price
     var curA: Int {
         set(val) {
             _curA = val;
@@ -41,6 +41,7 @@ class UpgradeFixtureCell: ShopCollectionViewCell {
     
     var fixture: Fixture? {
         set(val) {
+            // Creates one fixture button with one image (only one path for fixtures)
             _fixture = val;
             fixturePrice.text = val?.upgradePrice().toCurrency();
             fixtureButton.setImage(val?.getType().getImage(), for: .normal)
@@ -60,6 +61,7 @@ class UpgradeFixtureCell: ShopCollectionViewCell {
     override var frame: CGRect {
         set(val) {
             super.frame = val;
+            // Resizes the frame. Autolayout wasnt working for some reason
             foreground.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
             fixtureButton.frame = CGRect(x: (val.width/4), y: (val.height/2)-25, width: 50, height: 50)
             fixturePrice.frame = CGRect(x: (val.width/4)+50, y: val.height-30, width: frame.width-(val.width/4)-50, height: 30)
@@ -100,6 +102,7 @@ class UpgradeFixtureCell: ShopCollectionViewCell {
     
     
     @objc func upgradeFixt(sender: UIButton) {
+        // Calls upwards on the stack - upgradeFixture is defined by ShopCollectionView which is defined by MasterView
         if (_fixture != nil) {
             upgradeFixture(_fixture!);
         }

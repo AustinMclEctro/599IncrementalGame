@@ -21,6 +21,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     var direction = 1;
     var _curA: Int = 0;
     var curA: Int {
+        // Setter for _curA, updates the look of cells within viewable range
         set(val) {
             _curA = val
             for i in visibleCells {
@@ -44,9 +45,10 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         _ in
     }
     private var _cs: [GameObject] = [];
+    // Setter for currentShapes that reloads the collectionView
     var currentShapes: [GameObject] {
         set(val) {
-            // For some reason, it would not group these properly one line
+            // For some reason, it would not group these properly one line with brackets
             let condA = _cs.count < 1 && val.count >= 1
             let condB = (val.count == 0)
             _cs = val;
@@ -73,6 +75,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     init(frame: CGRect) {
+        // Sets up all values
         selectionFeedback = UISelectionFeedbackGenerator()
         selectionFeedback.prepare();
         let layout = UICollectionViewFlowLayout()
@@ -86,6 +89,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         fixturesStore = UIButton(frame: CGRect(x: frame.minX+frame.width-frame.height, y: frame.minY, width: frame.height, height: frame.height));
         fixturesStore.setImage(UIImage(named: "FixturesStore"), for: .normal);
         tapToAddButton = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        // Will be visible when no shapes
         tapToAddButton.text = "<- Tap to add your first shape";
         tapToAddButton.textColor = .white
         tapToAddButton.textAlignment = .center;
@@ -108,6 +112,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         // Even with 1000 cells per minute would still take 21 days to hit either end if starting in middle
         
         if (_cs.count == 0) {
+            // Setup label and return 0, no need for collection view yet
             self.addSubview(tapToAddButton);
             fixturesStore.isEnabled = false;
             superview?.addSubview(shapesStore);
@@ -119,6 +124,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         if (_cs.count == 0) {
             return _cs.count;
         }
+        // Makes sure buttons are on top and always visible
         fixturesStore.isEnabled = true;
         superview?.addSubview(shapesStore);
         superview?.addSubview(fixturesStore);
@@ -128,7 +134,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     func reloadDataShift() {
-        print("SHIFTING");
+        // Called to quick-reload the collection view (replaces visible cells by shifting the center)
         var mult = 1;
         while visibleCells.count > mult*_cs.count {
             mult += 1;
@@ -140,14 +146,16 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         direction *= -1; // So that it moves in opposite directions each time
         
         scrollToItem(at: IndexPath(row: curIndHold, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200), execute: {
+        
+        /*DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200), execute: {
             // TODO: if we change animated to false, change this back
             //self.fixViews(leftInd: IndexPath(row: curIndHold-1, section: 0), centerInd: IndexPath(row: curIndHold, section: 0), rightInd: IndexPath(row: curIndHold+1, section: 0), xO: nil);
-        })
+        })*/
     }
 
     
     func purchaseShape() {
+        // Makes sure the view has stopped scrolling first and then opens shape shop
         if (centerIndex != nil) {
             scrollToItem(at: centerIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
             if let controller = superview as? MasterView {
@@ -158,6 +166,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     func purchaseFixture() {
+        // Makes sure the view has stopped scrolling first and then opens fixture shop
         if (centerIndex != nil) {
             scrollToItem(at: centerIndex!, at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
             if let controller = superview as? MasterView {
@@ -168,44 +177,33 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // +One fixture, +one shape
-        
         let row = indexPath.row%(currentShapes.count)
-        /*if (row == 0) { // Purchase Shape
-            let cell = dequeueReusableCell(withReuseIdentifier: "purchaseShape", for: indexPath) as! PurchaseShapeCell;
-            cell.toggleShop = purchaseShape;
+        // Gets the cell for the current index, uses modulus and many cells to simulate circular list
+        if let shape = currentShapes[row] as? Shape {
+            print("ALLOCATING"+Date().description);
+            let cell = dequeueReusableCell(withReuseIdentifier: "upgradeShape", for: indexPath) as! UpgradeShapeCell;
+            cell.shape = shape;
+            cell.curA = _curA;
+            cell.shouldUpgrade = shouldUpgrade;
             return cell;
         }
-        if (row == 1) { // Purchase Fixture
-            let cell = dequeueReusableCell(withReuseIdentifier: "purchaseFixture", for: indexPath) as! PurchaseFixtureCell;
-            cell.toggleShop = purchaseFixture;
+        else if let fixture = currentShapes[row] as? Fixture {
+            let cell = dequeueReusableCell(withReuseIdentifier: "upgradeFixture", for: indexPath) as! UpgradeFixtureCell;
+            cell.fixture = fixture;
+            cell.curA = _curA;
+            cell.upgradeFixture = upgradeFixture;
             return cell;
-        }*/
-        //else { // Get shape
-            if let shape = currentShapes[row] as? Shape {
-                print("ALLOCATING"+Date().description);
-                let cell = dequeueReusableCell(withReuseIdentifier: "upgradeShape", for: indexPath) as! UpgradeShapeCell;
-                cell.shape = shape;
-                cell.curA = _curA;
-                cell.shouldUpgrade = shouldUpgrade;
-                return cell;
-            }
-            else if let fixture = currentShapes[row] as? Fixture {
-                let cell = dequeueReusableCell(withReuseIdentifier: "upgradeFixture", for: indexPath) as! UpgradeFixtureCell;
-                cell.fixture = fixture;
-                cell.curA = _curA;
-                cell.upgradeFixture = upgradeFixture;
-                return cell;
-            }
-        //}
+        }
         return UICollectionViewCell();
     }
     
     
     override func reloadData() {
         super.reloadData()
+        // Makes sure that we are scrolled to the center
         if (_cs.count >= 1) {
             tapToAddButton.removeFromSuperview()
+            // first scroll to centerish-1 without animation
             scrollToItem(at: IndexPath(row: 30485444, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false);
             // Have to scroll at least one to get to propper size (plus shows dragability)
             scrollToItem(at: IndexPath(row: 30485445, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true);
@@ -214,12 +212,14 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
 
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        // If scrolled, should snap - This is why quick snapping is an issue
+        // THere is no watcher for scrollViewIsScrolling with velocity so we could snap quicker
         snap(scrollView);
     }
     
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        _ = scrollView.panGestureRecognizer.velocity(in: self);
+        // if it shouldnt decelerate (user let go slow enough) snap right away
         if (!decelerate) {
             snap(scrollView);
         }
@@ -227,6 +227,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     func snap(_ scrollView: UIScrollView) {
+        // Gets the closest to center (if no center favours left) and scrolls to it
         let xOff = scrollView.contentOffset.x
         let ind = indexPathForItem(at: CGPoint(x: xOff+(frame.width/2), y: frame.height/2))
         if (ind != nil) {
@@ -254,6 +255,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     func fixViews(leftInd: IndexPath?, centerInd: IndexPath?, rightInd: IndexPath?, xO: CGFloat?) {
+        // Fix views resizes the views according to whether they are center, left, or right and applies the propper alphas
         let xOff = xO;
         var ind = centerInd;
         if (ind?.row == leftInd?.row) {
@@ -262,6 +264,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
         if (ind?.row == rightInd?.row) {
             ind = nil;
         }
+        // Makes center cell big and opaque
         if (ind != nil) {
             curInd = ind!.row;
             self.centerIndex = ind;
@@ -292,6 +295,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
 
             }
         }
+        // Makes left and right small and transparent
         if (leftInd != nil) {
             let cll = self.cellForItem(at: leftInd!);
             if let cell = cll as? ShopCollectionViewCell {
@@ -336,7 +340,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //DispatchQueue.global(qos: .background).async {
+        // Resizes views accordingly (left, right and center)
         let xOff = scrollView.contentOffset.x
         
         let ind = self.indexPathForItem(at: CGPoint(x: xOff+(self.frame.width/2), y: self.frame.height/2))
@@ -349,6 +353,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     @objc func openShapeShop(sender: UIButton) {
+        // Opens the shape shop
         if let controller = superview as? MasterView {
             controller.openShapeShop()
         }
@@ -356,6 +361,7 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     
     @objc func openFixtureShop(sender: UIButton) {
+        // Closes the shape shop
         if let controller = superview as? MasterView {
             controller.openFixtureShop()
         }

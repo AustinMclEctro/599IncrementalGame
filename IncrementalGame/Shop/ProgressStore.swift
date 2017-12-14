@@ -12,14 +12,16 @@ import SpriteKit
 class ProgressStore: SKView {
     
     // MARK: Properties
-    
+    // Setter for _curA to update whether each shape/fixture is blacked out or not
     private var _curA: Int = 0;
     var curA: Int {
         set(val) {
             if val < curA {
+                // Makes all shapes black
                 blackout()
             }
             _curA = val;
+            // Colours in required shapes (can afford, add and if capacity is not reached)
             updateStores();
             if let controller = superview as? MasterView {
                 let zone = controller.playArea.getZone();
@@ -27,6 +29,7 @@ class ProgressStore: SKView {
                     upgradeZoneAButton.text = "Max Zone Capacity Reached"
                 }
                 else {
+                    // The Zone capacity upgrade label - Need to make more visible!!!
                     let zoneUpPrice = zone.increaseCapacityPrice();
                     if (_curA < zoneUpPrice) {
                         upgradeZoneAButton.fontColor = .gray
@@ -34,6 +37,7 @@ class ProgressStore: SKView {
                     else {
                         upgradeZoneAButton.fontColor = .white
                     }
+                    // We will make this more visible
                     upgradeZoneAButton.text = "Upgrade Zone Capacity to "+String(describing: zone.shapeCapacity+1)+" for "+zoneUpPrice.toCurrency()
                 }
             }
@@ -77,25 +81,6 @@ class ProgressStore: SKView {
         
         items = [items1,items2]
         
-        
-        
-        // Adds all the items to the store data
-        /*items = [
-            [ // RING 1
-                StoreItem(objType: .Triangle),
-                StoreItem(objType: .Square),
-                StoreItem(objType: .Pentagon),
-                StoreItem(objType: .Hexagon),
-                StoreItem(objType: .Octagon),
-                StoreItem(objType: .Circle),
-            ],
-            [ // RING 2
-                StoreItem(objType: .Bonus),
-                StoreItem(objType: .Graviton),
-                StoreItem(objType: .Vortex),
-            ]
-        ]*/
-        
         upgradeZoneAButton = SKLabelNode(text: "Upgrade Zone Capacity to ");
         // @Austin - how can we make this more visible?
         upgradeZoneAButton.fontSize = 15;
@@ -125,8 +110,8 @@ class ProgressStore: SKView {
 
     
     // MARK: Functions
-    
-    
+    // Note: originally the fixtures and shapes were in same view. To avoid complete redesign, kept in same view but in different nodes
+    // First setup of shapes, only called once
     func setupStoreShapes() {
         let storeNode = shapeNode;
         var counter = 7*CGFloat.pi/8;
@@ -138,6 +123,7 @@ class ProgressStore: SKView {
         for child in storeNode.children {
             child.removeFromParent()
         }
+        // iterates through shapes and adds them to correct location
         for shape in items[0] {
             
             let x = cos(counter)*hypot
@@ -161,7 +147,7 @@ class ProgressStore: SKView {
         blackout();
     }
     
-    
+    // Sets up all store fixtures, should only call once
     func setupStoreFixtures() {
         let storeNode = fixtureNode;
         var counter = 7*CGFloat.pi/8;
@@ -173,6 +159,7 @@ class ProgressStore: SKView {
         for child in storeNode.children {
             child.removeFromParent()
         }
+        // Iterates through all fixtures and places
         for shape in items[1] {
             
             let x = cos(counter)*hypot
@@ -194,7 +181,7 @@ class ProgressStore: SKView {
         
     }
     
-    
+    // Animates the 'growing' of the shape node holding the shapes/fixtures
     func animateIn() {
         let storeNode = isShape ? shapeNode : fixtureNode;
         shapeNode.removeFromParent();
@@ -209,7 +196,7 @@ class ProgressStore: SKView {
         storeNode.run(move);
     }
     
-    
+    // Shrinks the node holding shapes/fixtures
     func animateOut(callback: @escaping ()->Void) {
         let storeNode = isShape ? shapeNode : fixtureNode;
         let pos = storeNode.frame.width*(9/20) // half of a tenth of the width
@@ -256,7 +243,7 @@ class ProgressStore: SKView {
         updateStores()
     }
     
-    
+
     var nextLowestRing1 = 0;
     var nextLowestRing2 = 0;
     func getPriceOf(_ storeItem: StoreItem) -> Int {
@@ -269,7 +256,7 @@ class ProgressStore: SKView {
         }
     }
     
-    
+    // Colours in all shapes/fixtures that can possibly be added
     func updateStores() {
     
         if let controller = superview as? MasterView {
@@ -330,7 +317,7 @@ class ProgressStore: SKView {
             item.priceLabel.fontColor = item.objectType.isFixture() ? .white : .black;
         }
     }
-
+    // Creates animation for 'celebration' with sparks
     func shapeAchieved(objectType: ObjectType) {
         for shape in items[0] {
             if shape.objectType == objectType {
@@ -356,8 +343,9 @@ class ProgressStore: SKView {
                 
             }
         }
+        // Updates entire view to reflect changes
         blackout()
-        let when = DispatchTime.now() + 2 // change 2 to desired number of seconds
+        let when = DispatchTime.now() + 2 // Keep shop open for 2 seconds then close
         DispatchQueue.main.asyncAfter(deadline: when) {
             if let controller = self.superview as? MasterView {
                 controller.closeShop();
@@ -365,7 +353,7 @@ class ProgressStore: SKView {
         }
     }
     
-    
+    // Checks if shape/fixture added, or if label pressed
     @objc func tap(sender: UITapGestureRecognizer) {
         
         if (sender.state == .ended) {
@@ -401,7 +389,7 @@ class ProgressStore: SKView {
         }
     }
     
-    
+    // Checks if shape/fixture dragged
     @objc func drag(sender: UIPanGestureRecognizer) {
         let storeNode = isShape ? shapeNode : fixtureNode;
         switch sender.state {
