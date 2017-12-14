@@ -135,6 +135,9 @@ class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UICollec
     
     func reloadDataShift() {
         // Called to quick-reload the collection view (replaces visible cells by shifting the center)
+        if (_cs.count == 0) {
+            return reloadData();
+        }
         var mult = 1;
         while visibleCells.count > mult*_cs.count {
             mult += 1;
