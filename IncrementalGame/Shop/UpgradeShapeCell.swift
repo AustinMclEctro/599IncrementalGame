@@ -73,6 +73,8 @@ class UpgradeShapeCell: ShopCollectionViewCell {
     }
     
     var _shape: Shape?;
+    // Sets all three upgrade image paths with their respective images
+    // Each image is 1+ the current shapes upgrade path for respective upgrade
     var shape: Shape? {
         set(val) {
             
@@ -80,14 +82,16 @@ class UpgradeShapeCell: ShopCollectionViewCell {
             if (val == nil) {
                 return;
             }
+            // Gets the spriteNode corresponding to shape ShapeNode
             let a = val?.nextUpgradeANode()
             let b = val?.nextUpgradeBNode()
             let c = val?.nextUpgradeCNode()
             
-            
+            // sets images
             up1Button.setImage(a, for: .normal);
             up2Button.setImage(b, for: .normal);
             up3Button.setImage(c, for: .normal);
+            // Gets upgrade prices
             upPrice1.text = val?.upgradePriceA().toCurrency();
             upPrice2.text = val?.upgradePriceB().toCurrency();
             upPrice3.text = val?.upgradePriceC().toCurrency();

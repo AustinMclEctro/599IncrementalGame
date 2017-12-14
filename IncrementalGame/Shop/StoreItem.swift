@@ -50,7 +50,7 @@ class StoreItem: SKSpriteNode {
     
     // MARK: Functions
     
-    
+    // Changes the image depending on state
     func canUpgrade(_ zone: Zone) {
         if !zone.allowedObjects.contains(self.objectType) {
             unlocked = false;
@@ -66,7 +66,7 @@ class StoreItem: SKSpriteNode {
         }
     }
     
-    
+    // Can easily create a copy to drag
     override func copy() -> Any {
         if (object != nil) {
             let storeItem = StoreItem(obj: self.object!);

@@ -27,7 +27,7 @@ class ShopCollectionViewCell: UICollectionViewCell {
     
     // MARK: Functions
     
-    
+    // Need an equal function to see if center is the same as left
     override func isEqual(_ object: Any?) -> Bool {
         if let shape = self as? UpgradeShapeCell {
             if let shape2 = object as? UpgradeShapeCell {
