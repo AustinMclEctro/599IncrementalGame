@@ -11,7 +11,7 @@ import SpriteKit
 
 
 /// A SKSpriteNode for objects that is used in gameplay (ie. Shapes and Fixtures).
-/// Contains common methods and properties for setting position, size and physics.
+/// Contains common methods and properties for setting position, size, and physics.
 class GameObject: SKSpriteNode {
     
     var objectType: ObjectType      // TO SAVE

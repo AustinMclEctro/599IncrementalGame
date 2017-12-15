@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+// Menu which holds toggles for various game options (i.e. sounds, music, vibration).
 class SettingsMenu: UIView {
    
     // MARK: Properties

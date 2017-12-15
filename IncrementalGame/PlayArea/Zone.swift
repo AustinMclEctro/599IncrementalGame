@@ -10,6 +10,7 @@ import UIKit
 import SpriteKit
 import CoreMotion
 
+// Zones are areas the player can place gameobjects into for gameplay.
 class Zone: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Properties

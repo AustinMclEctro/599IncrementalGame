@@ -177,7 +177,7 @@ class Shape: GameObject {
     }
     
     
-    // play a breif animation on shapes when they collide
+    // play a brief animation on shapes when they collide
     func animateCollision() {
         removeAction(forKey: "pulse")
         let pulseIn = SKAction.scale(to: CGSize(width: dimension*0.5, height: dimension*0.5), duration: 0.05)
@@ -187,7 +187,7 @@ class Shape: GameObject {
     }
     
     
-    // Called from ShopCollectionView to show which shape has upgrade focus.
+    // Called from ShopCollectionView to show which shape has upgrade focus (which shape the user is currently viewing upgrades for).
     // TODO: Maybe make the focus a separate border around the shape, away from the main border
     func focus() {
         // Put in place a temp border if the shape has no upgradeB
@@ -306,7 +306,7 @@ class Shape: GameObject {
     }
     
     
-    // Darkens color of shape for reduced friction upgrade.
+    // Darkens color of shape for reduced-friction upgrade.
     func drawUpgradeC()
     {
         self.colorBlendFactor = CGFloat(self.upgradeCLevel)*0.1
@@ -381,7 +381,7 @@ class Shape: GameObject {
         default:
             return
         }
-        border?.lineWidth = 0       // set this higher when one upgrade has been done
+        border?.lineWidth = 0       // this is set to a non-zero value when an upgradeB has been done once
         border?.lineCap = CGLineCap.round
         border?.lineJoin = CGLineJoin.round
         addChild(border!)

@@ -23,7 +23,7 @@
 		A37572FD1F9286FB0006CC3B /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = A37572FB1F9286FB0006CC3B /* MyParticle.sks */; };
 		A37572FE1F9286FB0006CC3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A37572FC1F9286FB0006CC3B /* Assets.xcassets */; };
 		A37CF7931FB6467200697D70 /* SettingsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37CF7921FB6467200697D70 /* SettingsMenu.swift */; };
-		A3E9A9CB1FCE3FCE002C46A6 /* LiquidVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E9A9C91FCE3FCD002C46A6 /* LiquidVIew.swift */; };
+		A3E9A9CB1FCE3FCE002C46A6 /* LiquidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E9A9C91FCE3FCD002C46A6 /* LiquidView.swift */; };
 		A3E9A9CC1FCE3FCE002C46A6 /* LiquidContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E9A9CA1FCE3FCD002C46A6 /* LiquidContainer.swift */; };
 		D50473341FD7BA73002C058B /* BGM1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473331FD7BA73002C058B /* BGM1.mp3 */; };
 		D50473391FD85D4E002C058B /* ShapeUpgrade.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50473351FD85D4D002C058B /* ShapeUpgrade.mp3 */; };
@@ -98,7 +98,7 @@
 		A37572FB1F9286FB0006CC3B /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
 		A37572FC1F9286FB0006CC3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A37CF7921FB6467200697D70 /* SettingsMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMenu.swift; sourceTree = "<group>"; };
-		A3E9A9C91FCE3FCD002C46A6 /* LiquidVIew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiquidVIew.swift; sourceTree = "<group>"; };
+		A3E9A9C91FCE3FCD002C46A6 /* LiquidView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiquidView.swift; sourceTree = "<group>"; };
 		A3E9A9CA1FCE3FCD002C46A6 /* LiquidContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiquidContainer.swift; sourceTree = "<group>"; };
 		D50473331FD7BA73002C058B /* BGM1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BGM1.mp3; sourceTree = "<group>"; };
 		D50473351FD85D4D002C058B /* ShapeUpgrade.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ShapeUpgrade.mp3; sourceTree = "<group>"; };
@@ -328,7 +328,7 @@
 				F8FF742B1F86ED1A0057AF21 /* LaunchScreen.storyboard */,
 				F8FF742E1F86ED1A0057AF21 /* Info.plist */,
 				A3E9A9CA1FCE3FCD002C46A6 /* LiquidContainer.swift */,
-				A3E9A9C91FCE3FCD002C46A6 /* LiquidVIew.swift */,
+				A3E9A9C91FCE3FCD002C46A6 /* LiquidView.swift */,
 				F8FF74261F86ED1A0057AF21 /* IncrementalGame.xcdatamodeld */,
 				A37572FB1F9286FB0006CC3B /* MyParticle.sks */,
 				A37572FC1F9286FB0006CC3B /* Assets.xcassets */,
@@ -514,7 +514,7 @@
 				F8FF74591F86EDC60057AF21 /* PlayArea.swift in Sources */,
 				F8F307CB1FC3417C00054D37 /* UpgradeShapeCell.swift in Sources */,
 				49B715251F9D024800132AD7 /* GameObject.swift in Sources */,
-				A3E9A9CB1FCE3FCE002C46A6 /* LiquidVIew.swift in Sources */,
+				A3E9A9CB1FCE3FCE002C46A6 /* LiquidView.swift in Sources */,
 				F852D27E1FA2A7E2008168A3 /* SceneCollectionViewCell.swift in Sources */,
 				4C24BA0E1FB3C08C00EE91B9 /* PassiveIncomeManager.swift in Sources */,
 				F8FF74531F86ED700057AF21 /* InfoPanel.swift in Sources */,
