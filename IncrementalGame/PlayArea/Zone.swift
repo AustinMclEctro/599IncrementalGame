@@ -17,7 +17,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     var motionManager = CMMotionManager()
     var shapeCapacity = 3                   // TO SAVE
     let maxCapacity = 12
-    let minHit: CGFloat = 200 // lowered for demo
+    let minHit: CGFloat = 200
     var allowedObjects: Set<ObjectType> = []    // TO SAVE
     var gravityX: Double = 0
     var gravityY: Double = 0
@@ -74,10 +74,6 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         liquid.position = CGPoint(x: size.width/2, y: -size.height)
         liquid.anchorPoint = CGPoint(x: 0.5, y: 0)
         liquid.zPosition = -1
-
-        //liquid.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 10, height: 10), center: CGPoint(x: 0, y: liquid.size.height/2));
-        //liquid.physicsBody?.pinned = true;
-        //liquid.physicsBody?.angularDamping = 1.0
         
         //backgroundColor = SKColor.black
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(resetGravity), userInfo: nil, repeats: true);
@@ -118,7 +114,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         return cumulative
     }
     
-    
+    // add active income to the fluid progress meter
     func updateProgress(money: Int) {
         cumulative += money
         if cumulative > lastCurrency {
@@ -155,7 +151,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
+    // returns the next shape to be unlocked
     func getNextShape() -> ObjectType? {
         for shape in ObjectType.types {
             if !canAdd(type: shape){
@@ -170,16 +166,14 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         return pIG.inactiveRate
     }
     
-    
+    // adjusts the gravity vector based on the position of the device
     override func update(_ currentTime: TimeInterval) {
-        
         if let accelData = motionManager.accelerometerData {
             physicsWorld.gravity = CGVector(dx: (accelData.acceleration.x - gravityX) * 50, dy: (accelData.acceleration.y - gravityY) * 50)
         }
- 
     }
     
-    
+    // if the device is held stationary gravity will gradually adjust to make it "level"
     @objc func resetGravity() {
         if let accelData = motionManager.accelerometerData {
             if abs(accelData.acceleration.x - lastGravX) < 0.05 && abs(accelData.acceleration.y - lastGravY) < 0.05 {
@@ -192,11 +186,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    func hasSounds() -> Bool {
-        return false;
-    }
-    
-    
+    // tactile feedback on collision
     func hapticFor(contact: SKPhysicsContact) {
         let hasHaptics = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Vibration);
         if hasHaptics {
@@ -228,6 +218,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     
+    // audible feedback on collision
     func soundFor(_ object: GameObject) {
         let hasSound = UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound);
         if hasSound {
@@ -236,9 +227,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     
+    // called when a collision occurs
     func didBegin(_ contact: SKPhysicsContact) {
         // one contact body will always be a shape so forced downcasting ok
         
+        // check if "collision" is really a shape entering the bonus area
         // turn on bonus for shape entering bonus zone
         if contact.bodyA.categoryBitMask == 8 {
             let shape = contact.bodyB.node as! Shape
@@ -253,9 +246,11 @@ class Zone: SKScene, SKPhysicsContactDelegate {
             return
         }
         
+        // otherwise process collision if minimum impact energy is met
         guard contact.collisionImpulse > minHit else {return}
         hapticFor(contact: contact);
         if let playArea = view as? PlayArea {
+            // add points, play sound, and tactile bump
             if let one = contact.bodyA.node as? Shape {
                 playArea.gained(amount: one.getPoints())
                 if (UserDefaults.standard.bool(forKey: SettingsBundleKeys.Sound)) {one.getType().playCollisionSound(one)}
@@ -271,6 +266,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     
+    // if the ending contact is a shape leaving bonus zone adjust accordingly
     func didEnd(_ contact: SKPhysicsContact) {
         let categoryA = contact.bodyA.categoryBitMask
         let categoryB = contact.bodyB.categoryBitMask
@@ -297,6 +293,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         
         return !zoneFull();
     }
+    
     func zoneFull() -> Bool {
         var shapeCount = 0
         
@@ -310,6 +307,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
     
     
+    // add a shape of the specified type to the zone
     func addShape(of: ObjectType, at: CGPoint) -> Shape? {
         guard canAdd(type: of) else {return nil}
         let shape = Shape(type: of, at: at, zoneSize: size, inZone: self);
@@ -322,7 +320,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         return shape;
     }
     
-    
+    // add a fixture of the specified type to the zone
     func addFixture(of: ObjectType, at: CGPoint) -> Fixture? {
         guard canAdd(type: of) else {return nil}
         let fix = Fixture(type: of, at: at, inZone: self, zoneSize: size);
@@ -336,7 +334,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
         return fix
     }
     
-    
+    // functions to check pricing and availability of increase to capacity
     func canIncreaseCapacity() -> Bool {
         return shapeCapacity < maxCapacity
     }
@@ -418,7 +416,7 @@ class Zone: SKScene, SKPhysicsContactDelegate {
     }
 }
 
-
+// used in calculating distance and relative position of shapes
 extension CGVector {
     func magnitudeSquared() -> CGFloat {
         return (self.dx * self.dx) + (self.dy * self.dy)

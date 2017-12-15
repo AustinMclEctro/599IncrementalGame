@@ -27,9 +27,11 @@ enum ObjectType: String, Codable {
     
     // MARK: Constants
     
-    
+    // allows iteration through object types
     static let types = [Triangle,Square,Pentagon,Hexagon,Octagon,Circle,Bonus,Graviton,Vortex]
     
+    
+    // various constants for game play
     struct triangle {
         static let points = [20,21,22,23,24,25,26,27,28,29]
         static let price = 9000
@@ -144,31 +146,6 @@ enum ObjectType: String, Codable {
     }
     
     
-    func getUnlockPrice() -> Int { // don't need under new mechanics?
-        switch self {
-        case .Triangle:
-            return 1000
-        case .Square:
-            return 2000
-        case .Pentagon:
-            return 3000
-        case .Hexagon:
-            return 4000
-        case .Octagon:
-            return 5001
-        case .Circle:
-            return 6000
-        case .Bonus:
-            return 10000
-        case .Graviton:
-            return 20000
-        case .Vortex:
-            return 30000
-        
-        }
-    }
-    
-    
     /// Retrieves the price for the ObjectType.
     ///
     /// - Returns: The price for the ObjectType.
@@ -196,7 +173,7 @@ enum ObjectType: String, Codable {
         }
     }
     
-    
+    // returns the base passive income rate for object
     func getPigRateNew() -> Int {
         switch self {
         case .Triangle:
@@ -244,6 +221,7 @@ enum ObjectType: String, Codable {
         }
     }
     
+    // returns the price to upgrade to next point level
     func getUpgradePriceA(_ level: Int) -> Int {
         switch self {
         case .Triangle:
@@ -263,7 +241,7 @@ enum ObjectType: String, Codable {
         }
     }
     
-    
+    // returns the price to upgrade to next bounciness level
     func getUpgradePriceB(_ level: Int) -> Int {
         switch self {
         case .Triangle:
@@ -283,7 +261,7 @@ enum ObjectType: String, Codable {
         }
     }
     
-    
+    // returns the price to upgrade to next drag level
     func getUpgradePriceC(_ level: Int) -> Int {
         switch self {
         case .Triangle:
@@ -303,7 +281,7 @@ enum ObjectType: String, Codable {
         }
     }
     
-    
+    // returns the price to upgrade to next level of fixture
     func getUpgradePriceFix(_ level: Int) -> Int {
         switch self {
         case .Bonus:
@@ -317,7 +295,7 @@ enum ObjectType: String, Codable {
         }
     }
     
-    
+    // returns the increase in passive income for a completed upgrade
     func getPigRateA(_ level: Int) -> Int {
         switch self {
         case .Triangle:
@@ -337,7 +315,7 @@ enum ObjectType: String, Codable {
         }
     }
     
-    
+    // returns the increase in passive income for a completed upgrade
     func getPigRateB(_ level: Int) -> Int {
         switch self {
         case .Triangle:
@@ -357,7 +335,7 @@ enum ObjectType: String, Codable {
         }
     }
     
-    
+    // returns the increase in passive income for a completed upgrade
     func getPigRateC(_ level: Int) -> Int {
         switch self {
         case .Triangle:
@@ -377,7 +355,7 @@ enum ObjectType: String, Codable {
         }
     }
     
-    
+    // returns the increase in passive income for a completed upgrade
     func getPigRateFix(_ level: Int) -> Int {
         switch self {
         case .Bonus:

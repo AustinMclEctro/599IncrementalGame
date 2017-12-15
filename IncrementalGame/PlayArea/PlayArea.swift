@@ -50,7 +50,6 @@ class PlayArea: SKView {
         self.layer.masksToBounds = true
         
         setupTouchEvents()
-        //self.showsPhysics = true// testing only
         
         presentScene(zone)
         let data: [String: Zone] = ["zone": zone]
@@ -93,6 +92,7 @@ class PlayArea: SKView {
     }
     
     
+    // returns the price to add an additional zone
     func newZonePrice() -> Int {
         if gameState.zones.count < 17 {
             return Int(pow(2,Double(gameState.zones.count))) * 10000
@@ -100,42 +100,6 @@ class PlayArea: SKView {
             return Int.max/2
         }
     }
-    
-    
-    /// Adds the specified shape to the level.
-    ///
-    /// - Parameters:
-    ///   - of: The specific type of shape.
-    ///   - at: The position where the fixture will be placed on the game screen.
-    /// - Returns: <#return value description#>
-    /*func addShape(of: ObjectType, at: CGPoint) -> Shape? { // REFACTOR: Could this be put in Zone?
-        if zone.canAdd(type: of) {
-            let shape = Shape(type: of, at: at, inZone: zone);
-            zone.addChild(shape);
-            zone.pIG.feed(portion: Shape.PigRates.newShape);
-            let data: [String: Zone] = ["zone": zone]
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
-            return shape;
-        }
-        return nil;
-    }*/
-    
-    
-    /// Adds the specified fixture to the level.
-    ///
-    /// - Parameters:
-    ///   - of: The specific type of fixture.
-    ///   - at: The position where the fixture will be placed on the game screen.
-    /*func addFixture(of: ObjectType, at: CGPoint) { // REFACTOR: Could this be put in Zone?
-        if zone.canAdd(type: of) {
-            let fix = Fixture(type: of, at: at, inZone: zone);
-            zone.addChild(fix);
-            zone.pIG.feed(portion: Fixture.PigRates.newFixture);
-            zone.removeAllowedObject(type: of)
-            let data: [String: Zone] = ["zone": zone]
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notification.Name.shapesChanged), object: nil, userInfo: data)
-        }
-    }*/
     
     
     /// Increases value of currencyA from gameplay.
@@ -149,14 +113,7 @@ class PlayArea: SKView {
         //update the zone cumulative currency amount
         self.getZone().updateProgress(money: amount)
     }
-    
-    
-    /*func resetGravity() {
-        for zone in gameState.zones {
-            zone.resetGravity()
-        }
-    }*/
-    
+
     
     // MARK: NSCoding
     

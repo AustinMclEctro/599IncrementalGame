@@ -14,7 +14,6 @@ class Fixture: GameObject {
     
     // MARK: Properties
     
-    //var withSize: CGSize  // REFACTOR: This might not need to be stored
     var zoneSize: CGSize    // TO SAVE
     var inZone: Zone        // TO SAVE
     var upgradeLevel = 0    // TO SAVE
@@ -39,6 +38,7 @@ class Fixture: GameObject {
         self.physicsBody?.contactTestBitMask = 1
         self.physicsBody?.collisionBitMask = 1
         
+        // settings specific to each type of fixture
         switch objectType {
             case .Bonus:
                 self.physicsBody = SKPhysicsBody(circleOfRadius: dimension*2)
@@ -117,18 +117,18 @@ class Fixture: GameObject {
         border?.lineWidth = 0
     }
     
-    
+    // return price of next upgrade
     func upgradePrice() -> Int {
         guard canUpgrade() else {return -1}
         return objectType.getUpgradePriceFix(upgradeLevel)
     }
     
-    
+    // return availability of next upgrade
     func canUpgrade() -> Bool {
         return upgradeLevel < 5
     }
     
-    
+    // perform an upgrade
     func upgrade() {
         guard canUpgrade() else {return}
         inZone.pIG.feed(portion: objectType.getPigRateFix(upgradeLevel))

@@ -16,7 +16,6 @@ class GameObject: SKSpriteNode {
     
     var objectType: ObjectType      // TO SAVE
     var dimension: CGFloat          // TO SAVE
-    //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
     
     
     // MARK: Initializers
@@ -45,7 +44,7 @@ class GameObject: SKSpriteNode {
         dimension = zoneSize.width/9
         self.scale(to: CGSize(width: dimension, height: dimension))
         
-        // Configure physics body settings relative to the shape
+        // Create base physics body
         switch objectType {
         case .Circle, .Bonus, .Graviton, .Vortex:
             self.physicsBody = SKPhysicsBody(circleOfRadius: dimension/2.0)
@@ -57,17 +56,6 @@ class GameObject: SKSpriteNode {
         
     }
 
-    
-    init(type: ObjectType) {
-        objectType = type
-        
-        // Configure the appearance of the object
-        let im = type.getImage() ?? UIImage()
-        let texture = SKTexture(image: im)
-        dimension = 1
-        
-        super.init(texture: texture, color: UIColor.clear, size: im.size)
-    }
     
     
     // MARK: Functions

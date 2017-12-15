@@ -43,7 +43,6 @@ extension PlayArea {
                 if let node = n as? GameObject {
                     selectedNode = node;
                     selectedNode?.physicsBody?.affectedByGravity = false;
-                    //selectedNode?.physicsBody?.isDynamic = false;
                     break;
                 }
             }
@@ -56,9 +55,7 @@ extension PlayArea {
             break;
         default: // ended, canceled etc.
             let vel = sender.velocity(in: self);
-            //selectedNode?.physicsBody?.isDynamic = true;
             selectedNode?.physicsBody?.affectedByGravity = true;
-            // TODO - overcome gravity
             selectedNode?.physicsBody?.applyForce(CGVector(dx: vel.x, dy: -vel.y))
             selectedNode = nil;
             
@@ -144,13 +141,10 @@ extension PlayArea {
             if recognizer.state == .changed {
                 if recognizer.edges == .right {
                     tempImageZone?.frame = CGRect(x: location.x, y: 0, width: frame.width, height: frame.height)
-                    // TODO: This wont work since level is a SKScene - "Setting the position of a SKScene has no effect."
                     zone.position = CGPoint(x: location.x-frame.width/2, y: frame.midY)
                 }
                 else if recognizer.edges == .left {
                     tempImageZone?.frame = CGRect(x: location.x-frame.width, y: 0, width: frame.width, height: frame.height)
-                    // TODO: This wont work since level is a SKScene - "Setting the position of a SKScene has no effect."
-                    //level.position = CGPoint(x: location.x+frame.width/2, y: frame.midY)
                 }
             }
             else if recognizer.state == .ended {
@@ -206,40 +200,4 @@ extension PlayArea {
         }
     }
     
-    
-    /*@objc func pinchSelf(sender: UIPinchGestureRecognizer) {
-        let scale = sender.scale
-        
-        switch sender.state {
-        case .began:
-            if (tableSceneView == nil) {
-                tableSceneView = SceneTableView(frame: CGRect(x: -100, y: -100, width: frame.width+200, height: frame.height+200))
-            }
-            tableSceneView!.setZones(zones: gameState.zones);
-            self.addSubview(tableSceneView!);
-        case .changed:
-            if (tableOpen) {
-                
-                tableSceneView?.alpha = scale
-                let dif = 200*(1-scale)
-                tableSceneView!.frame = CGRect(x: dif, y: dif, width: frame.width+(dif*2), height: frame.height+(dif*2))
-            }
-            else {
-                let maxScale = min(scale, 2)
-                let opacity = min(scale-1, 1)
-                tableSceneView?.alpha = opacity
-                let dif = 100-50*maxScale
-                tableSceneView!.frame = CGRect(x: dif, y: dif, width: frame.width+(dif*2), height: frame.height+(dif*2))
-            }
-        default:
-            if scale >= 1.5 {
-                tableSceneView!.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-                tableOpen = true
-            }
-            else {
-                tableSceneView?.removeFromSuperview()
-                tableOpen = false
-            }
-        }
-    }*/
 }

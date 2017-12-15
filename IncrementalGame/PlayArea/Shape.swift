@@ -15,8 +15,6 @@ class Shape: GameObject {
     
     // MARK: Properties
     
-    //var emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
-    //var withSize: CGSize // REFACTOR: Might need to remove
     var zoneSize: CGSize
     var inZone: Zone        // TO SAVE
     var pointValue = 0      // TO SAVE - MAYBE NOT AS SET FROM UPGRADELEVELA IN INIT
@@ -77,13 +75,6 @@ class Shape: GameObject {
         let conD = SKConstraint.distance(rangeD, to: CGPoint(x: zoneSize.width * 0.5, y: zoneSize.width * 0.5), in: inZone)
         self.constraints = [conX,conY,conD]
 
-        //emitter?.particleTexture = SKTexture(image: self.getType().getImage()!)
-        //emitter?.numParticlesToEmit = 10
-        //emitter?.particleLifetime = 0.25
-        //emitter?.position = CGPoint(x:self. , y:self.size.height/2)
-        //emitter?.particleSize = CGSize(width: 40, height: 40)
-        //emitter?.targetNode = inZone
-        //self.addChild(emitter!)
         
         // Setup points label
         pointsLabel.text = String(self.pointValue)
@@ -106,6 +97,7 @@ class Shape: GameObject {
     // MARK: Functions
     
     
+    // get images for shape upgraded to next level to display as upgrade button
     func nextUpgradeANode() -> UIImage {
         if (!self.canUpgradeA()) {
             return self.objectType.getImage()!
@@ -124,7 +116,6 @@ class Shape: GameObject {
             return self.objectType.getImage()!
         }
     }
-    
     
     func nextUpgradeBNode() -> UIImage {
         if (!self.canUpgradeB()) {
@@ -145,7 +136,6 @@ class Shape: GameObject {
             return self.objectType.getImage()!
         }
     }
-    
     
     func nextUpgradeCNode() -> UIImage {
         if (!self.canUpgradeC()) {
@@ -187,15 +177,8 @@ class Shape: GameObject {
     }
     
     
-    /// Animates the collision after being passed an emitter node by setting the proper duration,
-    /// adding a child node and then letting the animation play before removing itself
-    ///
-    /// - Parameter collisionEmitter: The SKEmitterNode that contains the settings for the animation.
+    // play a breif animation on shapes when they collide
     func animateCollision() {
-        // Set up a sequence animation which deletes its node after completion.
-        //let duration = Double((emitter?.particleLifetime)!*CGFloat((emitter?.numParticlesToEmit)!))
-        //emitter?.resetSimulation()
-        //emitter?.advanceSimulationTime(duration)
         removeAction(forKey: "pulse")
         let pulseIn = SKAction.scale(to: CGSize(width: dimension*0.5, height: dimension*0.5), duration: 0.05)
         let pulseOut = SKAction.scale(to: CGSize(width: dimension, height: dimension), duration: 0.05)
@@ -226,17 +209,16 @@ class Shape: GameObject {
     // MARK: Upgrade Methods
     
     
+    // get the next upgrade price
     func upgradePriceA() -> Int {
         guard canUpgradeA() else {return -1}
         return objectType.getUpgradePriceA(upgradeALevel)
     }
     
-    
     func upgradePriceB() -> Int {
         guard canUpgradeB() else {return -1}
         return objectType.getUpgradePriceB(upgradeBLevel)
     }
-    
     
     func upgradePriceC() -> Int {
         guard canUpgradeC() else {return -1}
@@ -244,20 +226,20 @@ class Shape: GameObject {
     }
     
     
+    // returns if another upgrade level is available
     func canUpgradeA() -> Bool {
         return upgradeALevel < 9
     }
-    
     
     func canUpgradeB() -> Bool {
         return upgradeBLevel < 5
     }
     
-    
     func canUpgradeC() -> Bool {
         return upgradeCLevel < 5
     }
     
+    // plays a brief burst effect when a shape is upgraded
     func animateUpgrade() {
         let emitter = SKEmitterNode(fileNamed: "MyParticle.sks")
         emitter?.particleTexture = self.texture

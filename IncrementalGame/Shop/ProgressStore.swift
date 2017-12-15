@@ -253,7 +253,7 @@ class ProgressStore: SKView {
             return storeItem.objectType.getPrice()
         }
         else {
-            return storeItem.objectType.getUnlockPrice()
+            return 0
         }
     }
     
