@@ -219,22 +219,16 @@ class ProgressStore: SKView {
         let items = isShape ? self.items[0] : self.items[1]
         if let controller = superview as? MasterView {
             for x in items {
-                //if !controller.playArea.getZone().canAdd(type: x.objectType) {
-                
-                /*}
-                else {*/
-                x.color = UIColor.black;
-                x.priceLabel.fontColor = .white;
-                x.colorBlendFactor = 1.0;
-                    //x.colorBlendFactor = 0.0;
-                /*
-                    if (x.objectType.isFixture()) {
-                        x.priceLabel.fontColor = .white;
-                    }
-                    else {
-                        x.priceLabel.fontColor = .black;
-                    }
-                //}*/
+                // Make all allowed shapes blacked out (otherwise they are locks and should be blue)
+                if (controller.playArea.getZone().allowedObjects.contains(x.objectType)) {
+                    x.color = UIColor.black;
+                    x.priceLabel.fontColor = .white;
+                    x.colorBlendFactor = 1.0;
+                }
+                else {
+                    x.priceLabel.fontColor = .black;
+                    x.colorBlendFactor = 0;
+                }
                 x.canUpgrade(controller.playArea.getZone());
             }
         }
@@ -261,10 +255,12 @@ class ProgressStore: SKView {
     func updateStores() {
     
         if let controller = superview as? MasterView {
-            if (controller.playArea.getZone().zoneFull()) {
-                return;
-            }
+            
             if (nextLowestRing1 < items[0].count) && isShape {
+                // If zone is full and we are adding shapes, then black them all out
+                if (controller.playArea.getZone().zoneFull()) {
+                    return;
+                }
                 var storeItem1 = items[0][nextLowestRing1];
                 
                 while (curA >= getPriceOf(storeItem1)) {
@@ -277,6 +273,7 @@ class ProgressStore: SKView {
                 }
             }
             else if (nextLowestRing2 < items[1].count) && !isShape {
+                
                 var storeItem2 = items[1][nextLowestRing2];
                 while (curA >= getPriceOf(storeItem2)) {
                     applyFilter(item: storeItem2, controller: controller);
